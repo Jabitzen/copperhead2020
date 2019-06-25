@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.Range;fff
+import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name = "Welcome 2020",group = "12596")
 public class newYearTest extends LinearOpMode {
@@ -25,7 +25,7 @@ public class newYearTest extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-//Test push
+            //test  does this work
             // Variables
             double leftPower;
             double rightPower;
