@@ -25,7 +25,6 @@ public class newYearTest extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            //test  does this work
             // Variables
             double leftPower;
             double rightPower;
