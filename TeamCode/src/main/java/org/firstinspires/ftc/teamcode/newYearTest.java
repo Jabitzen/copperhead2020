@@ -39,6 +39,7 @@ public class newYearTest extends LinearOpMode {
             motorR.setPower(rightPower);
             motorL.setPower(leftPower);
 
+            //Random
         }
     }
 }
