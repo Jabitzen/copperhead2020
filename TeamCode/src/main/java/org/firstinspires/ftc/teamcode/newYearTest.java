@@ -38,8 +38,6 @@ public class newYearTest extends LinearOpMode {
             // Apply powers to motor
             motorR.setPower(rightPower);
             motorL.setPower(leftPower);
-
-            //Cool it works
         }
     }
 }
