@@ -77,7 +77,7 @@ public class ConceptTensorFlowObjectDetectionWebcam extends LinearOpMode {
     private VuforiaLocalizer vuforia;
 
     /**
-     * {@link #tfod} is the variable we will use to store our instance of the TensorFlow Object
+     * {@link #tfod} is the variable we will use to store our instance of the Tensor Flow Object
      * Detection engine.
      */
     private TFObjectDetector tfod;
@@ -100,7 +100,7 @@ public class ConceptTensorFlowObjectDetectionWebcam extends LinearOpMode {
         waitForStart();
 
         if (opModeIsActive()) {
-            /** Activate TensorFlow Object Detection. */
+            /** Activate Tensor Flow Object Detection. */
             if (tfod != null) {
                 tfod.activate();
             }
@@ -161,11 +161,11 @@ public class ConceptTensorFlowObjectDetectionWebcam extends LinearOpMode {
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
-        // Loading trackables is not necessary for the TensorFlow Object Detection engine.
+        // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
     }
 
     /**
-     * Initialize the TensorFlow Object Detection engine.
+     * Initialize the Tensor Flow Object Detection engine.
      */
     private void initTfod() {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
