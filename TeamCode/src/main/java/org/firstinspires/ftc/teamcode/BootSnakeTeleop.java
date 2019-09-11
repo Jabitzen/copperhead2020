@@ -20,7 +20,7 @@ public class BootSnakeTeleop extends OpMode{
          */
         robot.init(hardwareMap);
 
-        robot.block.setPosition(0);
+        //robot.block.setPosition(0);
 
     }
 
@@ -79,21 +79,17 @@ public class BootSnakeTeleop extends OpMode{
 
         intake = gamepad2.left_bumper;
         if (gamepad2.left_bumper) {
-            robot.intake.setPower(1);
+            //robot.intake.setPower(1);
         }
 
         else {
-            robot.intake.setPower(0);
+            //robot.intake.setPower(0);
         }
 
         block = gamepad2.right_bumper;
         if (gamepad2.right_bumper) {
-            robot.block.setPosition(1);
+            //robot.block.setPosition(1);
         }
-
-
-
-
 
     }
 }
