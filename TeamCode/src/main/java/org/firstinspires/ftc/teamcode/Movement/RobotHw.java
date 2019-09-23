@@ -16,7 +16,8 @@ public class RobotHw {
 
     DcMotor intakeR = null;
     DcMotor intakeL = null;
-    // Servps
+
+    // Servos
     Servo clip = null;
     Servo claw = null;
     Servo rotate = null;
