@@ -291,7 +291,7 @@ public class vuforiaDogeCVSkystone extends LinearOpMode {
         }
 
         // Next, translate the camera lens to where it is on the robot.
-        // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
+       // In this example, it is centered (left to right), but forward of the middle of the robot, and above ground level.
         final float CAMERA_FORWARD_DISPLACEMENT  = 4.0f * mmPerInch;   // eg: Camera is 4 Inches in front of robot center
         final float CAMERA_VERTICAL_DISPLACEMENT = 8.0f * mmPerInch;   // eg: Camera is 8 Inches above ground
         final float CAMERA_LEFT_DISPLACEMENT     = 0;     // eg: Camera is ON the robot's center line
@@ -352,23 +352,28 @@ public class vuforiaDogeCVSkystone extends LinearOpMode {
 
                 // Returns X value to be used to determine left, middle, and right stone
                 double xPos = translation.get(0);
+                double yPos = translation.get(1);
+
 
                 // Scans only left and center because right can be determined if neither
-                if (xPos < -10) {
+                if (yPos < -0.2) {
                     stonePos = "Left";
                 }
-                else {
+                else if (-0.2 < yPos && yPos < 3.5){
                     stonePos = "Center";
+                }
+                else if (yPos > 3.5){
+                    stonePos = "Right";
                 }
 
                 // express the rotation of the robot in degrees.
                 Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
                 telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
             }
-            else {
+            /*else {
                 stonePos = "Right"; // Right because the scan did not pick up the skystone
                 telemetry.addData("Visible Target", "none");
-            }
+            }*/
             telemetry.addData("Skystone Position", stonePos);
             telemetry.update();
         }
