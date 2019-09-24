@@ -32,11 +32,11 @@ public class bitMapTest {
     private final int GREEN_THRESHOLD = 100;
     private final int BLUE_THRESHOLD = 60;
 
-    private static final String VUFORIA_KEY = "AU2n8aH/////AAABmYrAj+Z2rkB2q3LKkJDH3r0CozVgynwwk40JfnKP/wpamF0Km5t4Nza3w/SPNBs6ghM5D+mOgyGRJp9q8gPAeYI8p/c4iSzQ9yjX23yyDv3aqHfC6yFAy41Uz1C98mOcDeEHkyl1Bgc7k/YO3Ci6FDFzL6irifQ/Hpud9d4D7F1+y9KVuB3vd+xp7AG2r2OpJRvgrYi9PJ4MPNuddhhZovf37Dq58FkYlsIk67i/KK8WISyPE4jKwbZtBUmrQZxnxoBKvTqkRMV2T/MhezcOjJXfAdkH2/MLuIAJx4KR5cvbr/97g90njxKHR+pWHMQyqk46g9UYO4fPbCb8vJDzrG9Dsfj8mNDGceuYfhZyYwu3";
+    private static final String VUFORIA_KEY = "Aad5SFz/////AAABmT+V+odOO0Lcr/j0iQ+cxkFwNC+TZ2mUCftLAt5wXY/BCUwwq4iU84o/Q15qndcAU2JPL+SN/qG+8GE9j0fDBHGkUHqAOBhu41XjysYMyF+kBeicTqdwfzaUzT5NLSvAU8aOZ+oIyQu+KFBoHVGylT7Yf6ASJw9gX34kck2ECReLzij/3gORcXvFFtXm/rGIyQGlxPGOXDv0ZnYmurQ79fH6fnArDP6Ylcc9QYQuPInhQ7BKzhiicPZhciwnKfZfa3CH4zu8zSWajDLDQmaj3iZxnkVsXac6XCk2cYMD37svmgGqI78M4bAcRUfOpPqGtqz+89jC8kUmCip8OSdmGO7ArKzBPHF3sctfMxurkuG4";
 
     private BlockingQueue<VuforiaLocalizer.CloseableFrame> frame;
 
-    public static String bitmapCubePosition;
+    public static String bitmapSkyStonePosition;
 
     public bitMapTest (LinearOpMode opMode) {
 //        this.opMode = opMode;
