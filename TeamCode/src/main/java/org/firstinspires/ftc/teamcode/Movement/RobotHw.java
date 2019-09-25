@@ -82,6 +82,30 @@ public class RobotHw {
         intakeR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
+    public void moveStraight (int distance, int power) {
+        dtEncoderModeOn();
+        int startVal = fL.getCurrentPosition();
+        while (Math.abs(fL.getCurrentPosition() - startVal) < Math.abs(distance * COUNTS_PER_INCH)) {
+            fL.setPower(power);
+            fR.setPower(power);
+            bL.setPower(power);
+            bR.setPower(power);
+        }
+    }
+
+    public void strafeLeft (int distance, int power) {
+        dtEncoderModeOn();
+        int startVal = fL.getCurrentPosition();
+    }
+
+    public void dtEncoderModeOn (){
+        fL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        bL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        bR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+
 
 
 }
