@@ -82,21 +82,69 @@ public class RobotHw {
         intakeR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    public void moveStraight (int distance, int power) {
+    public double atTarget(double distance){
+        return Math.abs(distance*COUNTS_PER_INCH);
+    }
+
+    public void moveStraight (double distance, int power) {
+        dtEncoderModeOn();
+        int startVal = fL.getCurrentPosition();
+        if (fL.getCurrentPosition() != 0) {
+            while (Math.abs(fL.getCurrentPosition() - startVal) < atTarget(distance)) {
+                fL.setPower(power);
+                fR.setPower(power);
+                bL.setPower(power);
+                bR.setPower(power);
+            }
+        } else if (fR.getCurrentPosition() != 0) {
+            while (Math.abs(fR.getCurrentPosition() - startVal) < atTarget(distance)) {
+                fL.setPower(power);
+                fR.setPower(power);
+                bL.setPower(power);
+                bR.setPower(power);
+            }
+        } else if (bL.getCurrentPosition() != 0) {
+            while (Math.abs(bL.getCurrentPosition() - startVal) < atTarget(distance)) {
+                fL.setPower(power);
+                fR.setPower(power);
+                bL.setPower(power);
+                bR.setPower(power);
+            }
+        }else if (bR.getCurrentPosition() != 0) {
+            while (Math.abs(bR.getCurrentPosition() - startVal) < atTarget(distance)) {
+                fL.setPower(power);
+                fR.setPower(power);
+                bL.setPower(power);
+                bR.setPower(power);
+            }
+        }
+    }
+
+    public void strafeLeft (double distance, int power) {
         dtEncoderModeOn();
         int startVal = fL.getCurrentPosition();
         while (Math.abs(fL.getCurrentPosition() - startVal) < Math.abs(distance * COUNTS_PER_INCH)) {
             fL.setPower(power);
-            fR.setPower(power);
-            bL.setPower(power);
+            fR.setPower(-power);
+            bL.setPower(-power);
             bR.setPower(power);
         }
     }
 
-    public void strafeLeft (int distance, int power) {
+    public void strafeRight (double distance, int power) {
         dtEncoderModeOn();
-        int startVal = fL.getCurrentPosition();
+        int startVal = fR.getCurrentPosition();
+        while (Math.abs(fR.getCurrentPosition() - startVal) < Math.abs(distance * COUNTS_PER_INCH)) {
+            fL.setPower(-power);
+            fR.setPower(power);
+            bL.setPower(power);
+            bR.setPower(-power);
+        }
     }
+
+
+
+
 
     public void dtEncoderModeOn (){
         fL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

@@ -21,16 +21,16 @@ import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 
 
-public class bitMapTest {
+public class BitMap {
 
     private LinearOpMode opMode;
     private VuforiaLocalizer vuforia;
     private Parameters parameters;
     private CameraDirection CAMERA_CHOICE = CameraDirection.BACK;
 
-    private final int RED_THRESHOLD = 140;
-    private final int GREEN_THRESHOLD = 100;
-    private final int BLUE_THRESHOLD = 60;
+    private final int RED_THRESHOLD = 20;
+    private final int GREEN_THRESHOLD = 20;
+    private final int BLUE_THRESHOLD = 20;
 
     private static final String VUFORIA_KEY = "Aad5SFz/////AAABmT+V+odOO0Lcr/j0iQ+cxkFwNC+TZ2mUCftLAt5wXY/BCUwwq4iU84o/Q15qndcAU2JPL+SN/qG+8GE9j0fDBHGkUHqAOBhu41XjysYMyF+kBeicTqdwfzaUzT5NLSvAU8aOZ+oIyQu+KFBoHVGylT7Yf6ASJw9gX34kck2ECReLzij/3gORcXvFFtXm/rGIyQGlxPGOXDv0ZnYmurQ79fH6fnArDP6Ylcc9QYQuPInhQ7BKzhiicPZhciwnKfZfa3CH4zu8zSWajDLDQmaj3iZxnkVsXac6XCk2cYMD37svmgGqI78M4bAcRUfOpPqGtqz+89jC8kUmCip8OSdmGO7ArKzBPHF3sctfMxurkuG4";
 
@@ -38,7 +38,7 @@ public class bitMapTest {
 
     public static String bitmapSkyStonePosition;
 
-    public bitMapTest (LinearOpMode opMode) {
+    public BitMap(LinearOpMode opMode) {
 //        this.opMode = opMode;
 //
 //        int cameraMonitorViewId = this.opMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", this.opMode.hardwareMap.appContext.getPackageName());
@@ -138,6 +138,7 @@ public class bitMapTest {
 
     public String sample() throws InterruptedException{
         Bitmap bitmap = getBitmap();
+        String bitmapCubePosition;
 
         ArrayList<Integer> xValues = new ArrayList<>();
 
@@ -146,14 +147,14 @@ public class bitMapTest {
         //top left = (0,0)
         for (int colNum = 0; colNum < bitmap.getWidth(); colNum +=2) {
 
-            for (int rowNum = 0; rowNum < (int)(bitmap.getHeight() * 1.0/3); rowNum += 3) {
+            for (int rowNum = 0; rowNum < (int)(bitmap.getHeight() ); rowNum += 3) {
                 int pixel = bitmap.getPixel(colNum, rowNum);
 
                 int redPixel = red(pixel);
                 int greenPixel = green(pixel);
                 int bluePixel = blue(pixel);
 
-                if (redPixel >= RED_THRESHOLD && greenPixel >= GREEN_THRESHOLD && bluePixel <= BLUE_THRESHOLD) {
+                if (redPixel <= RED_THRESHOLD && greenPixel <= GREEN_THRESHOLD && bluePixel <= BLUE_THRESHOLD) {
                     xValues.add(colNum);
 
                 }
@@ -184,7 +185,6 @@ public class bitMapTest {
         opMode.telemetry.addData("Cube Position", bitmapCubePosition);
         opMode.telemetry.update();
         return bitmapCubePosition;
-
     }
 
     public Bitmap vufConvertToBitmap(Frame frame) { return vuforia.convertFrameToBitmap(frame); }
