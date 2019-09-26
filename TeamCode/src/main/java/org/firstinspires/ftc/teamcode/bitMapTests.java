@@ -45,6 +45,7 @@ public class bitMapTests extends LinearOpMode {
         int cameraMonitorViewId = this.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", this.hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
+
         params.vuforiaLicenseKey = VUFORIA_KEY;
         params.cameraDirection = CAMERA_CHOICE;
         vuforia = ClassFactory.getInstance().createVuforia(params);
@@ -59,6 +60,7 @@ public class bitMapTests extends LinearOpMode {
         //getBitmap();
         sample();
 
+        //telemetry.addData("width", bm)
 
 
     }
@@ -131,6 +133,8 @@ public class bitMapTests extends LinearOpMode {
         telemetry.update();
 
 
+
+
         picture.close();
 
         telemetry.addLine("Got bitmap");
@@ -148,23 +152,49 @@ public class bitMapTests extends LinearOpMode {
         int avgX = 0;
 
         //top left = (0,0)
-        for (int colNum = 0; colNum < bitmap.getWidth(); colNum +=2) {
+        int colNum = 180;
+        int end = 260;
+        telemetry.addLine("test 1");
+        sleep(2000);
+        while (end < 1280) {
+            while (colNum < end) {
+                for (int rowNum = 0; rowNum < (int) (bitmap.getHeight()); rowNum += 3) {
+                    int pixel = bitmap.getPixel(colNum, rowNum);
 
-            for (int rowNum = 0; rowNum < (int)(bitmap.getHeight() ); rowNum += 3) {
-                int pixel = bitmap.getPixel(colNum, rowNum);
+                    int redPixel = red(pixel);
+                    int greenPixel = green(pixel);
+                    int bluePixel = blue(pixel);
 
-                int redPixel = red(pixel);
-                int greenPixel = green(pixel);
-                int bluePixel = blue(pixel);
+                    if (redPixel <= RED_THRESHOLD && greenPixel <= GREEN_THRESHOLD && bluePixel <= BLUE_THRESHOLD) {
+                        xValues.add(colNum);
 
-                if (redPixel <= RED_THRESHOLD && greenPixel <= GREEN_THRESHOLD && bluePixel <= BLUE_THRESHOLD) {
-                    xValues.add(colNum);
-
+                    }
                 }
+                colNum ++;
 
             }
-
+            colNum += 320;
+            end += 400;
         }
+        telemetry.addLine("2");
+        sleep(2000);
+//        for (int colNum = 0; colNum < bitmap.getWidth(); colNum ) {
+//
+//            for (int rowNum = 0; rowNum < (int)(bitmap.getHeight() ); rowNum += 3) {
+//                int pixel = bitmap.getPixel(colNum, rowNum);
+//
+//                int redPixel = red(pixel);
+//                int greenPixel = green(pixel);
+//                int bluePixel = blue(pixel);
+//
+//                if (redPixel <= RED_THRESHOLD && greenPixel <= GREEN_THRESHOLD && bluePixel <= BLUE_THRESHOLD) {
+//                    xValues.add(colNum);
+//
+//                }
+//
+//            }
+//
+//        }
 
         for (int x : xValues) {
             avgX+= x;
@@ -172,11 +202,11 @@ public class bitMapTests extends LinearOpMode {
 
         avgX /= xValues.size();
 
-        if (avgX < (bitmap.getWidth() / 3.0)) {
+        if (avgX < (1280 / 3.0)) {
             bitmapCubePosition = "left";
 
         }
-        else if (avgX > (bitmap.getWidth() / 3.0) && avgX < (bitmap.getWidth() * 2.0/3)) {
+        else if (avgX > (1280 / 3.0) && avgX < (bitmap.getWidth() * 2.0/3)) {
             bitmapCubePosition = "center";
 
         }
@@ -184,10 +214,16 @@ public class bitMapTests extends LinearOpMode {
             bitmapCubePosition = "right";
 
         }
+        telemetry.addLine("test 3");
+        sleep(2000);
+
 
         telemetry.addData("Cube Position", bitmapCubePosition);
+        telemetry.addData ("X-value", avgX);
         telemetry.update();
+        sleep (10000);
         return bitmapCubePosition;
+
     }
 
     public Bitmap vufConvertToBitmap(Frame frame) { return vuforia.convertFrameToBitmap(frame); }
