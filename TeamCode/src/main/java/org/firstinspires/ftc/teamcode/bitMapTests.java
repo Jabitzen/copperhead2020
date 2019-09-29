@@ -15,6 +15,7 @@ import com.vuforia.PIXEL_FORMAT;
 import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.Parameters;
@@ -38,16 +39,19 @@ public class bitMapTests extends LinearOpMode {
     private BlockingQueue<VuforiaLocalizer.CloseableFrame> frame;
 
     public static String bitmapSkyStonePosition;
+    WebcamName webcamName = null;
 
     @Override
     public void runOpMode() throws InterruptedException {
+
+        webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
 
         int cameraMonitorViewId = this.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", this.hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
 
         params.vuforiaLicenseKey = VUFORIA_KEY;
-        params.cameraDirection = CAMERA_CHOICE;
+        params.cameraName = webcamName;
         vuforia = ClassFactory.getInstance().createVuforia(params);
 
         Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true); //enables RGB565 format for the image
@@ -58,7 +62,7 @@ public class bitMapTests extends LinearOpMode {
 
 
         //getBitmap();
-        sample();
+        colors();
 
         //telemetry.addData("width", bm)
 
@@ -152,13 +156,13 @@ public class bitMapTests extends LinearOpMode {
         int avgX = 0;
 
         //top left = (0,0)
-        int colNum = 180;
-        int end = 260;
-        telemetry.addLine("test 1");
+        int colNum =0;
+        int end = 320;
+
         sleep(2000);
-        while (end < 1280) {
+        while (end <= 960) {
             while (colNum < end) {
-                for (int rowNum = 0; rowNum < (int) (bitmap.getHeight()); rowNum += 3) {
+                for (int rowNum = 0; rowNum < (int) (bitmap.getHeight()); rowNum ++) {
                     int pixel = bitmap.getPixel(colNum, rowNum);
 
                     int redPixel = red(pixel);
@@ -173,8 +177,8 @@ public class bitMapTests extends LinearOpMode {
                 colNum ++;
 
             }
-            colNum += 320;
-            end += 400;
+           // colNum += 320;
+            end += 320;
         }
         telemetry.addLine("2");
         sleep(2000);
@@ -202,11 +206,11 @@ public class bitMapTests extends LinearOpMode {
 
         avgX /= xValues.size();
 
-        if (avgX < (1280 / 3.0)) {
+        if (avgX < (960 / 3.0)) {
             bitmapCubePosition = "left";
 
         }
-        else if (avgX > (1280 / 3.0) && avgX < (bitmap.getWidth() * 2.0/3)) {
+        else if (avgX > (960 / 3.0) && avgX < (960 * 2.0/3)) {
             bitmapCubePosition = "center";
 
         }
@@ -220,9 +224,88 @@ public class bitMapTests extends LinearOpMode {
 
         telemetry.addData("Cube Position", bitmapCubePosition);
         telemetry.addData ("X-value", avgX);
+
         telemetry.update();
         sleep (10000);
         return bitmapCubePosition;
+
+    }
+
+    public void colors() throws InterruptedException{
+        Bitmap bitmap = getBitmap();
+
+        ArrayList<Double> blueValues = new ArrayList<>();
+        ArrayList<Double> xValues = new ArrayList<>();
+
+        double x1 = 0;
+        double x2 = 0;
+        double x3 = 0;
+
+        double avg1 = 0;
+        double avg2 = 0;
+        double avg3 = 0;
+
+        int colNum =100;
+        int end = 120;
+        telemetry.addData("width", bitmap.getWidth());
+        sleep(2000);
+        while (end < bitmap.getWidth()) {
+            while (colNum < end) {
+                for (int rowNum = 0; rowNum < (int) (bitmap.getHeight()); rowNum ++) {
+                    int pixel = bitmap.getPixel(colNum, rowNum);
+                    blueValues.add((double)blue(pixel));
+                }
+                colNum ++;
+            }
+            colNum += 80;
+            end += 200;
+        }
+
+
+
+//        for (int colNum = 0; colNum < bitmap.getWidth(); colNum ) {
+//
+//            for (int rowNum = 0; rowNum < (int)(bitmap.getHeight() ); rowNum += 3) {
+//                int pixel = bitmap.getPixel(colNum, rowNum);
+//
+//                int redPixel = red(pixel);
+//                int greenPixel = green(pixel);
+//                int bluePixel = blue(pixel);
+//
+//                if (redPixel <= RED_THRESHOLD && greenPixel <= GREEN_THRESHOLD && bluePixel <= BLUE_THRESHOLD) {
+//                    xValues.add(colNum);
+//
+//                }
+//
+//            }
+//
+//        }
+        double size = blueValues.size();
+
+        for (int i = 0; i < size; i++) {
+            if (i <= size / 3) {
+                avg1 += blueValues.get(i);
+
+            }
+
+            else if (i > size / 3 && i <= size * 2/3) {
+                avg2 += blueValues.get(i);
+            }
+
+            else {
+                avg3 += blueValues.get(i);
+            }
+        }
+
+
+
+
+        telemetry.addData("avg1", avg1);
+        telemetry.addData ("avg2", avg2);
+        telemetry.addData ("avg3", avg3);
+
+        telemetry.update();
+        sleep (10000);
 
     }
 
