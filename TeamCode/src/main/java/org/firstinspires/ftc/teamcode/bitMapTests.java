@@ -30,28 +30,28 @@ public class bitMapTests extends LinearOpMode {
     private Parameters parameters;
     private CameraDirection CAMERA_CHOICE = CameraDirection.BACK;
 
-    private final int RED_THRESHOLD = 20;
-    private final int GREEN_THRESHOLD = 20;
-    private final int BLUE_THRESHOLD = 20;
+    private final int RED_THRESHOLD = 35;
+    private final int GREEN_THRESHOLD = 35;
+    private final int BLUE_THRESHOLD = 35;
 
     private static final String VUFORIA_KEY = "Aad5SFz/////AAABmT+V+odOO0Lcr/j0iQ+cxkFwNC+TZ2mUCftLAt5wXY/BCUwwq4iU84o/Q15qndcAU2JPL+SN/qG+8GE9j0fDBHGkUHqAOBhu41XjysYMyF+kBeicTqdwfzaUzT5NLSvAU8aOZ+oIyQu+KFBoHVGylT7Yf6ASJw9gX34kck2ECReLzij/3gORcXvFFtXm/rGIyQGlxPGOXDv0ZnYmurQ79fH6fnArDP6Ylcc9QYQuPInhQ7BKzhiicPZhciwnKfZfa3CH4zu8zSWajDLDQmaj3iZxnkVsXac6XCk2cYMD37svmgGqI78M4bAcRUfOpPqGtqz+89jC8kUmCip8OSdmGO7ArKzBPHF3sctfMxurkuG4";
 
     private BlockingQueue<VuforiaLocalizer.CloseableFrame> frame;
 
     public static String bitmapSkyStonePosition;
-    WebcamName webcamName = null;
+    //WebcamName webcamName = null;
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-        webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        //webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
 
         int cameraMonitorViewId = this.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", this.hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
 
         params.vuforiaLicenseKey = VUFORIA_KEY;
-        params.cameraName = webcamName;
+        //params.cameraName = webcamName;
         vuforia = ClassFactory.getInstance().createVuforia(params);
 
         Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true); //enables RGB565 format for the image
@@ -62,7 +62,8 @@ public class bitMapTests extends LinearOpMode {
 
 
         //getBitmap();
-        colors();
+        //colors();
+        sample();
 
         //telemetry.addData("width", bm)
 
@@ -151,16 +152,18 @@ public class bitMapTests extends LinearOpMode {
         Bitmap bitmap = getBitmap();
         String bitmapCubePosition;
 
+
+
         ArrayList<Integer> xValues = new ArrayList<>();
 
         int avgX = 0;
 
         //top left = (0,0)
-        int colNum =0;
-        int end = 320;
+        int colNum =193;
+        int end = 233;
 
         sleep(2000);
-        while (end <= 960) {
+        while (end <= 1280) {
             while (colNum < end) {
                 for (int rowNum = 0; rowNum < (int) (bitmap.getHeight()); rowNum ++) {
                     int pixel = bitmap.getPixel(colNum, rowNum);
@@ -177,11 +180,11 @@ public class bitMapTests extends LinearOpMode {
                 colNum ++;
 
             }
-           // colNum += 320;
-            end += 320;
+           colNum += 387;
+            end += 427;
         }
-        telemetry.addLine("2");
-        sleep(2000);
+//        telemetry.addLine("2");
+//        sleep(2000);
 //        for (int colNum = 0; colNum < bitmap.getWidth(); colNum ) {
 //
 //            for (int rowNum = 0; rowNum < (int)(bitmap.getHeight() ); rowNum += 3) {
@@ -206,11 +209,11 @@ public class bitMapTests extends LinearOpMode {
 
         avgX /= xValues.size();
 
-        if (avgX < (960 / 3.0)) {
+        if (avgX < (1280 / 3.0)) {
             bitmapCubePosition = "left";
 
         }
-        else if (avgX > (960 / 3.0) && avgX < (960 * 2.0/3)) {
+        else if (avgX > (1280 / 3.0) && avgX < (960 * 2.0/3)) {
             bitmapCubePosition = "center";
 
         }
@@ -218,6 +221,11 @@ public class bitMapTests extends LinearOpMode {
             bitmapCubePosition = "right";
 
         }
+
+        telemetry.addData("width", bitmap.getWidth());
+        telemetry.update();
+        sleep(2000);
+
         telemetry.addLine("test 3");
         sleep(2000);
 
@@ -235,6 +243,8 @@ public class bitMapTests extends LinearOpMode {
         Bitmap bitmap = getBitmap();
 
         ArrayList<Double> blueValues = new ArrayList<>();
+        ArrayList<Double> redValues = new ArrayList<>();
+        ArrayList<Double> greenValues = new ArrayList<>();
         ArrayList<Double> xValues = new ArrayList<>();
 
         double x1 = 0;
@@ -245,20 +255,59 @@ public class bitMapTests extends LinearOpMode {
         double avg2 = 0;
         double avg3 = 0;
 
-        int colNum =100;
-        int end = 120;
+        double green1 = 0;
+        double green2 = 0;
+        double green3 = 0;
+
+        double red1 = 0;
+        double red2 = 0;
+        double red3 = 0;
+
+
+      /*  // for looking at 3 stones with phone cam
+        int colNum =203;
+        int end = 223;
         telemetry.addData("width", bitmap.getWidth());
+        telemetry.update();
+
         sleep(2000);
-        while (end < bitmap.getWidth()) {
+        int count = 0;
+        while (count < 3) {
             while (colNum < end) {
-                for (int rowNum = 0; rowNum < (int) (bitmap.getHeight()); rowNum ++) {
+                for (int rowNum = 0; rowNum < (720); rowNum ++) {
                     int pixel = bitmap.getPixel(colNum, rowNum);
                     blueValues.add((double)blue(pixel));
+                    redValues.add((double)red(pixel));
+                    greenValues.add((double)green(pixel));
                 }
                 colNum ++;
             }
-            colNum += 80;
-            end += 200;
+            colNum += 430;
+            end += 450;
+            count ++;
+        } */
+
+      //for looking at 2 skystones with phone cam
+        int colNum =203;
+        int end = 223;
+        telemetry.addData("width", bitmap.getWidth());
+        telemetry.update();
+
+        sleep(2000);
+        int count = 0;
+        while (count < 3) {
+            while (colNum < end) {
+                for (int rowNum = 0; rowNum < (720); rowNum ++) {
+                    int pixel = bitmap.getPixel(colNum, rowNum);
+                    blueValues.add((double)blue(pixel));
+                    redValues.add((double)red(pixel));
+                    greenValues.add((double)green(pixel));
+                }
+                colNum ++;
+            }
+            colNum += 430;
+            end += 450;
+            count ++;
         }
 
 
@@ -281,14 +330,18 @@ public class bitMapTests extends LinearOpMode {
 //
 //        }
         double size = blueValues.size();
+        telemetry.addData("blue size", size );
+        telemetry.update();
+        sleep(5000);
 
+/*
         for (int i = 0; i < size; i++) {
-            if (i <= size / 3) {
+            if (i <= size / 3.0) {
                 avg1 += blueValues.get(i);
 
             }
 
-            else if (i > size / 3 && i <= size * 2/3) {
+            else if (i > size / 3.0 && i <= size * .666) {
                 avg2 += blueValues.get(i);
             }
 
@@ -296,8 +349,90 @@ public class bitMapTests extends LinearOpMode {
                 avg3 += blueValues.get(i);
             }
         }
+*/
+
+        double index = 0;
+        double stop = size / 3.0;
+
+        while (index < stop){
+            avg1 += blueValues.get((int)index);
+            index += 1.0;
+        }
+
+        index = size / 3.0;
+        stop = size * (.66666);
+
+        while (index < stop){
+            avg2 += blueValues.get((int)index);
+            index += 1.0;
+        }
+
+        index = size * 0.66666;
+        stop = size;
+
+        while (index < stop){
+            avg3 += blueValues.get((int)index);
+            index += 1.0;
+        }
 
 
+
+
+
+
+
+
+
+        double size2 = redValues.size();
+
+        telemetry.addData("red size", size2 );
+        telemetry.update();
+        sleep(5000);
+
+        for (int i = 0; i < size2; i++) {
+            if (i <= size2 / 3) {
+                red1 += redValues.get(i);
+
+            }
+
+            else if (i > size2 / 3 && i <= size2 * 2/3) {
+                red2 += redValues.get(i);
+            }
+
+            else {
+                red3 += redValues.get(i);
+            }
+        }
+
+
+
+
+
+        double size3 = greenValues.size();
+
+
+        telemetry.addData("green size", size3 );
+        telemetry.update();
+        sleep(5000);
+
+        for (int i = 0; i < size3; i++) {
+            if (i <= size3 / 3) {
+                green1 += greenValues.get(i);
+
+            }
+
+            else if (i > size3 / 3 && i <= size3 * 2/3) {
+                green2 += greenValues.get(i);
+            }
+
+            else {
+                green3 += greenValues.get(i);
+            }
+        }
+
+
+
+        //telemetry.addData("size of bitmap", blueValues.size());
 
 
         telemetry.addData("avg1", avg1);
@@ -305,7 +440,22 @@ public class bitMapTests extends LinearOpMode {
         telemetry.addData ("avg3", avg3);
 
         telemetry.update();
-        sleep (10000);
+        sleep (8000);
+
+
+        telemetry.addData("green1", green1);
+        telemetry.addData ("green2", green2);
+        telemetry.addData ("green3", green3);
+
+        telemetry.update();
+        sleep (8000);
+
+        telemetry.addData("red1", red1);
+        telemetry.addData ("red2", red2);
+        telemetry.addData ("red3", red3);
+
+        telemetry.update();
+        sleep (8000);
 
     }
 
