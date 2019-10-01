@@ -54,6 +54,7 @@ public class bitMapTests extends LinearOpMode {
         //params.cameraName = webcamName;
         vuforia = ClassFactory.getInstance().createVuforia(params);
 
+
         Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true); //enables RGB565 format for the image
         vuforia.setFrameQueueCapacity(4); //tells VuforiaLocalizer to only store one frame at a time
         vuforia.enableConvertFrameToBitmap();
@@ -62,8 +63,8 @@ public class bitMapTests extends LinearOpMode {
 
 
         //getBitmap();
-        //colors();
-        sample();
+        colors();
+        //sample();
 
         //telemetry.addData("width", bm)
 
@@ -159,7 +160,7 @@ public class bitMapTests extends LinearOpMode {
         int avgX = 0;
 
         //top left = (0,0)
-        int colNum =193;
+        int colNum = 193;
         int end = 233;
 
         sleep(2000);
@@ -209,17 +210,17 @@ public class bitMapTests extends LinearOpMode {
 
         avgX /= xValues.size();
 
-        if (avgX < (1280 / 3.0)) {
+        if (avgX<= 650) {
             bitmapCubePosition = "left";
 
         }
-        else if (avgX > (1280 / 3.0) && avgX < (960 * 2.0/3)) {
+        else if (650 < avgX && avgX <= 800) {
             bitmapCubePosition = "center";
 
         }
+
         else {
             bitmapCubePosition = "right";
-
         }
 
         telemetry.addData("width", bitmap.getWidth());
@@ -241,6 +242,7 @@ public class bitMapTests extends LinearOpMode {
 
     public void colors() throws InterruptedException{
         Bitmap bitmap = getBitmap();
+        String bitmapCubePosition;
 
         ArrayList<Double> blueValues = new ArrayList<>();
         ArrayList<Double> redValues = new ArrayList<>();
@@ -375,6 +377,24 @@ public class bitMapTests extends LinearOpMode {
             index += 1.0;
         }
 
+
+        if (red1 < 1800000) {
+            bitmapCubePosition = "left";
+        }
+
+        else if (red2 < 1800000) {
+            bitmapCubePosition = "center";
+        }
+
+        else if (red3 < 1800000) {
+            bitmapCubePosition = "right";
+        }
+
+        else {
+            bitmapCubePosition = "oopsie";
+        }
+
+        telemetry.addData("Cube Position", bitmapCubePosition);
 
 
 
