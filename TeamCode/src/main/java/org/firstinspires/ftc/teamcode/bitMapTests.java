@@ -314,6 +314,8 @@ public class bitMapTests extends LinearOpMode {
 
 
 
+
+
 //        for (int colNum = 0; colNum < bitmap.getWidth(); colNum ) {
 //
 //            for (int rowNum = 0; rowNum < (int)(bitmap.getHeight() ); rowNum += 3) {
@@ -378,7 +380,7 @@ public class bitMapTests extends LinearOpMode {
         }
 
 
-        if (red1 < 1800000) {
+        /*if (red1 < 1800000) {
             bitmapCubePosition = "left";
         }
 
@@ -392,9 +394,9 @@ public class bitMapTests extends LinearOpMode {
 
         else {
             bitmapCubePosition = "oopsie";
-        }
+        }*/
 
-        telemetry.addData("Cube Position", bitmapCubePosition);
+
 
 
 
@@ -475,7 +477,27 @@ public class bitMapTests extends LinearOpMode {
         telemetry.addData ("red3", red3);
 
         telemetry.update();
-        sleep (8000);
+        sleep(3000);
+
+
+        if (Math.abs(red1 - red2) > Math.abs(red2 - red3)) {
+            bitmapCubePosition = "left";
+        }
+
+        else if (Math.abs(red1 - red2) > Math.abs (red1 - red3)) {
+            bitmapCubePosition = "center";
+        }
+
+        else if (Math.abs(red2 - red3) > Math.abs(red1 - red2)) {
+            bitmapCubePosition = "right";
+        }
+
+        else {
+            bitmapCubePosition = "oopsie";
+        }
+
+        telemetry.addData("Cube Position", bitmapCubePosition);
+        telemetry.update();
 
     }
 

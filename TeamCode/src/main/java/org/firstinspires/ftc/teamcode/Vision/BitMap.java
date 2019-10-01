@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.Vision;
 
 import android.graphics.Bitmap;
+import android.graphics.ImageDecoder;
+import android.graphics.drawable.Drawable;
 
 import static android.graphics.Color.red;
 import static android.graphics.Color.green;
@@ -17,6 +19,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.Parameters;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 
@@ -47,6 +51,9 @@ public class BitMap {
 //        parameters.cameraDirection = CAMERA_CHOICE;
 //        vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
+
+
+
         this.opMode = opMode;
 
         int cameraMonitorViewId = this.opMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", this.opMode.hardwareMap.appContext.getPackageName());
@@ -62,7 +69,11 @@ public class BitMap {
 
     }
 
-    private Bitmap getBitmap2() throws InterruptedException{
+    private Bitmap getBitmap2() throws InterruptedException, IOException {
+
+        //File file = new File(...);
+        //ImageDecoder.Source source = ImageDecoder.createSource(file);
+        //Drawable drawable = ImageDecoder.decodeDrawable(source);
         VuforiaLocalizer.CloseableFrame frame = vuforia.getFrameQueue().take();
         Image rgb = null;
 
