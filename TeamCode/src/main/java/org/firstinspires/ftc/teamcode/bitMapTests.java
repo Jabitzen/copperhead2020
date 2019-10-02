@@ -21,6 +21,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.Came
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.Parameters;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.BlockingQueue;
 
 @TeleOp(name="bitMapTests", group="Pushbot")
@@ -184,25 +185,7 @@ public class bitMapTests extends LinearOpMode {
            colNum += 387;
             end += 427;
         }
-//        telemetry.addLine("2");
-//        sleep(2000);
-//        for (int colNum = 0; colNum < bitmap.getWidth(); colNum ) {
-//
-//            for (int rowNum = 0; rowNum < (int)(bitmap.getHeight() ); rowNum += 3) {
-//                int pixel = bitmap.getPixel(colNum, rowNum);
-//
-//                int redPixel = red(pixel);
-//                int greenPixel = green(pixel);
-//                int bluePixel = blue(pixel);
-//
-//                if (redPixel <= RED_THRESHOLD && greenPixel <= GREEN_THRESHOLD && bluePixel <= BLUE_THRESHOLD) {
-//                    xValues.add(colNum);
-//
-//                }
-//
-//            }
-//
-//        }
+
 
         for (int x : xValues) {
             avgX+= x;
@@ -244,9 +227,9 @@ public class bitMapTests extends LinearOpMode {
         Bitmap bitmap = getBitmap();
         String bitmapCubePosition;
 
-        ArrayList<Double> blueValues = new ArrayList<>();
-        ArrayList<Double> redValues = new ArrayList<>();
-        ArrayList<Double> greenValues = new ArrayList<>();
+        ArrayList<Integer> blueValues = new ArrayList<>();
+        ArrayList<Integer> redValues = new ArrayList<>();
+        ArrayList<Integer> greenValues = new ArrayList<>();
         ArrayList<Double> xValues = new ArrayList<>();
 
         double x1 = 0;
@@ -265,151 +248,7 @@ public class bitMapTests extends LinearOpMode {
         double red2 = 0;
         double red3 = 0;
 
-
-      /*  // for looking at 3 stones with phone cam
-        int colNum =203;
-        int end = 223;
-        telemetry.addData("width", bitmap.getWidth());
-        telemetry.update();
-
-        sleep(2000);
-        int count = 0;
-        while (count < 3) {
-            while (colNum < end) {
-                for (int rowNum = 0; rowNum < (720); rowNum ++) {
-                    int pixel = bitmap.getPixel(colNum, rowNum);
-                    blueValues.add((double)blue(pixel));
-                    redValues.add((double)red(pixel));
-                    greenValues.add((double)green(pixel));
-                }
-                colNum ++;
-            }
-            colNum += 430;
-            end += 450;
-            count ++;
-        } */
-
-      //for looking at 2 skystones with phone cam
-        int colNum =203;
-        int end = 223;
-        telemetry.addData("width", bitmap.getWidth());
-        telemetry.update();
-
-        sleep(2000);
-        int count = 0;
-        while (count < 3) {
-            while (colNum < end) {
-                for (int rowNum = 0; rowNum < (720); rowNum ++) {
-                    int pixel = bitmap.getPixel(colNum, rowNum);
-                    blueValues.add((double)blue(pixel));
-                    redValues.add((double)red(pixel));
-                    greenValues.add((double)green(pixel));
-                }
-                colNum ++;
-            }
-            colNum += 430;
-            end += 450;
-            count ++;
-        }
-
-
-
-
-
-//        for (int colNum = 0; colNum < bitmap.getWidth(); colNum ) {
-//
-//            for (int rowNum = 0; rowNum < (int)(bitmap.getHeight() ); rowNum += 3) {
-//                int pixel = bitmap.getPixel(colNum, rowNum);
-//
-//                int redPixel = red(pixel);
-//                int greenPixel = green(pixel);
-//                int bluePixel = blue(pixel);
-//
-//                if (redPixel <= RED_THRESHOLD && greenPixel <= GREEN_THRESHOLD && bluePixel <= BLUE_THRESHOLD) {
-//                    xValues.add(colNum);
-//
-//                }
-//
-//            }
-//
-//        }
-        double size = blueValues.size();
-        telemetry.addData("blue size", size );
-        telemetry.update();
-        sleep(5000);
-
-/*
-        for (int i = 0; i < size; i++) {
-            if (i <= size / 3.0) {
-                avg1 += blueValues.get(i);
-
-            }
-
-            else if (i > size / 3.0 && i <= size * .666) {
-                avg2 += blueValues.get(i);
-            }
-
-            else {
-                avg3 += blueValues.get(i);
-            }
-        }
-*/
-
-        double index = 0;
-        double stop = size / 3.0;
-
-        while (index < stop){
-            avg1 += blueValues.get((int)index);
-            index += 1.0;
-        }
-
-        index = size / 3.0;
-        stop = size * (.66666);
-
-        while (index < stop){
-            avg2 += blueValues.get((int)index);
-            index += 1.0;
-        }
-
-        index = size * 0.66666;
-        stop = size;
-
-        while (index < stop){
-            avg3 += blueValues.get((int)index);
-            index += 1.0;
-        }
-
-
-        /*if (red1 < 1800000) {
-            bitmapCubePosition = "left";
-        }
-
-        else if (red2 < 1800000) {
-            bitmapCubePosition = "center";
-        }
-
-        else if (red3 < 1800000) {
-            bitmapCubePosition = "right";
-        }
-
-        else {
-            bitmapCubePosition = "oopsie";
-        }*/
-
-
-
-
-
-
-
-
-
-
         double size2 = redValues.size();
-
-        telemetry.addData("red size", size2 );
-        telemetry.update();
-        sleep(5000);
 
         for (int i = 0; i < size2; i++) {
             if (i <= size2 / 3) {
@@ -427,77 +266,49 @@ public class bitMapTests extends LinearOpMode {
         }
 
 
+        int stone1 = bitmap.getPixel(100, 360);
+        int redVal1 = red(stone1);
 
+        int stone2 = bitmap.getPixel(527, 360);
+        int redVal2 = red(stone2);
 
+        int stone3 = bitmap.getPixel(954, 360);
+        int redVal3 = red(stone3);
 
-        double size3 = greenValues.size();
+        ArrayList<Integer> vals = new ArrayList<Integer>();
+        vals.add(redVal1);
+        vals.add(redVal2);
+        vals.add(redVal3);
 
+        int min = Collections.min(vals);
+        int pos = vals.indexOf(min);
 
-        telemetry.addData("green size", size3 );
-        telemetry.update();
-        sleep(5000);
-
-        for (int i = 0; i < size3; i++) {
-            if (i <= size3 / 3) {
-                green1 += greenValues.get(i);
-
-            }
-
-            else if (i > size3 / 3 && i <= size3 * 2/3) {
-                green2 += greenValues.get(i);
-            }
-
-            else {
-                green3 += greenValues.get(i);
-            }
-        }
-
-
-
-        //telemetry.addData("size of bitmap", blueValues.size());
-
-
-        telemetry.addData("avg1", avg1);
-        telemetry.addData ("avg2", avg2);
-        telemetry.addData ("avg3", avg3);
-
-        telemetry.update();
-        sleep (8000);
-
-
-        telemetry.addData("green1", green1);
-        telemetry.addData ("green2", green2);
-        telemetry.addData ("green3", green3);
-
-        telemetry.update();
-        sleep (8000);
-
-        telemetry.addData("red1", red1);
-        telemetry.addData ("red2", red2);
-        telemetry.addData ("red3", red3);
-
-        telemetry.update();
-        sleep(3000);
-
-
-        if (Math.abs(red1 - red2) > Math.abs(red2 - red3)) {
+        if (pos == 0){
             bitmapCubePosition = "left";
         }
 
-        else if (Math.abs(red1 - red2) > Math.abs (red1 - red3)) {
-            bitmapCubePosition = "center";
+        else if (pos == 1){
+            bitmapCubePosition = "middle";
         }
 
-        else if (Math.abs(red2 - red3) > Math.abs(red1 - red2)) {
+        else if (pos == 2){
             bitmapCubePosition = "right";
         }
-
         else {
-            bitmapCubePosition = "oopsie";
+            bitmapCubePosition = "yikes";
         }
 
+
+        telemetry.addData("stone 1", redVal1);
+
+        telemetry.addData("stone 2", redVal2);
+
+        telemetry.addData("stone 3", redVal3);
+
         telemetry.addData("Cube Position", bitmapCubePosition);
+
         telemetry.update();
+        sleep(20000);
 
     }
 

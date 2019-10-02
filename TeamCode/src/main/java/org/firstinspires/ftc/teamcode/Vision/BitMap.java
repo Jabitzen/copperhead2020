@@ -22,6 +22,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.Para
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.BlockingQueue;
 
 
@@ -43,16 +44,6 @@ public class BitMap {
     public static String bitmapSkyStonePosition;
 
     public BitMap(LinearOpMode opMode) {
-//        this.opMode = opMode;
-//
-//        int cameraMonitorViewId = this.opMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", this.opMode.hardwareMap.appContext.getPackageName());
-//        parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-//        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-//        parameters.cameraDirection = CAMERA_CHOICE;
-//        vuforia = ClassFactory.getInstance().createVuforia(parameters);
-
-
-
 
         this.opMode = opMode;
 
@@ -195,6 +186,44 @@ public class BitMap {
 
         opMode.telemetry.addData("Cube Position", bitmapCubePosition);
         opMode.telemetry.update();
+        return bitmapCubePosition;
+    }
+    public String findSkystones() throws InterruptedException{
+        Bitmap bitmap = getBitmap();
+        String bitmapCubePosition;
+
+        int stone1 = bitmap.getPixel(100, 360);
+        int redVal1 = red(stone1);
+
+        int stone2 = bitmap.getPixel(527, 360);
+        int redVal2 = red(stone2);
+
+        int stone3 = bitmap.getPixel(954, 360);
+        int redVal3 = red(stone3);
+
+        ArrayList<Integer> vals = new ArrayList<Integer>();
+        vals.add(redVal1);
+        vals.add(redVal2);
+        vals.add(redVal3);
+
+        int min = Collections.min(vals);
+        int pos = vals.indexOf(min);
+
+        if (pos == 0){
+            bitmapCubePosition = "left";
+        }
+
+        else if (pos == 1){
+            bitmapCubePosition = "middle";
+        }
+
+        else if (pos == 2){
+            bitmapCubePosition = "right";
+        }
+        else {
+            bitmapCubePosition = "yikes";
+        }
+
         return bitmapCubePosition;
     }
 
