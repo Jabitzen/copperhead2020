@@ -9,10 +9,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 public class RobotHw {
 
     // Motors
-    DcMotor fL = null;
-    DcMotor fR = null;
-    DcMotor bL = null;
-    DcMotor bR = null;
+    public DcMotor fL = null;
+    public DcMotor fR = null;
+    public DcMotor bL = null;
+    public DcMotor bR = null;
 
     DcMotor intakeR = null;
     DcMotor intakeL = null;
@@ -34,6 +34,7 @@ public class RobotHw {
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
+
 
     public void init(HardwareMap ahwMap) {
         // Hardware map
