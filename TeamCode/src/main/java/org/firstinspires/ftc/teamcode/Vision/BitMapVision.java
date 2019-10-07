@@ -26,7 +26,7 @@ import java.util.Collections;
 import java.util.concurrent.BlockingQueue;
 
 
-public class BitMap {
+public class BitMapVision {
 
     private LinearOpMode opMode;
     private VuforiaLocalizer vuforia;
@@ -43,7 +43,7 @@ public class BitMap {
 
     public static String bitmapSkyStonePosition;
 
-    public BitMap(LinearOpMode opMode) {
+    public BitMapVision(LinearOpMode opMode) {
 
         this.opMode = opMode;
 

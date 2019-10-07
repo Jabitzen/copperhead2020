@@ -78,13 +78,21 @@ public class testing extends LinearOpMode{
     }
 
     public void trigMecanum() {
+        telemetry.addLine("start");
         double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
-        double robotAngle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
+        double robotAngle = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x) - Math.PI / 4;
         double rightX = gamepad1.right_stick_x;
         final double v1 = r * Math.cos(robotAngle) + rightX;
         final double v2 = r * Math.sin(robotAngle) - rightX;
         final double v3 = r * Math.sin(robotAngle) + rightX;
         final double v4 = r * Math.cos(robotAngle) - rightX;
+
+        telemetry.addData("fl", v1);
+        telemetry.addData ("fR", v2);
+        telemetry.addData ("bL", v3);
+        telemetry.addData ("bR", v4);
+        telemetry.addData ("Right X", rightX);
+        telemetry.update();
 
         fL.setPower(v1);
         fR.setPower(v2);
