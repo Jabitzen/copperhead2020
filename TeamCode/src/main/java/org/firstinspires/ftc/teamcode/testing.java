@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 
 import org.firstinspires.ftc.teamcode.Movement.RobotHw;
@@ -27,6 +28,13 @@ public class testing extends LinearOpMode{
         fR  = hardwareMap.get(DcMotor.class, "fR");
         bL  = hardwareMap.get(DcMotor.class, "bL");
         bR  = hardwareMap.get(DcMotor.class, "bR");
+
+        fL.setDirection(DcMotor.Direction.FORWARD);
+        bL.setDirection(DcMotor.Direction.REVERSE);
+        fR.setDirection(DcMotor.Direction.REVERSE);
+        bR.setDirection(DcMotor.Direction.FORWARD);
+
+
 
         waitForStart();
         while (opModeIsActive()) {
@@ -82,10 +90,10 @@ public class testing extends LinearOpMode{
         double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
         double robotAngle = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x) - Math.PI / 4;
         double rightX = gamepad1.right_stick_x;
-        final double v1 = r * Math.cos(robotAngle) + rightX;
-        final double v2 = r * Math.sin(robotAngle) - rightX;
-        final double v3 = r * Math.sin(robotAngle) + rightX;
-        final double v4 = r * Math.cos(robotAngle) - rightX;
+        final double v1 = r * Math.cos(-robotAngle) + rightX;
+        final double v2 = r * Math.sin(-robotAngle) - rightX;
+        final double v3 = r * Math.sin(-robotAngle) + rightX;
+        final double v4 = r * Math.cos(-robotAngle) - rightX;
 
         telemetry.addData("fl", v1);
         telemetry.addData ("fR", v2);
@@ -96,8 +104,8 @@ public class testing extends LinearOpMode{
 
         fL.setPower(v1);
         fR.setPower(v2);
-        bL.setPower(v3);
-        bR.setPower(v4);
+        bL.setPower(v4);
+        bR.setPower(v3);
     }
 
 
