@@ -210,7 +210,7 @@ public class BitMapVision {
         int pos = vals.indexOf(min);
 
         if (pos == 0){
-            bitmapCubePosition = "left";
+            bitmapCubePosition = "right";
         }
 
         else if (pos == 1){
@@ -218,7 +218,7 @@ public class BitMapVision {
         }
 
         else if (pos == 2){
-            bitmapCubePosition = "right";
+            bitmapCubePosition = "left";
         }
         else {
             bitmapCubePosition = "yikes";
