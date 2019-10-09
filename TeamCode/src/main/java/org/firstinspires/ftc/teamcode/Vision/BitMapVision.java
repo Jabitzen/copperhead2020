@@ -192,13 +192,13 @@ public class BitMapVision {
         Bitmap bitmap = getBitmap();
         String bitmapCubePosition;
 
-        int stone1 = bitmap.getPixel(100, 360);
+        int stone1 = bitmap.getPixel(50, 360);
         int redVal1 = red(stone1);
 
-        int stone2 = bitmap.getPixel(527, 360);
+        int stone2 = bitmap.getPixel(391, 360);
         int redVal2 = red(stone2);
 
-        int stone3 = bitmap.getPixel(954, 360);
+        int stone3 = bitmap.getPixel(732, 360);
         int redVal3 = red(stone3);
 
         ArrayList<Integer> vals = new ArrayList<Integer>();
