@@ -30,7 +30,7 @@ public class RobotHw {
 
     // Tick Conversion
     static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
-    static final double     DRIVE_GEAR_REDUCTION    = 2.0 ;     // This is < 1.0 if geared UP
+    static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
@@ -87,7 +87,7 @@ public class RobotHw {
         return Math.abs(distance*COUNTS_PER_INCH);
     }
 
-    public void moveStraight (double distance, int power) {
+    public void moveStraight (double distance, double power) {
         dtEncoderModeOn();
         int startVal = fL.getCurrentPosition();
         if (fL.getCurrentPosition() != 0) {
@@ -121,7 +121,7 @@ public class RobotHw {
         }
     }
 
-    public void strafeLeft (double distance, int power) {
+    public void strafeLeft (double distance, double power) {
         dtEncoderModeOn();
         int startVal = fL.getCurrentPosition();
         while (Math.abs(fL.getCurrentPosition() - startVal) < Math.abs(distance * COUNTS_PER_INCH)) {
@@ -132,7 +132,7 @@ public class RobotHw {
         }
     }
 
-    public void strafeRight (double distance, int power) {
+    public void strafeRight (double distance, double power) {
         dtEncoderModeOn();
         int startVal = fR.getCurrentPosition();
         while (Math.abs(fR.getCurrentPosition() - startVal) < Math.abs(distance * COUNTS_PER_INCH)) {

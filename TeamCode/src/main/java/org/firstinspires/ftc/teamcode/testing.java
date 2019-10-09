@@ -29,10 +29,10 @@ public class testing extends LinearOpMode{
         bL  = hardwareMap.get(DcMotor.class, "bL");
         bR  = hardwareMap.get(DcMotor.class, "bR");
 
-        fL.setDirection(DcMotor.Direction.FORWARD);
-        bL.setDirection(DcMotor.Direction.REVERSE);
-        fR.setDirection(DcMotor.Direction.REVERSE);
-        bR.setDirection(DcMotor.Direction.FORWARD);
+        //fL.setDirection(DcMotor.Direction.FORWARD);
+        //bL.setDirection(DcMotor.Direction.REVERSE);
+        //fR.setDirection(DcMotor.Direction.REVERSE);
+        //bR.setDirection(DcMotor.Direction.FORWARD);
 
 
 
@@ -88,12 +88,12 @@ public class testing extends LinearOpMode{
     public void trigMecanum() {
         telemetry.addLine("start");
         double r = Math.hypot(gamepad1.left_stick_x, gamepad1.left_stick_y);
-        double robotAngle = Math.atan2(gamepad1.left_stick_y, -gamepad1.left_stick_x) - Math.PI / 4;
+        double robotAngle = Math.atan2(gamepad1.left_stick_y, gamepad1.left_stick_x) - Math.PI / 4;
         double rightX = gamepad1.right_stick_x;
-        final double v1 = r * Math.cos(-robotAngle) + rightX;
-        final double v2 = r * Math.sin(-robotAngle) - rightX;
-        final double v3 = r * Math.sin(-robotAngle) + rightX;
-        final double v4 = r * Math.cos(-robotAngle) - rightX;
+        final double v1 = r * Math.cos(robotAngle) + rightX;
+        final double v2 = r * Math.sin(robotAngle) - rightX;
+        final double v3 = r * Math.sin(robotAngle) + rightX;
+        final double v4 = r * Math.cos(robotAngle) - rightX;
 
         telemetry.addData("fl", v1);
         telemetry.addData ("fR", v2);
@@ -104,8 +104,8 @@ public class testing extends LinearOpMode{
 
         fL.setPower(v1);
         fR.setPower(v2);
-        bL.setPower(v4);
-        bR.setPower(v3);
+        bL.setPower(v3);
+        bR.setPower(v4);
     }
 
 
