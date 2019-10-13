@@ -21,6 +21,7 @@ public class RobotHw {
     Servo clip = null;
     Servo claw = null;
     Servo rotate = null;
+    //Servo grabber = null;
 
     // HardwareMap
     HardwareMap hwMap;
@@ -53,6 +54,7 @@ public class RobotHw {
         clip  = hwMap.get(Servo.class, "clip");
         claw  = hwMap.get(Servo.class, "claw");
         rotate  = hwMap.get(Servo.class, "rotate");
+       // grabber = hwMap.get(Servo.class, "grabber");
 
         //set direction of motors
         fL.setDirection(DcMotor.Direction.FORWARD);

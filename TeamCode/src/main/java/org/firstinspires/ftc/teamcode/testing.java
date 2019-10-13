@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 
 import org.firstinspires.ftc.teamcode.Movement.RobotHw;
@@ -22,6 +23,8 @@ public class testing extends LinearOpMode{
     public DcMotor bL = null;
     public DcMotor bR = null;
 
+    //public Servo grabber = null;
+
     @Override
     public void runOpMode() throws InterruptedException {
         fL  = hardwareMap.get(DcMotor.class, "fL");
@@ -29,10 +32,18 @@ public class testing extends LinearOpMode{
         bL  = hardwareMap.get(DcMotor.class, "bL");
         bR  = hardwareMap.get(DcMotor.class, "bR");
 
+        //grabber = hardwareMap.get(Servo.class, "grabber");
+
         fL.setDirection(DcMotor.Direction.FORWARD);
         bL.setDirection(DcMotor.Direction.REVERSE);
         fR.setDirection(DcMotor.Direction.FORWARD);
         bR.setDirection(DcMotor.Direction.REVERSE);
+
+        fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
 
 
 
@@ -89,13 +100,21 @@ public class testing extends LinearOpMode{
         double rightstickx = 0;
         double leftstickx = 0;
         double leftsticky = 0;
+/*
+        if (gamepad1.b) {
+            grabber.setPosition(0);
+        }
 
+        if (gamepad1.a) {
+            grabber.setPosition(1);
+        }
+*/
         if (gamepad1.right_stick_x > 0.15){
-            rightstickx = gamepad1.right_stick_x * gamepad1.right_stick_x;
+            rightstickx = (gamepad1.right_stick_x * gamepad1.right_stick_x) + .3;
         }
 
         else if(gamepad1.right_stick_x < -0.15){
-            rightstickx = -1 * (gamepad1.right_stick_x * gamepad1.right_stick_x);
+            rightstickx = -1 * ((gamepad1.right_stick_x * gamepad1.right_stick_x) + .3);
         }
 
         else{
@@ -105,11 +124,11 @@ public class testing extends LinearOpMode{
 
 
         if (gamepad1.left_stick_x > 0.15){
-            leftstickx = gamepad1.left_stick_x * gamepad1.left_stick_x;
+            leftstickx = (gamepad1.left_stick_x * gamepad1.left_stick_x) + .3;
         }
 
         else if(gamepad1.left_stick_x < -0.15){
-            leftstickx = -1 * (gamepad1.left_stick_x * gamepad1.left_stick_x);
+            leftstickx = -1 * ((gamepad1.left_stick_x * gamepad1.left_stick_x) + .3);
         }
 
         else{
@@ -118,12 +137,12 @@ public class testing extends LinearOpMode{
 
 
 
-        if (gamepad1.left_stick_y > 0.15){
-            leftsticky = gamepad1.left_stick_y * gamepad1.left_stick_y;
+        if (gamepad1.left_stick_y > 0.3){
+            leftsticky = (gamepad1.left_stick_y * gamepad1.left_stick_y) + .3;
         }
 
-        else if(gamepad1.left_stick_y < -0.15){
-            leftsticky = -1 * (gamepad1.left_stick_y * gamepad1.left_stick_y);
+        else if(gamepad1.left_stick_y < -0.3){
+            leftsticky = -1 * ((gamepad1.left_stick_y * gamepad1.left_stick_y) + .3);
         }
 
         else{
@@ -147,7 +166,7 @@ public class testing extends LinearOpMode{
         telemetry.addData ("fR", v2);
         telemetry.addData ("bL", v3);
         telemetry.addData ("bR", v4);
-        telemetry.addData ("Right X", rightX);
+       // telemetry.addData ("Right X", rightX);
         telemetry.update();
 
         fL.setPower(v1);
