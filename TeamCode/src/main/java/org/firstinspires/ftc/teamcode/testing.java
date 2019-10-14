@@ -23,7 +23,8 @@ public class testing extends LinearOpMode{
     public DcMotor bL = null;
     public DcMotor bR = null;
 
-    //public Servo grabber = null;
+    public Servo grabber = null;
+    public Servo clamp = null;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -32,7 +33,8 @@ public class testing extends LinearOpMode{
         bL  = hardwareMap.get(DcMotor.class, "bL");
         bR  = hardwareMap.get(DcMotor.class, "bR");
 
-        //grabber = hardwareMap.get(Servo.class, "grabber");
+        grabber = hardwareMap.get(Servo.class, "grabber");
+        clamp = hardwareMap.get(Servo.class, "clamp");
 
         fL.setDirection(DcMotor.Direction.FORWARD);
         bL.setDirection(DcMotor.Direction.REVERSE);
@@ -51,6 +53,26 @@ public class testing extends LinearOpMode{
         while (opModeIsActive()) {
             //mecanumDrive_Cartesian(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
             trigMecanum();
+
+            if (gamepad1.b) {
+                grabber.setPosition(0.6);
+            }
+
+            if (gamepad1.a) {
+                grabber.setPosition(1);
+            }
+
+            if (gamepad1.x) {
+                clamp.setPosition(0);
+            }
+
+            if (gamepad1.y) {
+                clamp.setPosition(1);
+            }
+
+            telemetry.addData ("pos1", clamp.getPosition());
+       //     telemetry.addData ("pos2", clamp.getPosition());
+            telemetry.update();
         }
 
 
@@ -100,15 +122,9 @@ public class testing extends LinearOpMode{
         double rightstickx = 0;
         double leftstickx = 0;
         double leftsticky = 0;
-/*
-        if (gamepad1.b) {
-            grabber.setPosition(0);
-        }
 
-        if (gamepad1.a) {
-            grabber.setPosition(1);
-        }
-*/
+
+
         if (gamepad1.right_stick_x > 0.15){
             rightstickx = (gamepad1.right_stick_x * gamepad1.right_stick_x) + .3;
         }
@@ -171,8 +187,8 @@ public class testing extends LinearOpMode{
 
         fL.setPower(v1);
         fR.setPower(v2);
-        bL.setPower(v3);
-        bR.setPower(v4);
+        bL.setPower(v3 * .85);
+        bR.setPower(v4 * .85);
     }
 
 
