@@ -22,6 +22,7 @@ public class RobotHw {
     Servo clip = null;
     Servo claw = null;
     Servo rotate = null;
+    public Servo clamp = null;
     //Servo grabber = null;
 
     // HardwareMap
@@ -55,7 +56,10 @@ public class RobotHw {
         clip  = hwMap.get(Servo.class, "clip");
         claw  = hwMap.get(Servo.class, "claw");
         rotate  = hwMap.get(Servo.class, "rotate");
-       // grabber = hwMap.get(Servo.class, "grabber");
+        clamp = hwMap.get(Servo.class, "clamp");
+
+
+        // grabber = hwMap.get(Servo.class, "grabber");
 
         //set direction of motors
         fL.setDirection(DcMotor.Direction.FORWARD);
@@ -155,6 +159,26 @@ public class RobotHw {
         bL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         fR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         bR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    }
+
+    public void turnTime (double power, boolean turnRight, double time){
+        ElapsedTime timer = new ElapsedTime();
+        if (turnRight) {
+            while (timer.seconds() < time) {
+                fL.setPower(power);
+                bL.setPower(power);
+                fR.setPower(-power);
+                bR.setPower(-power);
+            }
+        }
+        else{
+            while (timer.seconds() < time) {
+                fL.setPower(-power);
+                bL.setPower(-power);
+                fR.setPower(power);
+                bR.setPower(power);
+            }
+        }
     }
 
 
