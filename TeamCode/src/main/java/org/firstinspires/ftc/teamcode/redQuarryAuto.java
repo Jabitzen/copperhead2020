@@ -27,12 +27,12 @@ public class redQuarryAuto extends LinearOpMode {
 
         if (pos == "left") {
             robot.moveStraight(30, 0.5); //move to skystone
-            //grabber down
+            robot.grabberDown();
             robot.moveStraight(5, .5);
             robot.strafeLeft(60, 0.5);
-            //grabber up
+            robot.grabberUp();
             robot.strafeRight(85, .5);
-            //grabber down
+            robot.grabberDown();
             robot.strafeLeft(85, 0.5);
             robot.strafeRight(20, .5);
 

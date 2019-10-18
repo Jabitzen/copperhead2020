@@ -23,6 +23,7 @@ public class RobotHw {
     Servo claw = null;
     Servo rotate = null;
     public Servo clamp = null;
+    public Servo grabber = null;
     //Servo grabber = null;
 
     // HardwareMap
@@ -57,6 +58,8 @@ public class RobotHw {
         claw  = hwMap.get(Servo.class, "claw");
         rotate  = hwMap.get(Servo.class, "rotate");
         clamp = hwMap.get(Servo.class, "clamp");
+        grabber = hwMap.get(Servo.class, "grabber");
+
 
 
         // grabber = hwMap.get(Servo.class, "grabber");
@@ -179,6 +182,14 @@ public class RobotHw {
                 bR.setPower(power);
             }
         }
+    }
+
+    public void grabberDown(){
+        grabber.setPosition(1);
+    }
+
+    public void grabberUp(){
+        grabber.setPosition(.6);
     }
 
 

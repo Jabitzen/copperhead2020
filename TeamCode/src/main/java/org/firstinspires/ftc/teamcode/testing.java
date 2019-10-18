@@ -26,6 +26,8 @@ public class testing extends LinearOpMode{
     public Servo grabber = null;
     public Servo clamp = null;
 
+    int constant = 1;
+
     @Override
     public void runOpMode() throws InterruptedException {
         fL  = hardwareMap.get(DcMotor.class, "fL");
@@ -70,15 +72,26 @@ public class testing extends LinearOpMode{
                 clamp.setPosition(1);
             }
 
-            telemetry.addData ("pos1", clamp.getPosition());
+            if (gamepad1.dpad_down){
+                switchDirection();
+            }
+
+            //telemetry.addData ("pos1", clamp.getPosition());
        //     telemetry.addData ("pos2", clamp.getPosition());
-            telemetry.update();
+            //telemetry.update();
         }
 
 
 
 
     }
+
+    public void switchDirection(){
+        constant *= -1;
+    }
+
+
+
     public void mecanumDrive_Cartesian(double x, double y, double rotation)
     {
         double wheelSpeeds[] = new double[4];
@@ -126,11 +139,11 @@ public class testing extends LinearOpMode{
 
 
         if (gamepad1.right_stick_x > 0.15){
-            rightstickx = (gamepad1.right_stick_x * gamepad1.right_stick_x) + .3;
+            rightstickx = ((gamepad1.right_stick_x * gamepad1.right_stick_x) + .39);
         }
 
         else if(gamepad1.right_stick_x < -0.15){
-            rightstickx = -1 * ((gamepad1.right_stick_x * gamepad1.right_stick_x) + .3);
+            rightstickx = (-1 * ((gamepad1.right_stick_x * gamepad1.right_stick_x) + .39));
         }
 
         else{
@@ -140,11 +153,11 @@ public class testing extends LinearOpMode{
 
 
         if (gamepad1.left_stick_x > 0.15){
-            leftstickx = (gamepad1.left_stick_x * gamepad1.left_stick_x) + .3;
+            leftstickx = ((gamepad1.left_stick_x * gamepad1.left_stick_x) + .39) * constant;
         }
 
         else if(gamepad1.left_stick_x < -0.15){
-            leftstickx = -1 * ((gamepad1.left_stick_x * gamepad1.left_stick_x) + .3);
+            leftstickx = (-1 * ((gamepad1.left_stick_x * gamepad1.left_stick_x) + .39)) * constant;
         }
 
         else{
@@ -154,11 +167,11 @@ public class testing extends LinearOpMode{
 
 
         if (gamepad1.left_stick_y > 0.3){
-            leftsticky = (gamepad1.left_stick_y * gamepad1.left_stick_y) + .3;
+            leftsticky = ((gamepad1.left_stick_y * gamepad1.left_stick_y) + .39) * constant;
         }
 
         else if(gamepad1.left_stick_y < -0.3){
-            leftsticky = -1 * ((gamepad1.left_stick_y * gamepad1.left_stick_y) + .3);
+            leftsticky = (-1 * ((gamepad1.left_stick_y * gamepad1.left_stick_y) + .39)) * constant;
         }
 
         else{
@@ -187,8 +200,8 @@ public class testing extends LinearOpMode{
 
         fL.setPower(v1);
         fR.setPower(v2);
-        bL.setPower(v3 * .8);
-        bR.setPower(v4 * .8);
+        bL.setPower(v3 * .79);
+        bR.setPower(v4 * .79);
     }
 
 
