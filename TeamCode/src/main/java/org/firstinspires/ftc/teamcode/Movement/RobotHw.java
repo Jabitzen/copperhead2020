@@ -84,10 +84,12 @@ public class RobotHw {
 
 
         // Set all motors to zero power
-        fL.setPower(0);
-        bL.setPower(0);
-        fR.setPower(0);
-        bR.setPower(0);
+        fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
+        dtEncoderModeOn();
         //intakeL.setPower(0);
         //intakeR.setPower(0);
 
