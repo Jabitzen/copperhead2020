@@ -10,20 +10,31 @@ import org.firstinspires.ftc.teamcode.Vision.BitMapVision;
 public class redQuarryAuto extends LinearOpMode {
 
     BitMapVision bm1 = null;
-    RobotHw robot = new RobotHw();
+    RobotHw robot = new RobotHw(this);
 
 
 
     @Override
     public void runOpMode() throws InterruptedException {
-        bm1 = new BitMapVision(this);
+        robot.init(hardwareMap);
+        //bm1 = new BitMapVision(this);
         waitForStart();
 
+        // Middle Pathing
+        robot.goStraight(); // Move to Skystone
+        sleep(3000);
+        telemetry.addLine("done");
+        telemetry.update();
+
+        //robot.grabberDown(); // Bring down grabber
+      //  robot.strafeLeft(10, .5);
+        /*
         String pos = bm1.findSkystones();
         sleep(3000);
         telemetry.addData("Skystone Position: ", pos);
         telemetry.update();
         sleep(5000);
+
 
         if (pos == "left") {
             robot.moveStraight(30, 0.5); //move to skystone
@@ -49,5 +60,7 @@ public class redQuarryAuto extends LinearOpMode {
         else {
             telemetry.addLine("oopsie");
         }
+        */
+
     }
 }

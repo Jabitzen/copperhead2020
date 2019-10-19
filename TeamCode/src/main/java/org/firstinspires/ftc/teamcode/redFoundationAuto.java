@@ -8,10 +8,12 @@ import org.firstinspires.ftc.teamcode.Movement.RobotHw;
 
 @Autonomous(name="redFoundationAuto", group="12596")
 public class redFoundationAuto extends LinearOpMode {
-    RobotHw robot = new RobotHw();
+    RobotHw robot = new RobotHw(this);
 
     @Override
     public void runOpMode() throws InterruptedException {
+        robot.init(hardwareMap);
+
         waitForStart();
         robot.moveStraight(-15, .5);
         robot.turnTime(.5, true, .3);
@@ -20,6 +22,6 @@ public class redFoundationAuto extends LinearOpMode {
         robot.turnTime(.5, false, .3);
         robot.moveStraight(15, .5);
         //servo up
-        robot.strafeRight(30, .5);
+        //robot.strafeRight(30, .5);
     }
 }

@@ -58,10 +58,12 @@ public class testing extends LinearOpMode{
 
             if (gamepad1.b) {
                 grabber.setPosition(0.6);
+                telemetry.addData("detected", grabber.getPosition());
             }
 
             if (gamepad1.a) {
                 grabber.setPosition(1);
+                telemetry.addData("detected", grabber.getPosition());
             }
 
             if (gamepad1.x) {
@@ -85,6 +87,9 @@ public class testing extends LinearOpMode{
 
 
     }
+
+
+
 
     public void switchDirection(){
         constant *= -1;
