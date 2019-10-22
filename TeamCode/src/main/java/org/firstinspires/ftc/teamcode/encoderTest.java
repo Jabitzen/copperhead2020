@@ -1,21 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
 
 
-import org.firstinspires.ftc.teamcode.Movement.RobotHw;
-
-
-@TeleOp(name="Testing", group="Pushbot")
+@TeleOp(name="Encoder Testing", group="Pushbot")
 
 // @ AUTHOR HAYDEN WARREN
-public class testing extends LinearOpMode{
+public class encoderTest extends LinearOpMode{
 
 
     public DcMotor fL = null;
@@ -23,10 +16,7 @@ public class testing extends LinearOpMode{
     public DcMotor bL = null;
     public DcMotor bR = null;
 
-    public Servo grabber = null;
-    public Servo clamp = null;
-
-    int constant = 1;
+    //public Servo grabber = null;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -35,18 +25,20 @@ public class testing extends LinearOpMode{
         bL  = hardwareMap.get(DcMotor.class, "bL");
         bR  = hardwareMap.get(DcMotor.class, "bR");
 
-        grabber = hardwareMap.get(Servo.class, "grabber");
-        clamp = hardwareMap.get(Servo.class, "clamp");
+        //grabber = hardwareMap.get(Servo.class, "grabber");
 
         fL.setDirection(DcMotor.Direction.FORWARD);
         bL.setDirection(DcMotor.Direction.REVERSE);
         fR.setDirection(DcMotor.Direction.FORWARD);
         bR.setDirection(DcMotor.Direction.REVERSE);
 
-        fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        fL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        bL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        bR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+
+
 
 
 
@@ -54,49 +46,22 @@ public class testing extends LinearOpMode{
         waitForStart();
         while (opModeIsActive()) {
             //mecanumDrive_Cartesian(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-            trigMecanum();
+            fL.setPower(gamepad1.left_stick_y);
+            bL.setPower(gamepad1.left_stick_y);
+            fR.setPower(gamepad1.right_stick_y);
+            bR.setPower(gamepad1.right_stick_y);
 
-            if (gamepad1.b) {
-                grabber.setPosition(0.6);
-                telemetry.addData("detected", grabber.getPosition());
-            }
-
-            if (gamepad1.a) {
-                grabber.setPosition(1);
-                telemetry.addData("detected", grabber.getPosition());
-            }
-
-            if (gamepad1.x) {
-                clamp.setPosition(0);
-            }
-
-            if (gamepad1.y) {
-                clamp.setPosition(1);
-            }
-
-            if (gamepad1.dpad_down){
-                switchDirection();
-            }
-
-            //telemetry.addData ("pos1", clamp.getPosition());
-       //     telemetry.addData ("pos2", clamp.getPosition());
-            //telemetry.update();
+            telemetry.addData("FL : ", fL.getCurrentPosition());
+            telemetry.addData("BL : ", bL.getCurrentPosition());
+            telemetry.addData("FR : ", fR.getCurrentPosition());
+            telemetry.addData("BR : ", bR.getCurrentPosition());
+            telemetry.update();
         }
 
 
 
 
     }
-
-
-
-
-    public void switchDirection(){
-        constant *= -1;
-    }
-
-
-
     public void mecanumDrive_Cartesian(double x, double y, double rotation)
     {
         double wheelSpeeds[] = new double[4];
@@ -140,15 +105,21 @@ public class testing extends LinearOpMode{
         double rightstickx = 0;
         double leftstickx = 0;
         double leftsticky = 0;
+/*
+        if (gamepad1.b) {
+            grabber.setPosition(0);
+        }
 
-
-
+        if (gamepad1.a) {
+            grabber.setPosition(1);
+        }
+*/
         if (gamepad1.right_stick_x > 0.15){
-            rightstickx = ((gamepad1.right_stick_x * gamepad1.right_stick_x) + .39);
+            rightstickx = (gamepad1.right_stick_x * gamepad1.right_stick_x) + .3;
         }
 
         else if(gamepad1.right_stick_x < -0.15){
-            rightstickx = (-1 * ((gamepad1.right_stick_x * gamepad1.right_stick_x) + .39));
+            rightstickx = -1 * ((gamepad1.right_stick_x * gamepad1.right_stick_x) + .3);
         }
 
         else{
@@ -158,11 +129,11 @@ public class testing extends LinearOpMode{
 
 
         if (gamepad1.left_stick_x > 0.15){
-            leftstickx = ((gamepad1.left_stick_x * gamepad1.left_stick_x) + .39) * constant;
+            leftstickx = (gamepad1.left_stick_x * gamepad1.left_stick_x) + .3;
         }
 
         else if(gamepad1.left_stick_x < -0.15){
-            leftstickx = (-1 * ((gamepad1.left_stick_x * gamepad1.left_stick_x) + .39)) * constant;
+            leftstickx = -1 * ((gamepad1.left_stick_x * gamepad1.left_stick_x) + .3);
         }
 
         else{
@@ -172,11 +143,11 @@ public class testing extends LinearOpMode{
 
 
         if (gamepad1.left_stick_y > 0.3){
-            leftsticky = ((gamepad1.left_stick_y * gamepad1.left_stick_y) + .39) * constant;
+            leftsticky = (gamepad1.left_stick_y * gamepad1.left_stick_y) + .3;
         }
 
         else if(gamepad1.left_stick_y < -0.3){
-            leftsticky = (-1 * ((gamepad1.left_stick_y * gamepad1.left_stick_y) + .39)) * constant;
+            leftsticky = -1 * ((gamepad1.left_stick_y * gamepad1.left_stick_y) + .3);
         }
 
         else{
@@ -205,8 +176,8 @@ public class testing extends LinearOpMode{
 
         fL.setPower(v1);
         fR.setPower(v2);
-        bL.setPower(v3 * .79);
-        bR.setPower(v4 * .79);
+        bL.setPower(v3);
+        bR.setPower(v4);
     }
 
 
