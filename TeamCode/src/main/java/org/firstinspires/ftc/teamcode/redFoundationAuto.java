@@ -8,11 +8,11 @@ import org.firstinspires.ftc.teamcode.Movement.RobotHw;
 
 @Autonomous(name="redFoundationAuto", group="12596")
 public class redFoundationAuto extends LinearOpMode {
-    RobotHw robot = new RobotHw(this);
+    RobotHw robot = new RobotHw();
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot.init(hardwareMap);
+        robot.init(this);
 
         waitForStart();
         robot.moveStraight(-15, .5);

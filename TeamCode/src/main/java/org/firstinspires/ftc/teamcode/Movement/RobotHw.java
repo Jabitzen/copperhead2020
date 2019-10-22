@@ -37,27 +37,26 @@ public class RobotHw {
     private ElapsedTime runtime = new ElapsedTime();
 
     // Tick Conversion
-    static final double     COUNTS_PER_MOTOR_REV    = 134.4 ;    // eg: TETRIX Motor Encoder
+    static final double     COUNTS_PER_MOTOR_REV    = 380 ;    // eg: TETRIX Motor Encoder
     static final double     DRIVE_GEAR_REDUCTION    = 1.0 ;     // This is < 1.0 if geared UP
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
 
-    public RobotHw(LinearOpMode lOpmode) {
+
+
+
+
+    public void init(LinearOpMode lOpmode) {
         opmode = lOpmode;
-    }
-
-
-
-    public void init(HardwareMap ahwMap) {
         // Hardware map
-        hwMap = ahwMap;
+        hwMap = opmode.hardwareMap;
 
         // Define and Initialize Motors
-        fL  = hwMap.get(DcMotor.class, "fL");
-        fR  = hwMap.get(DcMotor.class, "fR");
-        bL  = hwMap.get(DcMotor.class, "bL");
-        bR  = hwMap.get(DcMotor.class, "bR");
+        fL  = opmode.hardwareMap.get(DcMotor.class, "fL");
+        fR  = opmode.hardwareMap.get(DcMotor.class, "fR");
+        bL  = opmode.hardwareMap.get(DcMotor.class, "bL");
+        bR  = opmode.hardwareMap.get(DcMotor.class, "bR");
 
         //intakeR  = hwMap.get(DcMotor.class, "intakeR");
         //intakeL  = hwMap.get(DcMotor.class, "intakeL");
@@ -79,6 +78,8 @@ public class RobotHw {
         fR.setDirection(DcMotor.Direction.REVERSE);
         bR.setDirection(DcMotor.Direction.REVERSE);
 
+        dtEncoderModeOn();
+
         //intakeL.setDirection(DcMotor.Direction.FORWARD);
         //intakeR.setDirection(DcMotor.Direction.REVERSE);
 
@@ -89,7 +90,14 @@ public class RobotHw {
         fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        dtEncoderModeOn();
+        opmode.telemetry.addData("fl", fL.getCurrentPosition()) ;
+        opmode.telemetry.addData("fr", fR.getCurrentPosition());
+        //opmode.telemetry.addData("bl", bL.getCurrentPosition());
+        opmode.telemetry.addData("br", bR.getCurrentPosition());
+        opmode.telemetry.update();
+
+
+
         //intakeL.setPower(0);
         //intakeR.setPower(0);
 
@@ -142,20 +150,25 @@ public class RobotHw {
         }
     }
 
-    public void goStraight() {
+    public void goStraight(double distance, double power) {
         reset();
-        //dtEncoderModeOn();
-        while (fL.getCurrentPosition() < 1200 && bR.getCurrentPosition() < 1200 && fR.getCurrentPosition() < 1200) {
-            fL.setPower(.5);
-            fR.setPower(.5);
-            bL.setPower(.5);
-            bR.setPower(.5);
-            opmode.telemetry.addData("fl", fL.getCurrentPosition()) ;
+
+        while (encoderAvg() < (distance * (537.6/18.5))) {
+            fL.setPower(-power);
+            fR.setPower(power);
+            bL.setPower(power);
+            bR.setPower(power);
+            opmode.telemetry.addData("avg", encoderAvg());
+            opmode.telemetry.addData("fl", fL.getCurrentPosition());
             opmode.telemetry.addData("fr", fR.getCurrentPosition());
-            //opmode.telemetry.addData("bl", bL.getCurrentPosition());
+            opmode.telemetry.addData("bl", bL.getCurrentPosition());
             opmode.telemetry.addData("br", bR.getCurrentPosition());
             opmode.telemetry.update();
         }
+        fL.setPower(0);
+        fR.setPower(0);
+        bL.setPower(0);
+        bR.setPower(0);
     }
 
 
@@ -262,49 +275,43 @@ public class RobotHw {
     public void reset() {
 
         fL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        opmode.idle();
         bL.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        opmode.idle();
         fR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        opmode.idle();
         bR.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        opmode.idle();
+
+        fL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        opmode.idle();
+        bL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        opmode.idle();
+        fR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        opmode.idle();
+        bR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        opmode.idle();
 
     }
 
-    /*public double encoderAvg() {
+    public double encoderAvg() {
         double avg = 0;
-        int count = 0;
+
         // FR motor
-        if (fR.getCurrentPosition() + 1 != 0) {
-            avg += Math.abs(fR.getCurrentPosition());
-        }
-        else {
-            count ++;
-        }
+        avg += Math.abs(fR.getCurrentPosition());
+
         // FL motor
-        if (fL.getCurrentPosition() + 1 != 0) {
-            avg += Math.abs(fL.getCurrentPosition());
-        }
-        else {
-            count ++;
-        }
-        // BL motor
-        if (bL.getCurrentPosition() + 1 != 0) {
-            avg += Math.abs(bL.getCurrentPosition());
-        }
-        else {
-            count ++;
-        }
+        avg += Math.abs(fL.getCurrentPosition());
+
         //BR motor
-        if (bR.getCurrentPosition() + 1 != 0) {
-            avg += Math.abs(bR.getCurrentPosition());
-        }
-        else {
-            count ++;
-        }
+        avg += Math.abs(bR.getCurrentPosition());
 
 
-        return avg/count;
+
+        return avg/3;
 
     }
-*/
+
 
     public void dtEncoderModeOn (){
         fL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
