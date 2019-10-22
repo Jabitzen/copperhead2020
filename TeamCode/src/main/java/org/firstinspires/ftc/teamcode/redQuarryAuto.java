@@ -60,9 +60,12 @@ public class redQuarryAuto extends LinearOpMode {
         waitForStart();
 
         // Middle Pathing
-        robot.goStraight(30, .3); // Move to Skystone
+
+        robot.goStraight(20, .3 + checkDirection(), 0.3);
+        robot.correctStraight(10, 0.3);
+        // Move to Skystone
         sleep(3000);
-        rotate(90, .4);
+        rotate(90, .2);
         /*robot.fL.setPower(-0.2);
         robot.fR.setPower(0.2);
         robot.bL.setPower(0.2);
@@ -172,7 +175,7 @@ public class redQuarryAuto extends LinearOpMode {
         // The gain value determines how sensitive the correction is to direction changes.
         // You will have to experiment with your robot to get small smooth direction changes
         // to stay on a straight line.
-        double correction, angle, gain = .10;
+        double correction, angle, gain = .05;
 
         angle = getAngle();
 
@@ -184,6 +187,10 @@ public class redQuarryAuto extends LinearOpMode {
         correction = correction * gain;
 
         return correction;
+    }
+
+    public void correction (double degree) {
+        
     }
 
     /**
@@ -248,7 +255,7 @@ public class redQuarryAuto extends LinearOpMode {
             while (opModeIsActive() && getAngle() < degrees) {
                 robot.fL.setPower(leftPower);
                 robot.bL.setPower(leftPower);
-                robot.fR.setPower(rightPower);
+                robot.fR.setPower(-rightPower);
                 robot.bR.setPower(rightPower);
                 telemetry.addData("degrees", getAngle());
                 /*telemetry.addData("lastangle", lastAngles);
@@ -259,6 +266,13 @@ public class redQuarryAuto extends LinearOpMode {
                 telemetry.addData("br", robot.bR.getPower());*/
 
                 telemetry.update();
+
+                if (getAngle() > degrees) {
+                    robot.fL.setPower(-leftPower);
+                    robot.bL.setPower(-leftPower);
+                    robot.fR.setPower(rightPower);
+                    robot.bR.setPower(-rightPower);
+                }
             }
 
         // turn the motors off.
@@ -268,6 +282,10 @@ public class redQuarryAuto extends LinearOpMode {
         sleep(1000);
 
         // reset angle tracking on new heading.
-        resetAngle();
+        //resetAngle();
+    }
+
+    public void straight(double degrees, double power) {
+
     }
 }

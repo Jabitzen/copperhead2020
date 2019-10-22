@@ -150,14 +150,14 @@ public class RobotHw {
         }
     }
 
-    public void goStraight(double distance, double power) {
+    public void goStraight(double distance, double leftPower, double rightPower) {
         reset();
 
         while (encoderAvg() < (distance * (537.6/18.5))) {
-            fL.setPower(-power);
-            fR.setPower(power);
-            bL.setPower(power);
-            bR.setPower(power);
+            fL.setPower(-rightPower);
+            fR.setPower(leftPower);
+            bL.setPower(leftPower);
+            bR.setPower(rightPower);
             opmode.telemetry.addData("avg", encoderAvg());
             opmode.telemetry.addData("fl", fL.getCurrentPosition());
             opmode.telemetry.addData("fr", fR.getCurrentPosition());
@@ -170,6 +170,22 @@ public class RobotHw {
         bL.setPower(0);
         bR.setPower(0);
     }
+
+    public void correctStraight (double distance, double power) {
+        reset();
+        while (encoderAvg() < (distance * (537.6/18.5))) {
+            fL.setPower(-power +0.1);
+            fR.setPower(power);
+            bL.setPower(power);
+            bR.setPower(power - 0.1);
+        }
+        fL.setPower(0);
+        fR.setPower(0);
+        bL.setPower(0);
+        bR.setPower(0);
+    }
+
+
 
 
 
