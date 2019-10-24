@@ -57,9 +57,8 @@ public class testing extends LinearOpMode{
             trigMecanum();
 
             if (gamepad1.b) {
-                grabber.setPosition(0);
+                grabber.setPosition(0.6);
                 telemetry.addData("detected", grabber.getPosition());
-
             }
 
             if (gamepad1.a) {
