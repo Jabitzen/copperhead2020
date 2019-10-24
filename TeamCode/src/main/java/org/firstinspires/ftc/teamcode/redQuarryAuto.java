@@ -190,7 +190,7 @@ public class redQuarryAuto extends LinearOpMode {
     }
 
     public void correction (double degree) {
-
+        
     }
 
     /**
