@@ -18,6 +18,7 @@ public class redQuarryAuto extends LinearOpMode {
     BitMapVision bm1 = null;
     BNO055IMU               imu;
     Orientation             lastAngles = new Orientation();
+    double lastDegrees;
     double globalAngle;
     RobotHw robot = new RobotHw();
 
@@ -60,12 +61,27 @@ public class redQuarryAuto extends LinearOpMode {
         waitForStart();
 
         // Middle Pathing
-
-        robot.goStraight(20, .3 + checkDirection(), 0.3);
-        robot.correctStraight(10, 0.3);
+       // robot.grabber.setPosition(1);
+        robot.goStraight(-25, .3 + checkDirection(), 0.3);
+        //robot.correctStraight(29, 0.3);
         // Move to Skystone
-        sleep(3000);
-        rotate(90, .2);
+        sleep(1000);
+        rotate(89.5, .3);
+        sleep(1000);
+        robot.goStraight(-0.75, 0.3 + checkDirection(), 0.3);
+        sleep(1000);
+        robot.strafeRight(5, .2);
+        robot.grabber.setPosition(0.1);
+        sleep(1500);
+        robot.strafeLeft(10, .3);
+        /*telemetry.addLine("first test");
+        telemetry.update();
+        sleep(500);
+        correction();
+        telemetry.addLine("second test");
+        telemetry.update();
+        sleep(500);*/
+
         /*robot.fL.setPower(-0.2);
         robot.fR.setPower(0.2);
         robot.bL.setPower(0.2);
@@ -175,7 +191,8 @@ public class redQuarryAuto extends LinearOpMode {
         // The gain value determines how sensitive the correction is to direction changes.
         // You will have to experiment with your robot to get small smooth direction changes
         // to stay on a straight line.
-        double correction, angle, gain = .05;
+
+        double correction, angle, gain = .0;
 
         angle = getAngle();
 
@@ -189,8 +206,17 @@ public class redQuarryAuto extends LinearOpMode {
         return correction;
     }
 
-    public void correction (double degree) {
-
+    public void correction () {
+        // Overshot
+        Double newTarget;
+        if (getAngle() > lastDegrees) {
+            newTarget = lastDegrees - getAngle();
+            rotate(newTarget, .15 );
+        }
+        else {
+            newTarget = getAngle() - lastDegrees;
+            rotate(newTarget,.15);
+        }
     }
 
     /**
@@ -204,6 +230,7 @@ public class redQuarryAuto extends LinearOpMode {
         robot.fR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.bR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);*/
         double  leftPower, rightPower;
+        lastDegrees = degrees;
 
 
         // restart imu movement tracking.
@@ -217,13 +244,13 @@ public class redQuarryAuto extends LinearOpMode {
 
         if (degrees > 0)
         {   // turn right.
-            leftPower = power;
-            rightPower = -power;
+            leftPower = power - .13;
+            rightPower = -power + .13;
         }
         else if (degrees < 0)
         {   // turn left.
-            leftPower = -power;
-            rightPower = power;
+            leftPower = -power + .13;
+            rightPower = power - .13;
         }
         else return;
 
@@ -251,28 +278,29 @@ public class redQuarryAuto extends LinearOpMode {
                 telemetry.update();
             }
         }
-        else    // left turn.
+        else    // right turn.
             while (opModeIsActive() && getAngle() < degrees) {
-                robot.fL.setPower(leftPower);
-                robot.bL.setPower(leftPower);
-                robot.fR.setPower(-rightPower);
-                robot.bR.setPower(rightPower);
+                robot.fL.setPower(.13 + (leftPower * ((degrees - getAngle())/degrees)));
+                robot.bL.setPower(.13 + (leftPower * ((degrees - getAngle())/degrees)));
+                robot.fR.setPower(.13 +(-rightPower * ((degrees - getAngle())/degrees)));
+                robot.bR.setPower(-.13 - (-rightPower * ((degrees - getAngle())/degrees)));
+
                 telemetry.addData("degrees", getAngle());
-                /*telemetry.addData("lastangle", lastAngles);
-                telemetry.addData("globalangle", globalAngle);
+                //telemetry.addData("lastangle", lastAngles);
+                //telemetry.addData("globalangle", globalAngle);
                 telemetry.addData("fl", robot.fL.getPower()) ;
                 telemetry.addData("fr", robot.fR.getPower());
                 telemetry.addData("bl", robot.bL.getPower());
-                telemetry.addData("br", robot.bR.getPower());*/
+                telemetry.addData("br", robot.bR.getPower());
 
                 telemetry.update();
 
-                if (getAngle() > degrees) {
+                /*if (getAngle() > degrees) {
                     robot.fL.setPower(-leftPower);
                     robot.bL.setPower(-leftPower);
                     robot.fR.setPower(rightPower);
                     robot.bR.setPower(-rightPower);
-                }
+                }*/
             }
 
         // turn the motors off.
