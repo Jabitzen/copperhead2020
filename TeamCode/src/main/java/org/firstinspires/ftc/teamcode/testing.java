@@ -206,7 +206,7 @@ public class testing extends LinearOpMode{
 
         fL.setPower(v1);
         fR.setPower(v2);
-        bL.setPower(v3 * .79);
+        bL.setPower(-v3 * .79);
         bR.setPower(v4 * .79);
     }
 

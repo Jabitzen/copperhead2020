@@ -12,8 +12,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Movement.RobotHw;
 import org.firstinspires.ftc.teamcode.Vision.BitMapVision;
 
-@Autonomous(name="redQuarryAuto", group="12596")
-public class redQuarryAuto extends LinearOpMode {
+@Autonomous(name="redQuarryAutoMerge", group="12596")
+public class avoidMergeConflicts extends LinearOpMode {
 
     BitMapVision bm1 = null;
     BNO055IMU               imu;
@@ -344,7 +344,7 @@ public class redQuarryAuto extends LinearOpMode {
 
         if (distance > 0) {
             while (Math.abs(robot.encoderAvg()) < target) {
-
+                
                 motorPower1 = -.15 + (-rightPower + .15) * ((target - robot.encoderAvg()) / target);
                 motorPower2 = .15 + (leftPower * ((target - robot.encoderAvg()) / target));
                 robot.fL.setPower(motorPower1);

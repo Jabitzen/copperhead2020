@@ -234,38 +234,6 @@ public class RobotHw {
         bR.setPower(0);
     }
 
-
-
-
-
-
-    public void goInches(double distance, double power) {
-        dtEncoderModeOn();
-        targetPosition(distance);
-        setMode();
-        runtime.reset();
-        fL.setPower(power);
-        fR.setPower(power);
-        bL.setPower(power);
-        bR.setPower(power);
-
-        while (opmode.opModeIsActive() && runtime.seconds() < 10.0 && fL.isBusy() && fR.isBusy()  && bR.isBusy()) {
-            //bL.setPower(power);
-            opmode.telemetry.addData("fl", fL.getCurrentPosition()) ;
-            opmode.telemetry.addData("fr", fR.getCurrentPosition());
-            opmode.telemetry.addData("bl", bL.getCurrentPosition());
-            opmode.telemetry.addData("br", bR.getCurrentPosition());
-            opmode.telemetry.update();
-        }
-
-        stopMotors();
-
-        fL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        fR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        bL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        bR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
-
     public void stopMotors() {
         fL.setPower(0);
         fR.setPower(0);
@@ -457,6 +425,8 @@ public class RobotHw {
             }
         }
     }
+
+
 
     public void grabberDown(){
         grabber.setPosition(1);
