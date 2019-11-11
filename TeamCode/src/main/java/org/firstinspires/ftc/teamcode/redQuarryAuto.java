@@ -4,6 +4,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -20,7 +21,13 @@ public class redQuarryAuto extends LinearOpMode {
     Orientation             lastAngles = new Orientation();
     double lastDegrees;
     double globalAngle;
+    double referenceAngle;
+    String skyStonePos = null;
     RobotHw robot = new RobotHw();
+
+    double leftCorrect;
+    double rightCorrect;
+    ElapsedTime runtime = new ElapsedTime();
 
 
 
@@ -44,6 +51,13 @@ public class redQuarryAuto extends LinearOpMode {
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
         // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
         // and named "imu".
+
+        //bm1 = new BitMapVision(this);
+        //String skyStonePos = bm1.findSkystones();
+        //sleep(10000);
+        //telemetry.addData("Skystone Position: ", skyStonePos);
+        //telemetry.update();
+
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
         imu.initialize(parameters);
@@ -53,7 +67,7 @@ public class redQuarryAuto extends LinearOpMode {
         telemetry.update();
 
         // make sure the imu gyro is calibrated before continuing.
-        while (!isStopRequested() && !imu.isGyroCalibrated())
+        while (!isStopRequested() && !imu.isGyroCalibrated() )
         {
             sleep(50);
             idle();
@@ -63,52 +77,120 @@ public class redQuarryAuto extends LinearOpMode {
         telemetry.addData("imu calib status", imu.getCalibrationStatus().toString());
         telemetry.update();
 
-
-
-        straight(100, .5, .5);
-        straight(-100, .5, .5);
-        sleep(30000);
-        bm1 = new BitMapVision(this);
-        String pos = bm1.findSkystones();
-        sleep(3000);
-        telemetry.addData("Skystone Position: ", pos);
-        telemetry.update();
+        //skyStonePos = "left";
         waitForStart();
 
-        // Middle Pathing
-        robot.goStraight(-25, .3 + checkDirection(), 0.35); //Move to the stone
-        sleep(500);
-        rotate(87, .35); // Rotate to
-        robot.goStraight(-2.6, 0.3, 0.3);
-        sleep(500);
-        robot.strafeRight(8, .2);
-        robot.grabber.setPosition(0.1);
-        sleep(2000);
-        robot.strafeLeft(11, .5);
-        //telemetry.addData("angle : ",imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle);
-        //sleep(1000);
-        rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .77, .3);
-        robot.goStraight(-80,.525,.6);
-        //robot.strafeRight(5, .2);
-        robot.grabber.setPosition(.5);
-        //robot.strafeLeft(5, .2);
-
-        //second stone
-        robot.goStraight(107,.415,.475);
-        telemetry.addData("angle", getAngle());
+        bm1 = new BitMapVision(this);
+        skyStonePos = bm1.findRedSkystones();
+        telemetry.addData("stone", skyStonePos);
         telemetry.update();
-       // robot.goStraight(-1, 0.3, 0.3);
-        sleep(500);
-        robot.strafeRight(6, .2);
-        robot.grabber.setPosition(0.1);
-        sleep(1000);
-        robot.strafeLeft(13, .5);
-        //telemetry.addData("angle : ",imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle);
-        //sleep(1000);
-        rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .84, .3);
-        robot.goStraight(-104,.7,.79);
-        //robot.strafeRight(5, .2);
-        robot.grabber.setPosition(.5);
+
+
+        while (opModeIsActive()) {
+
+            // Middle Pathing
+            if (skyStonePos == "center") {
+
+                goStraightGyro(-25, .3, 3); //Move to the stone
+                sleep(500);
+                rotate(84.5, .35); // Rotate to align grabber with stone
+                sleep(500);
+                goStraightGyro(-1, 0.3, 2); // Align with center stone
+                // sleep(5000);
+                strafeRightGyro(9.5, .25); // Approach stone
+                robot.grabberR.setPosition(0.02); // Drop grabber
+                robot.goStraight(-.6, .2, .2);
+                sleep(2000);
+                robot.strafeLeft(7, .5); // Pull Stone out
+                // rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .05, .4); // Straighten out
+                goStraightGyro(-60, .5, 7); // Cross the bridge
+                robot.grabberR.setPosition(.5); // Grabber lets go of stone
+                //rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .77, .4);
+                //second stone
+                goStraightGyro(91, .4, 5); // Go back to the stones
+                sleep(500);
+                //rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .8, .3);
+                strafeRightGyro(10.5, .25); // go in to get 2nd stone
+                robot.grabberR.setPosition(0.02); // drop grabber do hold stone
+                robot.goStraight(-.6, .2, .2);
+                sleep(1000);
+                robot.strafeLeft(10.5, .5); // Pull stone out
+                rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .6, .3); // Straighen out
+                goStraightGyro(-100, .7, 7); // Cross the bridge
+                robot.grabberR.setPosition(.5); // Drop the stone
+                sleep(500);
+                robot.strafeRight(3, .3);
+                goStraightGyro(26, .5, 3); // park
+                sleep(30000);
+
+
+
+            } else if (skyStonePos == "left") {
+                goStraightGyro(-25, .35, 3); //(-25, .3 + checkDirection(), 0.35); //Move to the stone
+                sleep(500);
+                rotate(84.5, .35); // Rotate to align grabber with stone
+                sleep(500);
+                goStraightGyro(5.2, 0.3, 0.3); // Align with center stone
+                //  sleep(5000);
+                strafeRightGyro(8.5, .25); // Approach stone
+                robot.grabberR.setPosition(0.02); // Drop grabber
+                robot.goStraight(-.6, .2, .2);
+
+                sleep(2000);
+                robot.strafeLeft(8.25, .4); // Pull Stone out
+                //rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .7, .3); // Straighten out
+                goStraightGyro(-63, .525, 6); // Cross the bridge
+                robot.grabberR.setPosition(.5); // Grabber lets go of stone
+                //second stone
+                goStraightGyro(95.5, .38, 5); // Go back to the 2nd stones
+                sleep(500);
+                strafeRightGyro(11.9, .25); // go in to get 2nd stone
+                robot.grabberR.setPosition(0.02); // drop grabber do hold stone
+                sleep(1000);
+                robot.strafeLeft(7.7, .5); // Pull stone out
+                //rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .84, .3); // Straighen out
+                robot.goStraight(-112, .7, .79); // Cross the bridge
+                robot.grabberR.setPosition(.5); // Drop the stone
+                sleep(500);
+                strafeRightGyro(4, .3); //push stones aside
+                robot.goStraight(30, .5, .59); // park
+                sleep(30000);
+            }
+
+            else { // right
+                goStraightGyro(-25, .35 , 3); //Move to the stone
+                sleep(500);
+                rotate(84.5, .35); // Rotate to align grabber with stone
+                sleep(100);
+                goStraightGyro(-11.6, 0.3 , 3); // Align with right stone
+                //  sleep(5000);
+                strafeRightGyro(10, .2); // Approach stone
+                robot.grabberR.setPosition(0.02); // Drop grabber
+                robot.goStraight(-.6, .2, .2);
+
+                sleep(1900);
+                robot.strafeLeft(11, .5); // Pull Stone out
+                //rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .75, .3); // Straighten out
+                goStraightGyro(-65, .525, 6); // Cross the bridge
+                robot.grabberR.setPosition(.5); // Grabber lets go of stone
+                //second stone
+                goStraightGyro(93.45, .415, 7); // Go back to the stones
+                sleep(500);
+                strafeRightGyro(11.3, .2); // go in to get 2nd stone
+                robot.grabberR.setPosition(0.02); // drop grabber do hold stone
+                robot.goStraight(-.6, .2, .2);
+
+                sleep(1000);
+                robot.strafeLeft(14, .5); // Pull stone out
+                rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .7, .3); // Straighen out
+                goStraightGyro(-95, .7, 7); // Cross the bridge
+                robot.grabberR.setPosition(.5); // Drop the stone
+                strafeRightGyro(3, .3);
+                goStraightGyro(30, .5, 3); // park
+                sleep(30000);
+            }
+        }
+
 
         telemetry.addLine("done");
         telemetry.update();
@@ -221,6 +303,25 @@ public class redQuarryAuto extends LinearOpMode {
         }
     }
 
+    public void gyroCorrect() {
+        if (getAngle() > referenceAngle + 1) {
+            rightCorrect = .8;
+        }
+        else if (getAngle() < referenceAngle - 1) {
+            leftCorrect = .8;
+        }
+        else {
+            leftCorrect = 1;
+            rightCorrect = 1;
+        }
+    }
+
+    public void setReferenceAngle() {
+        resetAngle();
+        referenceAngle = getAngle();
+    }
+
+
     /**
      * Rotate left or right the number of degrees. Does not support turning more than 180 degrees.
      * @param degrees Degrees to turn, + is left - is right
@@ -238,7 +339,7 @@ public class redQuarryAuto extends LinearOpMode {
         // restart imu movement tracking.
         resetAngle();
         telemetry.addLine().addData("Robot Angle", getAngle());
-        sleep(1000);
+        sleep(500);
 
 
         // getAngle() returns + when rotating counter clockwise (left) and - when rotating
@@ -343,7 +444,7 @@ public class redQuarryAuto extends LinearOpMode {
         robot.bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         if (distance > 0) {
-            while (Math.abs(robot.encoderAvg()) < target) {
+            while (Math.abs(robot.encoderAvg()) < target && opModeIsActive()) {
 
                 motorPower1 = -.15 + (-rightPower + .15) * ((target - robot.encoderAvg()) / target);
                 motorPower2 = .15 + (leftPower * ((target - robot.encoderAvg()) / target));
@@ -365,9 +466,9 @@ public class redQuarryAuto extends LinearOpMode {
             }
         }
         else {
-            while (Math.abs(robot.encoderAvg()) < target) {
+            while (Math.abs(robot.encoderAvg()) < target && opModeIsActive()) {
                 motorPower1 = .15 + (-rightPower - .15) * ((target - robot.encoderAvg()) / target);
-                motorPower2 = -.15 + (leftPower * ((target - robot.encoderAvg()) / target));
+                motorPower2 = -.15 + (leftPower * ((target - robot.encoderAvg()) / target)) + (getAngle());
                 robot.fL.setPower(motorPower1);
                 robot.fR.setPower(motorPower2);
                 robot.bL.setPower(motorPower2);
@@ -394,5 +495,164 @@ public class redQuarryAuto extends LinearOpMode {
         robot.bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         robot.fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         robot.bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+    }
+
+    public void goStraightGyro(double distance, double leftPower, double timeout) {
+
+        robot.reset();
+        resetAngle();
+        sleep(100);
+        double rightPower;
+        // Forward
+        if (distance > 0) {
+            rightPower = leftPower * 1.45;
+            rightPower = rightPower - .15;
+            leftPower = leftPower -.15;
+
+        } // reverse
+        else {
+            rightPower = leftPower * 1.2;
+            rightPower = -rightPower + .15;
+            leftPower = -leftPower + .15;
+        }
+
+        double target = Math.abs(distance * (537.6/15.5));
+
+        robot.fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        runtime.reset();
+        if (distance > 0) {
+            while (Math.abs(robot.encoderAvg()) < target && opModeIsActive() && runtime.seconds() < timeout) {
+                if (getAngle() > 1) {
+                    robot.fL.setPower(1.2 * (-.15 + (-rightPower + .15) * ((target - robot.encoderAvg()) / target)));
+                    robot.fR.setPower(.8 * (.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
+                    robot.bL.setPower(.8 * (.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
+                    robot.bR.setPower(1.2 * (.15 + (rightPower * ((target - robot.encoderAvg()) / target))));
+                }
+                else if (getAngle() < -1) {
+                    robot.fL.setPower(.8 * (-.15 + (-rightPower + .15) * ((target - robot.encoderAvg()) / target)));
+                    robot.fR.setPower(1.2 * (.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
+                    robot.bL.setPower(1.2 * (.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
+                    robot.bR.setPower(.8 * (.15 + (rightPower * ((target - robot.encoderAvg()) / target))));
+                }
+                else {
+                    robot.fL.setPower((-.15 + (-rightPower + .15) * ((target - robot.encoderAvg()) / target)));
+                    robot.fR.setPower((.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
+                    robot.bL.setPower((.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
+                    robot.bR.setPower((.15 + (rightPower * ((target - robot.encoderAvg()) / target))));
+                }
+                //opmode.telemetry.addData("avg", encoderAvg());
+                //opmode.telemetry.addData("fl", fL.getCurrentPosition());
+                //opmode.telemetry.addData("fr", fR.getCurrentPosition());
+                //opmode.telemetry.addData("bl", bL.getCurrentPosition());
+                //opmode.telemetry.addData("br", bR.getCurrentPosition());
+                telemetry.addData("angle", getAngle());
+                telemetry.addData("fl", robot.fL.getPower());
+                telemetry.addData("fr", robot.fR.getPower());
+                telemetry.addData("bl", robot.bL.getPower());
+                telemetry.addData("br", robot.bR.getPower());
+                telemetry.update();
+            }
+        }
+        else {
+            while (Math.abs(robot.encoderAvg()) < target && opModeIsActive() && runtime.seconds() < timeout) {
+                if (getAngle() > 1) {
+                    robot.fL.setPower(.8 * (.15 + (-rightPower - .15) * ((target - robot.encoderAvg()) / target)));
+                    robot.fR.setPower(1.2 * (-.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
+                    robot.bL.setPower(1.2 * (-.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
+                    robot.bR.setPower(.8 * (-.15 + (rightPower * ((target - robot.encoderAvg()) / target))));
+                }
+                else if (getAngle() < -1) {
+                    robot.fL.setPower(1.2 * (.15 + (-rightPower - .15) * ((target - robot.encoderAvg()) / target)));
+                    robot.fR.setPower(.8 * (-.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
+                    robot.bL.setPower(.8 * (-.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
+                    robot.bR.setPower(1.2 * (-.15 + (rightPower * ((target - robot.encoderAvg()) / target))));
+                }
+                else {
+                    robot.fL.setPower(.15 + (-rightPower - .15) * ((target - robot.encoderAvg()) / target));
+                    robot.fR.setPower(-.15 + (leftPower * ((target - robot.encoderAvg()) / target)));
+                    robot.bL.setPower(-.15 + (leftPower * ((target - robot.encoderAvg()) / target)));
+                    robot.bR.setPower(-.15 + (rightPower * ((target - robot.encoderAvg()) / target)));
+                }
+
+                //opmode.telemetry.addData("avg", encoderAvg());
+                //opmode.telemetry.addData("fl", fL.getCurrentPosition());
+                //opmode.telemetry.addData("fr", fR.getCurrentPosition());
+                //opmode.telemetry.addData("bl", bL.getCurrentPosition());
+                //opmode.telemetry.addData("br", bR.getCurrentPosition());
+                telemetry.addData("angle", getAngle());
+                telemetry.addData("fl", robot.fL.getPower());
+                telemetry.addData("fr", robot.fR.getPower());
+                telemetry.addData("bl", robot.bL.getPower());
+                telemetry.addData("br", robot.bR.getPower());
+                telemetry.update();
+            }
+        }
+
+        robot.stopMotors();
+
+        robot.fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        robot.bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        robot.fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        robot.bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+    }
+
+    public void strafeRightGyro (double distance, double power) {
+
+
+        robot.reset();
+        resetAngle();
+        double target = Math.abs(distance * (537.6/11));
+
+        robot.fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        while (Math.abs(robot.encoderAvg()) < target && opModeIsActive()) {
+
+            if (getAngle() > 1) {
+                robot.fL.setPower(power * .8);
+                robot.fR.setPower(power * .8);
+                robot.bL.setPower(-power * 1.2);
+                robot.bR.setPower(power * 1.2);
+            }
+            else if (getAngle() < -1) {
+                robot.fL.setPower(power * 1.2);
+                robot.fR.setPower(power * 1.2);
+                robot.bL.setPower(-power * .8);
+                robot.bR.setPower(power * .8);
+            }
+            else {
+                robot.fL.setPower(power);
+                robot.fR.setPower(power);
+                robot.bL.setPower(-power);
+                robot.bR.setPower(power);
+            }
+            //opmode.telemetry.addData("avg", encoderAvg());
+            //opmode.telemetry.addData("fl", fL.getCurrentPosition());
+            //opmode.telemetry.addData("fr", fR.getCurrentPosition());
+            //opmode.telemetry.addData("bl", bL.getCurrentPosition());
+            //opmode.telemetry.addData("br", bR.getCurrentPosition());
+            telemetry.addData("fl", robot.fL.getPower());
+            telemetry.addData("fr", robot.fR.getPower());
+            telemetry.addData("bl", robot.bL.getPower());
+            telemetry.addData("br", robot.bR.getPower());
+            telemetry.update();
+        }
+
+
+
+
+        robot.stopMotors();
+
+        robot.fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        robot.bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        robot.fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        robot.bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
+
     }
 }

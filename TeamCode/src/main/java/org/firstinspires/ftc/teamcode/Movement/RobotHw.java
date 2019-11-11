@@ -153,71 +153,22 @@ public class RobotHw {
     public void goStraight(double distance, double leftPower, double rightPower) {
         reset();
 
-
-
-        // Forward
-        if (distance > 0) {
-            rightPower = rightPower - .15;
-            leftPower = leftPower -.15;
-
-        } // reverse
-        else {
-            rightPower = -rightPower + .15;
-            leftPower = -leftPower + .15;
-        }
-
-        double target = Math.abs(distance * (537.6/15.5));
-
-        fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        if (distance > 0) {
-            while (Math.abs(encoderAvg()) < target) {
-                fL.setPower(-.15 + (-rightPower + .15) * ((target - encoderAvg()) / target));
-                fR.setPower(.15 + (leftPower * ((target - encoderAvg()) / target)));
-                bL.setPower(.15 + (leftPower * ((target - encoderAvg()) / target)));
-                bR.setPower(.15 + (rightPower * ((target - encoderAvg()) / target)));
-                //opmode.telemetry.addData("avg", encoderAvg());
-                //opmode.telemetry.addData("fl", fL.getCurrentPosition());
-                //opmode.telemetry.addData("fr", fR.getCurrentPosition());
-                //opmode.telemetry.addData("bl", bL.getCurrentPosition());
-                //opmode.telemetry.addData("br", bR.getCurrentPosition());
-                opmode.telemetry.addData("fl", fL.getPower());
-                opmode.telemetry.addData("fr", fR.getPower());
-                opmode.telemetry.addData("bl", bL.getPower());
-                opmode.telemetry.addData("br", bR.getPower());
-                opmode.telemetry.update();
-            }
-        }
-        else {
-            while (Math.abs(encoderAvg()) < target) {
-                fL.setPower(.15 + (-rightPower - .15) * ((target - encoderAvg()) / target));
-                fR.setPower(-.15 + (leftPower * ((target - encoderAvg()) / target)));
-                bL.setPower(-.15 + (leftPower * ((target - encoderAvg()) / target)));
-                bR.setPower(-.15 + (rightPower * ((target - encoderAvg()) / target)));
-                //opmode.telemetry.addData("avg", encoderAvg());
-                //opmode.telemetry.addData("fl", fL.getCurrentPosition());
-                //opmode.telemetry.addData("fr", fR.getCurrentPosition());
-                //opmode.telemetry.addData("bl", bL.getCurrentPosition());
-                //opmode.telemetry.addData("br", bR.getCurrentPosition());
-                opmode.telemetry.addData("fl", fL.getPower());
-                opmode.telemetry.addData("fr", fR.getPower());
-                opmode.telemetry.addData("bl", bL.getPower());
-                opmode.telemetry.addData("br", bR.getPower());
-                opmode.telemetry.update();
-            }
+        while (encoderAvg() < (distance * (537.6/18.5))) {
+            fL.setPower(-rightPower);
+            fR.setPower(leftPower);
+            bL.setPower(leftPower);
+            bR.setPower(rightPower);
+            opmode.telemetry.addData("avg", encoderAvg());
+            opmode.telemetry.addData("fl", fL.getCurrentPosition());
+            opmode.telemetry.addData("fr", fR.getCurrentPosition());
+            opmode.telemetry.addData("bl", bL.getCurrentPosition());
+            opmode.telemetry.addData("br", bR.getCurrentPosition());
+            opmode.telemetry.update();
         }
         fL.setPower(0);
         fR.setPower(0);
         bL.setPower(0);
         bR.setPower(0);
-
-        fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
     public void correctStraight (double distance, double power) {
@@ -264,85 +215,32 @@ public class RobotHw {
     }
 
     public void strafeRight (double distance, double power) {
-        reset();
+        //reset();
+        dtEncoderModeOn();
+        targetPositionStrafeRight(distance);
+        setMode();
+        runtime.reset();
+        fL.setPower(power);
+        fR.setPower(power);
 
+        bR.setPower(power);
 
-        double target = Math.abs(distance * (537.6/11));
-
-        fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-
-            while (Math.abs(encoderAvg()) < target) {
-                fL.setPower(power);
-                fR.setPower(power);
-                bL.setPower(-power);
-                bR.setPower(power);
-                //opmode.telemetry.addData("avg", encoderAvg());
-                //opmode.telemetry.addData("fl", fL.getCurrentPosition());
-                //opmode.telemetry.addData("fr", fR.getCurrentPosition());
-                //opmode.telemetry.addData("bl", bL.getCurrentPosition());
-                //opmode.telemetry.addData("br", bR.getCurrentPosition());
-                opmode.telemetry.addData("fl", fL.getPower());
-                opmode.telemetry.addData("fr", fR.getPower());
-                opmode.telemetry.addData("bl", bL.getPower());
-                opmode.telemetry.addData("br", bR.getPower());
-                opmode.telemetry.update();
-            }
-
-
-        fL.setPower(0);
-        fR.setPower(0);
-        bL.setPower(0);
-        bR.setPower(0);
-
-        fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-    }
-
-    public void strafeLeft (double distance, double power) {
-        reset();
-
-
-        double target = Math.abs(distance * (537.6/11));
-
-        fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-
-        while (Math.abs(encoderAvg()) < target) {
-            fL.setPower(-power);
-            fR.setPower(-power);
-            bL.setPower(power);
-            bR.setPower(-power);
-            //opmode.telemetry.addData("avg", encoderAvg());
-            //opmode.telemetry.addData("fl", fL.getCurrentPosition());
-            //opmode.telemetry.addData("fr", fR.getCurrentPosition());
-            //opmode.telemetry.addData("bl", bL.getCurrentPosition());
-            //opmode.telemetry.addData("br", bR.getCurrentPosition());
-            opmode.telemetry.addData("fl", fL.getPower());
-            opmode.telemetry.addData("fr", fR.getPower());
-            opmode.telemetry.addData("bl", bL.getPower());
-            opmode.telemetry.addData("br", bR.getPower());
+        while (opmode.opModeIsActive() && runtime.seconds() < 10.0 && fL.isBusy() && fR.isBusy()  && bR.isBusy()) {
+            //bL.setPower(power);
+            opmode.telemetry.addData("fl", fL.getCurrentPosition()) ;
+            opmode.telemetry.addData("fr", fR.getCurrentPosition());
+            opmode.telemetry.addData("bl", bL.getCurrentPosition());
+            opmode.telemetry.addData("br", bR.getCurrentPosition());
             opmode.telemetry.update();
         }
 
+        stopMotors();
 
-        fL.setPower(0);
-        fR.setPower(0);
-        bL.setPower(0);
-        bR.setPower(0);
+        fL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        fR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        bL.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        bR.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
 
