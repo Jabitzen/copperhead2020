@@ -10,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Movement.RobotHw;
+import org.firstinspires.ftc.teamcode.Vision.BitMapVision;
 
 @Autonomous(name="blueQuarryAuto", group="12596")
 public class blueQuarryAuto extends LinearOpMode {

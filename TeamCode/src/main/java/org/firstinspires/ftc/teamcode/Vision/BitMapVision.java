@@ -1,12 +1,6 @@
 package org.firstinspires.ftc.teamcode.Vision;
 
 import android.graphics.Bitmap;
-import android.graphics.ImageDecoder;
-import android.graphics.drawable.Drawable;
-
-import static android.graphics.Color.red;
-import static android.graphics.Color.green;
-import static android.graphics.Color.blue;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.vuforia.Frame;
@@ -19,11 +13,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.Parameters;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.BlockingQueue;
+
+import static android.graphics.Color.blue;
+import static android.graphics.Color.green;
+import static android.graphics.Color.red;
 
 
 public class BitMapVision {
@@ -54,7 +50,7 @@ public class BitMapVision {
         this.opMode = opMode;
 
         int cameraMonitorViewId = this.opMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", this.opMode.hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+        Parameters params = new Parameters(cameraMonitorViewId);
 
         params.vuforiaLicenseKey = VUFORIA_KEY;
         params.cameraDirection = CAMERA_CHOICE;

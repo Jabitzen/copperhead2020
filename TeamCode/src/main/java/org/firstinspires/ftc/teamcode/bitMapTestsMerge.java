@@ -21,7 +21,7 @@ import java.util.concurrent.BlockingQueue;
 
 import static android.graphics.Color.red;
 
-@TeleOp(name="bitMapTests", group="Pushbot")
+@TeleOp(name="BMTestsMerge", group="Pushbot")
 public class bitMapTestsMerge extends LinearOpMode {
 
     private VuforiaLocalizer vuforia;
