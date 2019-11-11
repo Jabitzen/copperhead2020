@@ -3,10 +3,6 @@ package org.firstinspires.ftc.teamcode;
 
 import android.graphics.Bitmap;
 
-import static android.graphics.Color.red;
-import static android.graphics.Color.green;
-import static android.graphics.Color.blue;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.vuforia.Frame;
@@ -15,7 +11,6 @@ import com.vuforia.PIXEL_FORMAT;
 import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.Parameters;
@@ -24,8 +19,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.BlockingQueue;
 
+import static android.graphics.Color.red;
+
 @TeleOp(name="bitMapTests", group="Pushbot")
-public class bitMapTests extends LinearOpMode {
+public class bitMapTestsMerge extends LinearOpMode {
 
     private VuforiaLocalizer vuforia;
     private Parameters parameters;
@@ -51,7 +48,7 @@ public class bitMapTests extends LinearOpMode {
         //webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
 
         int cameraMonitorViewId = this.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", this.hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters params = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+        Parameters params = new Parameters(cameraMonitorViewId);
 
 
         params.vuforiaLicenseKey = VUFORIA_KEY;
