@@ -77,14 +77,12 @@ public class redQuarryAuto extends LinearOpMode {
         telemetry.addData("imu calib status", imu.getCalibrationStatus().toString());
         telemetry.update();
 
-        //skyStonePos = "left";
         waitForStart();
 
         bm1 = new BitMapVision(this);
         skyStonePos = bm1.findRedSkystones();
         telemetry.addData("stone", skyStonePos);
         telemetry.update();
-
 
         while (opModeIsActive()) {
 
@@ -156,20 +154,19 @@ public class redQuarryAuto extends LinearOpMode {
                 robot.goStraight(30, .5, .59); // park
                 sleep(30000);
             }
-
             else { // right
                 goStraightGyro(-25, .35 , 3); //Move to the stone
                 sleep(500);
-                rotate(84.5, .35); // Rotate to align grabber with stone
+               // rotate(1, .35); // Rotate to align grabber with stone    //84.5
                 sleep(100);
                 goStraightGyro(-11.6, 0.3 , 3); // Align with right stone
-                //  sleep(5000);
-                strafeRightGyro(10, .2); // Approach stone
+                 sleep(5000);
+                strafeRightGyro(100, .2); // Approach stone //10
                 robot.grabberR.setPosition(0.02); // Drop grabber
                 robot.goStraight(-.6, .2, .2);
 
-                sleep(1900);
-                robot.strafeLeft(11, .5); // Pull Stone out
+                sleep(5000);
+                robot.strafeLeft(100, .5); // Pull Stone out //11
                 //rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .75, .3); // Straighten out
                 goStraightGyro(-65, .525, 6); // Cross the bridge
                 robot.grabberR.setPosition(.5); // Grabber lets go of stone
@@ -179,7 +176,6 @@ public class redQuarryAuto extends LinearOpMode {
                 strafeRightGyro(11.3, .2); // go in to get 2nd stone
                 robot.grabberR.setPosition(0.02); // drop grabber do hold stone
                 robot.goStraight(-.6, .2, .2);
-
                 sleep(1000);
                 robot.strafeLeft(14, .5); // Pull stone out
                 rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .7, .3); // Straighen out
@@ -385,8 +381,8 @@ public class redQuarryAuto extends LinearOpMode {
             while (opModeIsActive() && getAngle() < degrees) {
                 robot.fL.setPower(.13 + (leftPower * ((degrees - getAngle())/degrees)));
                 robot.bL.setPower(.13 + (leftPower * ((degrees - getAngle())/degrees)));
-                robot.fR.setPower(.13 +(-rightPower * ((degrees - getAngle())/degrees)));
-                robot.bR.setPower(-.13 - (-rightPower * ((degrees - getAngle())/degrees)));
+                robot.fR.setPower(-.13 -(-rightPower * ((degrees - getAngle())/degrees))); //0.13 + (-rpwr)
+                robot.bR.setPower(-.13 - (-rightPower * ((degrees - getAngle())/degrees))); //-0.13 - (-rpw)
 
                 telemetry.addData("degrees", getAngle());
                 //telemetry.addData("lastangle", lastAngles);
@@ -526,19 +522,19 @@ public class redQuarryAuto extends LinearOpMode {
         if (distance > 0) {
             while (Math.abs(robot.encoderAvg()) < target && opModeIsActive() && runtime.seconds() < timeout) {
                 if (getAngle() > 1) {
-                    robot.fL.setPower(1.2 * (-.15 + (-rightPower + .15) * ((target - robot.encoderAvg()) / target)));
+                    robot.fL.setPower(1.2 * (.15 + (rightPower - 0.15) * ((target - robot.encoderAvg()) / target))); //rightPower + 0.15
                     robot.fR.setPower(.8 * (.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
                     robot.bL.setPower(.8 * (.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
                     robot.bR.setPower(1.2 * (.15 + (rightPower * ((target - robot.encoderAvg()) / target))));
                 }
                 else if (getAngle() < -1) {
-                    robot.fL.setPower(.8 * (-.15 + (-rightPower + .15) * ((target - robot.encoderAvg()) / target)));
+                    robot.fL.setPower(.8 * (.15 + (rightPower - .15) * ((target - robot.encoderAvg()) / target)));
                     robot.fR.setPower(1.2 * (.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
                     robot.bL.setPower(1.2 * (.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
                     robot.bR.setPower(.8 * (.15 + (rightPower * ((target - robot.encoderAvg()) / target))));
                 }
                 else {
-                    robot.fL.setPower((-.15 + (-rightPower + .15) * ((target - robot.encoderAvg()) / target)));
+                    robot.fL.setPower((.15 + (rightPower - .15) * ((target - robot.encoderAvg()) / target)));
                     robot.fR.setPower((.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
                     robot.bL.setPower((.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
                     robot.bR.setPower((.15 + (rightPower * ((target - robot.encoderAvg()) / target))));
@@ -559,19 +555,19 @@ public class redQuarryAuto extends LinearOpMode {
         else {
             while (Math.abs(robot.encoderAvg()) < target && opModeIsActive() && runtime.seconds() < timeout) {
                 if (getAngle() > 1) {
-                    robot.fL.setPower(.8 * (.15 + (-rightPower - .15) * ((target - robot.encoderAvg()) / target)));
+                    robot.fL.setPower(.8 * (-.15 + (rightPower + .15) * ((target - robot.encoderAvg()) / target))); //0.15 + - rightpwr - 0.15
                     robot.fR.setPower(1.2 * (-.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
                     robot.bL.setPower(1.2 * (-.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
                     robot.bR.setPower(.8 * (-.15 + (rightPower * ((target - robot.encoderAvg()) / target))));
                 }
                 else if (getAngle() < -1) {
-                    robot.fL.setPower(1.2 * (.15 + (-rightPower - .15) * ((target - robot.encoderAvg()) / target)));
+                    robot.fL.setPower(1.2 * (-.15 + (rightPower + .15) * ((target - robot.encoderAvg()) / target)));
                     robot.fR.setPower(.8 * (-.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
                     robot.bL.setPower(.8 * (-.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
                     robot.bR.setPower(1.2 * (-.15 + (rightPower * ((target - robot.encoderAvg()) / target))));
                 }
                 else {
-                    robot.fL.setPower(.15 + (-rightPower - .15) * ((target - robot.encoderAvg()) / target));
+                    robot.fL.setPower(-.15 + (rightPower + .15) * ((target - robot.encoderAvg()) / target));
                     robot.fR.setPower(-.15 + (leftPower * ((target - robot.encoderAvg()) / target)));
                     robot.bL.setPower(-.15 + (leftPower * ((target - robot.encoderAvg()) / target)));
                     robot.bR.setPower(-.15 + (rightPower * ((target - robot.encoderAvg()) / target)));
@@ -615,19 +611,19 @@ public class redQuarryAuto extends LinearOpMode {
 
             if (getAngle() > 1) {
                 robot.fL.setPower(power * .8);
-                robot.fR.setPower(power * .8);
+                robot.fR.setPower(-power * .8);
                 robot.bL.setPower(-power * 1.2);
                 robot.bR.setPower(power * 1.2);
             }
             else if (getAngle() < -1) {
                 robot.fL.setPower(power * 1.2);
-                robot.fR.setPower(power * 1.2);
+                robot.fR.setPower(-power * 1.2);
                 robot.bL.setPower(-power * .8);
                 robot.bR.setPower(power * .8);
             }
             else {
                 robot.fL.setPower(power);
-                robot.fR.setPower(power);
+                robot.fR.setPower(-power);
                 robot.bL.setPower(-power);
                 robot.bR.setPower(power);
             }

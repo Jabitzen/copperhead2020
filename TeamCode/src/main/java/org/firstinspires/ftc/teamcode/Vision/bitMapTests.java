@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Vision;
 
 
 import android.graphics.Bitmap;
@@ -21,8 +21,8 @@ import java.util.concurrent.BlockingQueue;
 
 import static android.graphics.Color.red;
 
-@TeleOp(name="BMTestsMerge", group="Pushbot")
-public class bitMapTestsMerge extends LinearOpMode {
+@TeleOp(name="bitMapTests", group="Pushbot")
+public class bitMapTests extends LinearOpMode {
 
     private VuforiaLocalizer vuforia;
     private Parameters parameters;
@@ -65,7 +65,7 @@ public class bitMapTestsMerge extends LinearOpMode {
 
         //getBitmap();
         //String pos =
-                findBlueSkystones();
+        findBlueSkystones();
         //telemetry.addData("pos", pos);
         //telemetry.update();
 
@@ -452,4 +452,3 @@ public class bitMapTestsMerge extends LinearOpMode {
 
 
 }
-

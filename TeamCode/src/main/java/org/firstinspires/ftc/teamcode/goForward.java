@@ -78,7 +78,14 @@ public class goForward extends LinearOpMode {
         //skyStonePos = "left";
         waitForStart();
         //resetAngle();
-        goStraight(7, .3, .3);
+        goStraightGyro(20, .4);
+        sleep(5000);
+        strafeRightGyro(10, .4);
+        sleep(5000);
+        goStraightGyro(-20, .4);
+        sleep(5000);
+        strafeLeftGyro(10, .4);
+
 
 
         telemetry.addLine("done");
@@ -389,72 +396,7 @@ public class goForward extends LinearOpMode {
         robot.bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
-    public void goStraight(double distance, double leftPower, double rightPower) {
-        robot.reset();
-        // Forward
-        if (distance > 0) {
-            rightPower = rightPower - .15;
-            leftPower = leftPower -.15;
 
-        } // reverse
-        else {
-            rightPower = -rightPower + .15;
-            leftPower = -leftPower + .15;
-        }
-
-        double target = Math.abs(distance * (537.6/15.5));
-
-        robot.fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robot.bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robot.fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robot.bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        if (distance > 0) {
-            while (Math.abs(robot.encoderAvg()) < target && opModeIsActive()) {
-                robot.fL.setPower(-.15 + (-rightPower + .15) * ((target - robot.encoderAvg()) / target));
-                robot.fR.setPower(.15 + (leftPower * ((target - robot.encoderAvg()) / target)));
-                robot.bL.setPower(.15 + (leftPower * ((target - robot.encoderAvg()) / target)));
-                robot.bR.setPower(.15 + (rightPower * ((target - robot.encoderAvg()) / target)));
-                //opmode.telemetry.addData("avg", encoderAvg());
-                //opmode.telemetry.addData("fl", fL.getCurrentPosition());
-                //opmode.telemetry.addData("fr", fR.getCurrentPosition());
-                //opmode.telemetry.addData("bl", bL.getCurrentPosition());
-                //opmode.telemetry.addData("br", bR.getCurrentPosition());
-                telemetry.addData("fl", robot.fL.getPower());
-                telemetry.addData("fr", robot.fR.getPower());
-                telemetry.addData("bl", robot.bL.getPower());
-                telemetry.addData("br", robot.bR.getPower());
-                telemetry.update();
-            }
-        }
-        else {
-            while (Math.abs(robot.encoderAvg()) < target && opModeIsActive()) {
-                robot.fL.setPower(.15 + (-rightPower - .15) * ((target - robot.encoderAvg()) / target));
-                robot.fR.setPower(-.15 + (leftPower * ((target - robot.encoderAvg()) / target)));
-                robot.bL.setPower(-.15 + (leftPower * ((target - robot.encoderAvg()) / target)));
-                robot.bR.setPower(-.15 + (rightPower * ((target - robot.encoderAvg()) / target)));
-                //opmode.telemetry.addData("avg", encoderAvg());
-                //opmode.telemetry.addData("fl", fL.getCurrentPosition());
-                //opmode.telemetry.addData("fr", fR.getCurrentPosition());
-                //opmode.telemetry.addData("bl", bL.getCurrentPosition());
-                //opmode.telemetry.addData("br", bR.getCurrentPosition());
-                telemetry.addData("fl", robot.fL.getPower());
-                telemetry.addData("fr", robot.fR.getPower());
-                telemetry.addData("bl", robot.bL.getPower());
-                telemetry.addData("br", robot.bR.getPower());
-                telemetry.update();
-            }
-        }
-        robot.fL.setPower(0);
-        robot.fR.setPower(0);
-        robot.bL.setPower(0);
-        robot.bR.setPower(0);
-
-        robot.fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        robot.bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        robot.fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        robot.bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-    }
 
     public void goStraightGyro(double distance, double leftPower) {
         robot.reset();
@@ -484,19 +426,19 @@ public class goForward extends LinearOpMode {
         if (distance > 0) {
             while (Math.abs(robot.encoderAvg()) < target && opModeIsActive()) {
                 if (getAngle() > 1) {
-                    robot.fL.setPower(1.2 * (-.15 + (-rightPower + .15) * ((target - robot.encoderAvg()) / target)));
+                    robot.fL.setPower(1.2 * (.15 + (rightPower) * ((target - robot.encoderAvg()) / target)));
                     robot.fR.setPower(.8 * (.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
                     robot.bL.setPower(.8 * (.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
                     robot.bR.setPower(1.2 * (.15 + (rightPower * ((target - robot.encoderAvg()) / target))));
                 }
                 else if (getAngle() < -1) {
-                    robot.fL.setPower(.8 * (-.15 + (-rightPower + .15) * ((target - robot.encoderAvg()) / target)));
+                    robot.fL.setPower(.8 * (.15 + (rightPower) * ((target - robot.encoderAvg()) / target)));
                     robot.fR.setPower(1.2 * (.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
                     robot.bL.setPower(1.2 * (.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
                     robot.bR.setPower(.8 * (.15 + (rightPower * ((target - robot.encoderAvg()) / target))));
                 }
                 else {
-                    robot.fL.setPower((-.15 + (-rightPower + .15) * ((target - robot.encoderAvg()) / target)));
+                    robot.fL.setPower((.15 + (rightPower) * ((target - robot.encoderAvg()) / target)));
                     robot.fR.setPower((.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
                     robot.bL.setPower((.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
                     robot.bR.setPower((.15 + (rightPower * ((target - robot.encoderAvg()) / target))));
@@ -517,19 +459,19 @@ public class goForward extends LinearOpMode {
         else {
             while (Math.abs(robot.encoderAvg()) < target && opModeIsActive()) {
                 if (getAngle() > 1) {
-                    robot.fL.setPower(.8 * (.15 + (-rightPower - .15) * ((target - robot.encoderAvg()) / target)));
+                    robot.fL.setPower(.8 * (-.15 + (rightPower) * ((target - robot.encoderAvg()) / target)));
                     robot.fR.setPower(1.2 * (-.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
                     robot.bL.setPower(1.2 * (-.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
                     robot.bR.setPower(.8 * (-.15 + (rightPower * ((target - robot.encoderAvg()) / target))));
                 }
                 else if (getAngle() < -1) {
-                    robot.fL.setPower(1.2 * (.15 + (-rightPower - .15) * ((target - robot.encoderAvg()) / target)));
+                    robot.fL.setPower(1.2 * (-.15 + (-rightPower) * ((target - robot.encoderAvg()) / target)));
                     robot.fR.setPower(.8 * (-.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
                     robot.bL.setPower(.8 * (-.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
                     robot.bR.setPower(1.2 * (-.15 + (rightPower * ((target - robot.encoderAvg()) / target))));
                 }
                 else {
-                    robot.fL.setPower(.15 + (-rightPower - .15) * ((target - robot.encoderAvg()) / target));
+                    robot.fL.setPower(-.15 + (rightPower) * ((target - robot.encoderAvg()) / target));
                     robot.fR.setPower(-.15 + (leftPower * ((target - robot.encoderAvg()) / target)));
                     robot.bL.setPower(-.15 + (leftPower * ((target - robot.encoderAvg()) / target)));
                     robot.bR.setPower(-.15 + (rightPower * ((target - robot.encoderAvg()) / target)));
@@ -573,19 +515,19 @@ public class goForward extends LinearOpMode {
 
             if (getAngle() > 1) {
                 robot.fL.setPower(power * .8);
-                robot.fR.setPower(power * .8);
+                robot.fR.setPower(-power * .8);
                 robot.bL.setPower(-power * 1.2);
                 robot.bR.setPower(power * 1.2);
             }
             else if (getAngle() < -1) {
                 robot.fL.setPower(power * 1.2);
-                robot.fR.setPower(power * 1.2);
+                robot.fR.setPower(-power * 1.2);
                 robot.bL.setPower(-power * .8);
                 robot.bR.setPower(power * .8);
             }
             else {
                 robot.fL.setPower(power);
-                robot.fR.setPower(power);
+                robot.fR.setPower(-power);
                 robot.bL.setPower(-power);
                 robot.bR.setPower(power);
             }
@@ -600,18 +542,12 @@ public class goForward extends LinearOpMode {
             telemetry.addData("br", robot.bR.getPower());
             telemetry.update();
         }
-
-
-
-
         robot.stopMotors();
 
         robot.fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         robot.bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         robot.fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         robot.bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-
-
     }
     public void strafeLeftGyro (double distance, double power) {
         robot.reset();
@@ -627,19 +563,19 @@ public class goForward extends LinearOpMode {
 
             if (getAngle() > 1) {
                 robot.fL.setPower(-power * 1.2);
-                robot.fR.setPower(-power * 1.2);
+                robot.fR.setPower(power * 1.2);
                 robot.bL.setPower(power * .8);
                 robot.bR.setPower(-power * .8);
             }
             else if (getAngle() < -1) {
                 robot.fL.setPower(-power * .8);
-                robot.fR.setPower(-power * .8);
+                robot.fR.setPower(power * .8);
                 robot.bL.setPower(power * 1.2);
                 robot.bR.setPower(-power * 1.2);
             }
             else {
                 robot.fL.setPower(-power);
-                robot.fR.setPower(-power);
+                robot.fR.setPower(power);
                 robot.bL.setPower(power);
                 robot.bR.setPower(-power);
             }
@@ -654,9 +590,6 @@ public class goForward extends LinearOpMode {
             telemetry.addData("br", robot.bR.getPower());
             telemetry.update();
         }
-
-        rotate(-getAngle(), .3);
-
         robot.stopMotors();
 
         robot.fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);

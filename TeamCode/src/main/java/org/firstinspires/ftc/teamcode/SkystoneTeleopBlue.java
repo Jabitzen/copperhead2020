@@ -107,15 +107,17 @@ public class SkystoneTeleopBlue extends LinearOpMode{
         //telemetry.update();
 
         //telemetry.addData("input",gamepad1.left_stick_y *gamepad1.left_stick_y);
-        //telemetry.addData("fl", v1);
-        //telemetry.addData ("fR", v2);
-        //telemetry.addData ("bL", v3);
-        //telemetry.addData ("bR", v4);
-        //telemetry.addData ("Right X", rightX);
-        //telemetry.update();
+        telemetry.addData("fl", v1);
+        telemetry.addData ("fR", v2);
+        telemetry.addData ("bL", v3);
+        telemetry.addData ("bR", v4);
+        telemetry.addData("leftX", gamepad1.left_stick_x);
+        telemetry.addData("leftY", gamepad1.left_stick_y);
+        telemetry.addData ("Right X", rightX);
+        telemetry.update();
 
-        fL.setPower(v1);
-        fR.setPower(v2);
+        fL.setPower(-v1);
+        fR.setPower(-v2);
         bL.setPower(-v3);// * .79);
         bR.setPower(v4);// * .79);
     }
