@@ -89,22 +89,22 @@ public class blueQuarryAuto extends LinearOpMode {
             // Middle Pathing
             if (skyStonePos == "center") {
 
-                robot.goStraight(-25, .3 + checkDirection(), 0.35); //Move to the stone
+                //robot.goStraight(-25, .3 + checkDirection(), 0.35); //Move to the stone
                 sleep(500);
                 rotate(-86.5, .35); // Rotate to align grabber with stone
                 //sleep(5000);
-                robot.goStraight(-2, 0.3, 0.3); // Align with center stone
+                straight(-2, 0.3, 0.3); // Align with center stone
                 //sleep(5000);
-                robot.strafeLeft(9.5, .25); // Approach stone
-                robot.grabberL.setPosition(0.98); // Drop grabber
+                //robot.strafeLeft(9.5, .25); // Approach stone
+                //robot.grabberL.setPosition(0.98); // Drop grabber
                 sleep(2000);
-                robot.strafeRight(12, .5); // Pull Stone out
+                //robot.strafeRight(12, .5); // Pull Stone out
                 // rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .05, .4); // Straighten out
-                robot.goStraight(-60, .525, .6); // Cross the bridge
-                robot.grabberL.setPosition(.5); // Grabber lets go of stone
+                straight(-60, .525, .6); // Cross the bridge
+                //robot.grabberL.setPosition(.5); // Grabber lets go of stone
                 //rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .77, .4);
                 //second stone
-                robot.goStraight(89.5, .415, .53); // Go back to the stones
+                straight(89.5, .415, .53); // Go back to the stones
                 sleep(500);
                 //rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .8, .3);
                 robot.strafeLeft(13, .3); // go in to get 2nd stone
@@ -112,32 +112,32 @@ public class blueQuarryAuto extends LinearOpMode {
                 sleep(1000);
                 robot.strafeRight(12, .5); // Pull stone out
                 rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .5, .3); // Straighen out
-                robot.goStraight(-104, .7, .79); // Cross the bridge
+                straight(-104, .7, .79); // Cross the bridge
                 robot.grabberL.setPosition(.5); // Drop the stone
                 sleep(500);
                 robot.strafeLeft(3.5, .3);
-                robot.goStraight(33, .5, .59); // park
+               // robot.goStraight(33, .5, .59); // park
                 sleep(30000);
 
 
 
             } else if (skyStonePos == "left") {
-                robot.goStraight(-25, .3 + checkDirection(), 0.35); //Move to the stone
+                straight(-25, .3 + checkDirection(), 0.35); //Move to the stone
                 sleep(500);
                 rotate(-86.5, .35); // Rotate to align grabber with stone
                 //sleep(5000);
-                robot.goStraight(-10, 0.3, 0.3); // Align with center stone
+                straight(-10, 0.3, 0.3); // Align with center stone
                 //sleep(5000);
                 robot.strafeLeft(9.5, .25); // Approach stone
                 robot.grabberL.setPosition(0.98); // Drop grabber
                 sleep(2000);
                 robot.strafeRight(9.5, .5); // Pull Stone out
                 // rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .05, .4); // Straighten out
-                robot.goStraight(-60, .525, .6); // Cross the bridge
+                straight(-60, .525, .6); // Cross the bridge
                 robot.grabberL.setPosition(.5); // Grabber lets go of stone
                 //rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .77, .4);
                 //second stone
-                robot.goStraight(89, .415, .53); // Go back to the stones
+                straight(89, .415, .53); // Go back to the stones
                 sleep(500);
                 //rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .8, .3);
                 robot.strafeLeft(13, .3); // go in to get 2nd stone
@@ -145,31 +145,31 @@ public class blueQuarryAuto extends LinearOpMode {
                 sleep(1000);
                 robot.strafeRight(11, .5); // Pull stone out
                 //rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .5, .3); // Straighen out
-                robot.goStraight(-104, .7, .79); // Cross the bridge
+                straight(-104, .7, .79); // Cross the bridge
                 robot.grabberL.setPosition(.5); // Drop the stone
                 sleep(500);
                 robot.strafeLeft(3.5, .3);
-                robot.goStraight(38, .5, .59); // park
+                straight(38, .5, .59); // park
                 sleep(30000);
             }
 
             else { // right
-                robot.goStraight(-25, .3 + checkDirection(), 0.35); //Move to the stone
+                straight(-25, .3 + checkDirection(), 0.35); //Move to the stone
                 sleep(500);
                 rotate(-86.5, .35); // Rotate to align grabber with stone
                 //sleep(5000);
-                robot.goStraight(2, 0.3, 0.3); // Align with center stone
+                straight(2, 0.3, 0.3); // Align with center stone
                 //sleep(5000);
                 robot.strafeLeft(9.5, .25); // Approach stone
                 robot.grabberL.setPosition(0.98); // Drop grabber
                 sleep(2000);
                 robot.strafeRight(12, .5); // Pull Stone out
                 // rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .05, .4); // Straighten out
-                robot.goStraight(-60, .525, .6); // Cross the bridge
+                straight(-60, .525, .6); // Cross the bridge
                 robot.grabberL.setPosition(.5); // Grabber lets go of stone
                 //rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .77, .4);
                 //second stone
-                robot.goStraight(89, .415, .53); // Go back to the stones
+                straight(89, .415, .53); // Go back to the stones
                 sleep(500);
                 //rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .8, .3);
                 robot.strafeLeft(16, .3); // go in to get 2nd stone
@@ -177,11 +177,11 @@ public class blueQuarryAuto extends LinearOpMode {
                 sleep(1000);
                 robot.strafeRight(11, .5); // Pull stone out
                 rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .5, .3); // Straighen out
-                robot.goStraight(-104, .7, .79); // Cross the bridge
+                straight(-104, .7, .79); // Cross the bridge
                 robot.grabberL.setPosition(.5); // Drop the stone
                 sleep(500);
                 robot.strafeLeft(3.5, .3);
-                robot.goStraight(30, .5, .59); // park
+                straight(30, .5, .59); // park
                 sleep(30000);
             }
         }

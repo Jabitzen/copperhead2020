@@ -145,11 +145,11 @@ public class blueQuarryAutoV2 extends LinearOpMode {
                 sleep(1000);
                 strafeRightGyro(7.7, .5); // Pull stone out
                 //rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .84, .3); // Straighen out
-                robot.goStraight(-112, .7, .79); // Cross the bridge
+                straight(-112, .7, .79); // Cross the bridge
                 robot.grabberL.setPosition(.5); // Drop the stone
                 sleep(500);
                 robot.strafeLeft(4, .3); //push stones aside
-                robot.goStraight(30, .5, .59); // park
+                straight(30, .5, .59); // park
                 sleep(30000);
             }
 

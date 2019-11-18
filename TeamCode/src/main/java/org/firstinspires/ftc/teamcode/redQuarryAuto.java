@@ -97,7 +97,7 @@ public class redQuarryAuto extends LinearOpMode {
                 // sleep(5000);
                 strafeRightGyro(9.5, .25); // Approach stone
                 robot.grabberR.setPosition(0.02); // Drop grabber
-                robot.goStraight(-.6, .2, .2);
+                straight(-.6, .2, .2);
                 sleep(2000);
                 robot.strafeLeft(7, .5); // Pull Stone out
                 // rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .05, .4); // Straighten out
@@ -110,7 +110,7 @@ public class redQuarryAuto extends LinearOpMode {
                 //rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .8, .3);
                 strafeRightGyro(10.5, .25); // go in to get 2nd stone
                 robot.grabberR.setPosition(0.02); // drop grabber do hold stone
-                robot.goStraight(-.6, .2, .2);
+                straight(-.6, .2, .2);
                 sleep(1000);
                 robot.strafeLeft(10.5, .5); // Pull stone out
                 rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .6, .3); // Straighen out
@@ -132,7 +132,7 @@ public class redQuarryAuto extends LinearOpMode {
                 //  sleep(5000);
                 strafeRightGyro(8.5, .25); // Approach stone
                 robot.grabberR.setPosition(0.02); // Drop grabber
-                robot.goStraight(-.6, .2, .2);
+                straight(-.6, .2, .2);
 
                 sleep(2000);
                 robot.strafeLeft(8.25, .4); // Pull Stone out
@@ -147,11 +147,11 @@ public class redQuarryAuto extends LinearOpMode {
                 sleep(1000);
                 robot.strafeLeft(7.7, .5); // Pull stone out
                 //rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .84, .3); // Straighen out
-                robot.goStraight(-112, .7, .79); // Cross the bridge
+                straight(-112, .7, .79); // Cross the bridge
                 robot.grabberR.setPosition(.5); // Drop the stone
                 sleep(500);
                 strafeRightGyro(4, .3); //push stones aside
-                robot.goStraight(30, .5, .59); // park
+                straight(30, .5, .59); // park
                 sleep(30000);
             }
             else { // right
@@ -163,7 +163,7 @@ public class redQuarryAuto extends LinearOpMode {
                  sleep(5000);
                 strafeRightGyro(100, .2); // Approach stone //10
                 robot.grabberR.setPosition(0.02); // Drop grabber
-                robot.goStraight(-.6, .2, .2);
+                straight(-.6, .2, .2);
 
                 sleep(5000);
                 robot.strafeLeft(100, .5); // Pull Stone out //11
@@ -175,7 +175,7 @@ public class redQuarryAuto extends LinearOpMode {
                 sleep(500);
                 strafeRightGyro(11.3, .2); // go in to get 2nd stone
                 robot.grabberR.setPosition(0.02); // drop grabber do hold stone
-                robot.goStraight(-.6, .2, .2);
+                straight(-.6, .2, .2);
                 sleep(1000);
                 robot.strafeLeft(14, .5); // Pull stone out
                 rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .7, .3); // Straighen out
