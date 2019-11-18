@@ -464,7 +464,7 @@ public class redQuarryAuto extends LinearOpMode {
         else {
             while (Math.abs(robot.encoderAvg()) < target && opModeIsActive()) {
                 motorPower1 = .15 + (-rightPower - .15) * ((target - robot.encoderAvg()) / target);
-                motorPower2 = -.15 + (leftPower * ((target - robot.encoderAvg()) / target));
+                motorPower2 = -.15 + (leftPower * ((target - robot.encoderAvg()) / target)) + (getAngle());
                 robot.fL.setPower(motorPower1);
                 robot.fR.setPower(motorPower2);
                 robot.bL.setPower(motorPower2);

@@ -190,6 +190,38 @@ public class blueQuarryAuto extends LinearOpMode {
         telemetry.addLine("done");
         telemetry.update();
 
+        // String pos = bm1.findSkystones();
+        //sleep(3000);
+        //telemetry.addData("Skystone Position: ", pos);
+       /* telemetry.update();
+        sleep(5000);
+
+
+        if (pos == "left") {
+            robot.moveStraight(30, 0.5); //move to skystone
+            robot.grabberDown();
+            robot.moveStraight(5, .5);
+            robot.strafeLeft(60, 0.5);
+            robot.grabberUp();
+            robot.strafeRight(85, .5);
+            robot.grabberDown();
+            robot.strafeLeft(85, 0.5);
+            robot.strafeRight(20, .5);
+
+        }
+
+        else if (pos == "middle") {
+
+        }
+
+        else if (pos == "right"){
+
+        }
+
+        else {
+            telemetry.addLine("oopsie");
+        }
+        */
 
     }
     /**
@@ -434,7 +466,7 @@ public class blueQuarryAuto extends LinearOpMode {
         else {
             while (Math.abs(robot.encoderAvg()) < target && opModeIsActive()) {
                 motorPower1 = .15 + (-rightPower - .15) * ((target - robot.encoderAvg()) / target);
-                motorPower2 = -.15 + (leftPower * ((target - robot.encoderAvg()) / target));
+                motorPower2 = -.15 + (leftPower * ((target - robot.encoderAvg()) / target)) + (getAngle());
                 robot.fL.setPower(motorPower1);
                 robot.fR.setPower(motorPower2);
                 robot.bL.setPower(motorPower2);
