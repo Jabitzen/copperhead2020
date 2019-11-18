@@ -78,13 +78,13 @@ public class goForward extends LinearOpMode {
         //skyStonePos = "left";
         waitForStart();
         //resetAngle();
-        goStraightGyro(20, .4);
-        sleep(5000);
-        strafeRightGyro(10, .4);
-        sleep(5000);
-        goStraightGyro(-20, .4);
-        sleep(5000);
-        strafeLeftGyro(10, .4);
+        goStraightGyro(40, .4);
+        sleep(1000);
+        strafeRightGyro(20, .4);
+        sleep(1000);
+        goStraightGyro(-40, .4);
+        sleep(1000);
+        strafeLeftGyro(20, .4);
 
 
 
@@ -405,13 +405,13 @@ public class goForward extends LinearOpMode {
         double rightPower;
         // Forward
         if (distance > 0) {
-            rightPower = leftPower * 1.5;
+            rightPower = leftPower; // 1.5
             rightPower = rightPower - .15;
             leftPower = leftPower -.15;
 
         } // reverse
         else {
-            rightPower = leftPower * 1.2;
+            rightPower = leftPower; // 1.5
             rightPower = -rightPower + .15;
             leftPower = -leftPower + .15;
         }

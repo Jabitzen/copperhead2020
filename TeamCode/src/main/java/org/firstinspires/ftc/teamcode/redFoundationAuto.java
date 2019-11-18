@@ -16,10 +16,10 @@ public class redFoundationAuto extends LinearOpMode {
 
         waitForStart();
         robot.moveStraight(-15, .5);
-        robot.turnTime(.5, true, .3);
+
         robot.moveStraight(-15, .5);
         //servo down
-        robot.turnTime(.5, false, .3);
+
         robot.moveStraight(15, .5);
         //servo up
         //robot.strafeRight(30, .5);
