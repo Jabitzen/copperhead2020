@@ -23,7 +23,9 @@ public class SkystoneTeleopBlue extends LinearOpMode{
 
     public double rightstickx;
     public double leftstickx;
-    public double leftsticky;
+    public double leftstickyfront;
+    public double leftstickyback;
+
 
     public int constant;
 
@@ -93,20 +95,24 @@ public class SkystoneTeleopBlue extends LinearOpMode{
     public void trigMecanum() {
         rightstickx = gamepad1.right_stick_x ;
         leftstickx = gamepad1.left_stick_x * constant;
-        leftsticky = gamepad1.left_stick_y * constant;
-        double r = Math.hypot(rightstickx, leftsticky);
-        double robotAngle = Math.atan2(leftsticky, rightstickx) - Math.PI / 4;
+
+        leftstickyfront = gamepad1.left_stick_y * -constant;
+        leftstickyback = gamepad1.left_stick_y * constant;
+
+        double rFront = Math.hypot(rightstickx, leftstickyfront);
+        double rBack = Math.hypot(rightstickx, leftstickyback);
+
+        double robotAngleFront = Math.atan2(leftstickyfront, rightstickx) - Math.PI / 4;
+        double robotAngleBack = Math.atan2(leftstickyback, rightstickx) - Math.PI / 4;
+
         double rightX = leftstickx;
-        final double v1 = r * Math.cos(robotAngle) + rightX;
-        final double v2 = r * Math.sin(robotAngle) - rightX;
-        final double v3 = r * Math.sin(robotAngle) + rightX;
-        final double v4 = r * Math.cos(robotAngle) - rightX;
 
-        //telemetry.addData ("r", r);
-        //telemetry.addData ("robotAngle", robotAngle);
-        //telemetry.update();
+        final double v1 = rFront * Math.cos(robotAngleFront) + rightX;
+        final double v2 = rFront * Math.sin(robotAngleFront) - rightX;
+        final double v3 = rBack * Math.sin(robotAngleBack) + rightX;
+        final double v4 = rBack * Math.cos(robotAngleBack) - rightX;
 
-        //telemetry.addData("input",gamepad1.left_stick_y *gamepad1.left_stick_y);
+        /*
         telemetry.addData("fl", v1);
         telemetry.addData ("fR", v2);
         telemetry.addData ("bL", v3);
@@ -115,6 +121,8 @@ public class SkystoneTeleopBlue extends LinearOpMode{
         telemetry.addData("leftY", gamepad1.left_stick_y);
         telemetry.addData ("Right X", rightX);
         telemetry.update();
+
+         */
 
         fL.setPower(-v1);
         fR.setPower(-v2);
