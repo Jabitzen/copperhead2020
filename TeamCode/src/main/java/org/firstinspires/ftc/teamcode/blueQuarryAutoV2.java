@@ -97,8 +97,13 @@ public class blueQuarryAutoV2 extends LinearOpMode {
         //skyStonePos = "left";
         waitForStart();
 
-        strafeLeftGyro(20, 0.3);
+        telemetry.addLine("test 1");
+        telemetry.update();
+        sleep(1000);
         approachStones(.3);
+        telemetry.addLine("test 2");
+        telemetry.update();
+        sleep(1000);
 
         sleep(30000);
         bm1 = new BitMapVision(this);
@@ -754,33 +759,67 @@ public class blueQuarryAutoV2 extends LinearOpMode {
 
     public void approachStones (double power) {
         resetAngle();
-
         robot.brakeMode();
-        while (sensorDistanceLeft.getDistance(DistanceUnit.CM) > 5.5 && sensorDistanceBotBack.getDistance(DistanceUnit.CM) > 5.5 ){
-            if (getAngle() > 1) {
-                robot.fL.setPower(-power * 1.2);
-                robot.fR.setPower(power * 1.2);
-                robot.bL.setPower(power * .8);
-                robot.bR.setPower(-power * .8);
-            }
-            else if (getAngle() < -1) {
-                robot.fL.setPower(-power * .8);
-                robot.fR.setPower(power * .8);
-                robot.bL.setPower(power * 1.2);
-                robot.bR.setPower(-power * 1.2);
-            }
-            else {
-                robot.fL.setPower(-power);
-                robot.fR.setPower(power);
-                robot.bL.setPower(power);
-                robot.bR.setPower(-power);
-            }
+
+
+        while (Double.isNaN(sensorDistanceLeft.getDistance(DistanceUnit.CM)) && Double.isNaN(sensorDistanceBotBack.getDistance(DistanceUnit.CM)) && opModeIsActive()){
+            moveLeft(power);
+            telemetry.addData("front", sensorDistanceLeft.getDistance(DistanceUnit.CM));
+            telemetry.addData("back", sensorDistanceBotBack.getDistance(DistanceUnit.CM));
+            telemetry.update();
+        }
+        while (sensorDistanceLeft.getDistance(DistanceUnit.CM) > 5.5 && sensorDistanceBotBack.getDistance(DistanceUnit.CM) > 5.5 && opModeIsActive()){
+            moveLeft(power);
+            telemetry.addData("front", sensorDistanceLeft.getDistance(DistanceUnit.CM));
+             telemetry.update();
         }
 
         robot.stopMotors();
         robot.floatMode();
-
     }
+
+    private void moveLeft(double power) {
+        if (getAngle() > 1) {
+            robot.fL.setPower(-power * 1.2);
+            robot.fR.setPower(power * 1.2);
+            robot.bL.setPower(power * .8);
+            robot.bR.setPower(-power * .8);
+        }
+        else if (getAngle() < -1) {
+            robot.fL.setPower(-power * .8);
+            robot.fR.setPower(power * .8);
+            robot.bL.setPower(power * 1.2);
+            robot.bR.setPower(-power * 1.2);
+        }
+        else {
+            robot.fL.setPower(-power);
+            robot.fR.setPower(power);
+            robot.bL.setPower(power);
+            robot.bR.setPower(-power);
+        }
+    }
+
+    private void moveRight(double power) {
+        if (getAngle() > 1) {
+            robot.fL.setPower(power * .8);
+            robot.fR.setPower(-power * .8);
+            robot.bL.setPower(-power * 1.2);
+            robot.bR.setPower(power * 1.2);
+        }
+        else if (getAngle() < -1) {
+            robot.fL.setPower(power * 1.2);
+            robot.fR.setPower(-power * 1.2);
+            robot.bL.setPower(-power * .8);
+            robot.bR.setPower(power * .8);
+        }
+        else {
+            robot.fL.setPower(power);
+            robot.fR.setPower(-power);
+            robot.bL.setPower(-power);
+            robot.bR.setPower(power);
+        }
+    }
+
 
 
 
