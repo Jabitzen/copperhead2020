@@ -1,14 +1,21 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.app.Activity;
+import android.graphics.Color;
+import android.view.View;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Movement.RobotHw;
 import org.firstinspires.ftc.teamcode.Vision.BitMapVision;
@@ -22,6 +29,15 @@ public class blueQuarryAutoV2 extends LinearOpMode {
     double lastDegrees;
     double globalAngle;
     double referenceAngle;
+
+    ColorSensor sensorColorBotBack;
+    ColorSensor sensorColorLeft;
+    ColorSensor sensorColorRight;
+    DistanceSensor sensorDistanceBotBack;
+    DistanceSensor sensorDistanceLeft;
+    DistanceSensor sensorDistanceRight;
+
+
     String skyStonePos = null;
     RobotHw robot = new RobotHw();
 
@@ -61,6 +77,7 @@ public class blueQuarryAutoV2 extends LinearOpMode {
         imu = hardwareMap.get(BNO055IMU.class, "imu");
 
         imu.initialize(parameters);
+        initColor();
         //robot.driveTrain.srvMarker.setPosition(1);
 
         telemetry.addData("Mode", "calibrating...");
@@ -80,6 +97,10 @@ public class blueQuarryAutoV2 extends LinearOpMode {
         //skyStonePos = "left";
         waitForStart();
 
+        strafeLeftGyro(20, 0.3);
+        approachStones(.3);
+
+        sleep(30000);
         bm1 = new BitMapVision(this);
         skyStonePos = bm1.findBlueSkystones();
         telemetry.addData("stone", skyStonePos);
@@ -511,10 +532,7 @@ public class blueQuarryAutoV2 extends LinearOpMode {
 
         double target = Math.abs(distance * (537.6/15.5));
 
-        robot.fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robot.bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robot.fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robot.bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.brakeMode();
         runtime.reset();
         if (distance > 0) {
             while (Math.abs(robot.encoderAvg()) < target && opModeIsActive() && runtime.seconds() < timeout) {
@@ -586,10 +604,7 @@ public class blueQuarryAutoV2 extends LinearOpMode {
 
         robot.stopMotors();
 
-        robot.fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        robot.bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        robot.fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        robot.bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        robot.floatMode();
         resetAngle();
     }
 
@@ -649,4 +664,187 @@ public class blueQuarryAutoV2 extends LinearOpMode {
 
 
     }
+
+    public void strafeLeftGyro (double distance, double power) {
+        robot.reset();
+        resetAngle();
+        double target = Math.abs(distance * (537.6/11));
+
+        robot.brakeMode();
+
+        while (Math.abs(robot.encoderAvg()) < target && opModeIsActive()) {
+
+            if (getAngle() > 1) {
+                robot.fL.setPower(-power * 1.2);
+                robot.fR.setPower(power * 1.2);
+                robot.bL.setPower(power * .8);
+                robot.bR.setPower(-power * .8);
+            }
+            else if (getAngle() < -1) {
+                robot.fL.setPower(-power * .8);
+                robot.fR.setPower(power * .8);
+                robot.bL.setPower(power * 1.2);
+                robot.bR.setPower(-power * 1.2);
+            }
+            else {
+                robot.fL.setPower(-power);
+                robot.fR.setPower(power);
+                robot.bL.setPower(power);
+                robot.bR.setPower(-power);
+            }
+            //opmode.telemetry.addData("avg", encoderAvg());
+            //opmode.telemetry.addData("fl", fL.getCurrentPosition());
+            //opmode.telemetry.addData("fr", fR.getCurrentPosition());
+            //opmode.telemetry.addData("bl", bL.getCurrentPosition());
+            //opmode.telemetry.addData("br", bR.getCurrentPosition());
+            telemetry.addData("fl", robot.fL.getPower());
+            telemetry.addData("fr", robot.fR.getPower());
+            telemetry.addData("bl", robot.bL.getPower());
+            telemetry.addData("br", robot.bR.getPower());
+            telemetry.update();
+        }
+        robot.stopMotors();
+
+        robot.floatMode();
+    }
+
+    private void initColor() {
+
+        sensorColorBotBack = hardwareMap.get(ColorSensor.class, "sensorColorBotFront");
+        sensorColorLeft = hardwareMap.get(ColorSensor.class, "sensorColorLeft");
+        sensorColorRight = hardwareMap.get(ColorSensor.class, "sensorColorRight");
+
+        // get a reference to the distance sensor that shares the same name.
+        sensorDistanceLeft = hardwareMap.get(DistanceSensor.class, "sensorColorLeft");
+        sensorDistanceRight = hardwareMap.get(DistanceSensor.class, "sensorColorRight");
+        sensorDistanceBotBack = hardwareMap.get(DistanceSensor.class, "sensorColorBotFront");
+
+        // hsvValues is an array that will hold the hue, saturation, and value information.
+        float hsvValues[] = {0F, 0F, 0F};
+
+        // values is a reference to the hsvValues array.
+        final float values[] = hsvValues;
+
+        // sometimes it helps to multiply the raw RGB values with a scale factor
+        // to amplify/attentuate the measured values.
+        final double SCALE_FACTOR = 255;
+        sensorColorLeft.enableLed(false);
+        sensorColorRight.enableLed(false);
+        sensorColorBotBack.enableLed(false);
+
+        // get a reference to the RelativeLayout so we can change the background
+        // color of the Robot Controller app to match the hue detected by the RGB sensor.
+        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
+        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
+
+        while (opModeIsActive()) {
+            // convert the RGB values to HSV values.
+            // multiply by the SCALE_FACTOR.
+            // then cast it back to int (SCALE_FACTOR is a double)
+            Color.RGBToHSV((int) (sensorColorLeft.red() * SCALE_FACTOR),
+                    (int) (sensorColorLeft.green() * SCALE_FACTOR),
+                    (int) (sensorColorLeft.blue() * SCALE_FACTOR),
+                    hsvValues);
+            Color.RGBToHSV((int) (sensorColorBotBack.red() * SCALE_FACTOR),
+                    (int) (sensorColorBotBack.green() * SCALE_FACTOR),
+                    (int) (sensorColorBotBack.blue() * SCALE_FACTOR),
+                    hsvValues);
+        }
+    }
+
+    public void approachStones (double power) {
+        resetAngle();
+
+        robot.brakeMode();
+        while (sensorDistanceLeft.getDistance(DistanceUnit.CM) > 5.5 && sensorDistanceBotBack.getDistance(DistanceUnit.CM) > 5.5 ){
+            if (getAngle() > 1) {
+                robot.fL.setPower(-power * 1.2);
+                robot.fR.setPower(power * 1.2);
+                robot.bL.setPower(power * .8);
+                robot.bR.setPower(-power * .8);
+            }
+            else if (getAngle() < -1) {
+                robot.fL.setPower(-power * .8);
+                robot.fR.setPower(power * .8);
+                robot.bL.setPower(power * 1.2);
+                robot.bR.setPower(-power * 1.2);
+            }
+            else {
+                robot.fL.setPower(-power);
+                robot.fR.setPower(power);
+                robot.bL.setPower(power);
+                robot.bR.setPower(-power);
+            }
+        }
+
+        robot.stopMotors();
+        robot.floatMode();
+
+    }
+
+
+
+    public void alignWithStones (double leftPower) {
+
+        while (sensorColorLeft.red() > 300 || sensorColorBotBack.red() > 300) {
+
+            if (sensorColorLeft.red() > 300) {
+
+                //drive backwards
+                robot.reset();
+                resetAngle();
+                sleep(100);
+                double rightPower;
+
+                rightPower = leftPower * 1.2;
+                rightPower = -rightPower + .15;
+                leftPower = -leftPower + .15;
+
+                robot.brakeMode();
+                runtime.reset();
+
+                    while (sensorColorLeft.red() > 300) {
+
+                        //drive backwards
+                        if (getAngle() > 1) {
+                            robot.fL.setPower(.8 * (.15 + (-rightPower - .15) ));
+                            robot.fR.setPower(1.2 * (-.15 + (leftPower )));
+                            robot.bL.setPower(1.2 * (-.15 + (leftPower )));
+                            robot.bR.setPower(.8 * (-.15 + (rightPower)));
+                        }
+                        else if (getAngle() < -1) {
+                            robot.fL.setPower(1.2 * (.15 + (-rightPower - .15)));
+                            robot.fR.setPower(.8 * (-.15 + (leftPower )));
+                            robot.bL.setPower(.8 * (-.15 + (leftPower)));
+                            robot.bR.setPower(1.2 * (-.15 + (rightPower)));
+                        }
+                        else {
+                            robot.fL.setPower(.15 + (-rightPower - .15));
+                            robot.fR.setPower(-.15 + (leftPower));
+                            robot.bL.setPower(-.15 + (leftPower));
+                            robot.bR.setPower(-.15 + (rightPower));
+                        }
+
+
+                    }
+
+                robot.stopMotors();
+
+                robot.floatMode();
+                resetAngle();
+            }
+            else {
+                    while (sensorColorBotBack.red() > 300) {
+                        goStraightGyro(10, 0.2, 10);
+                    }
+            }
+
+            }
+
+        }
+
+    
+
+
+
 }
