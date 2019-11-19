@@ -97,13 +97,10 @@ public class blueQuarryAutoV2 extends LinearOpMode {
         //skyStonePos = "left";
         waitForStart();
 
-        telemetry.addLine("test 1");
-        telemetry.update();
-        sleep(1000);
-        approachStones(.3);
-        telemetry.addLine("test 2");
-        telemetry.update();
-        sleep(1000);
+
+        approachStones(.2);
+
+
 
         sleep(30000);
         bm1 = new BitMapVision(this);
@@ -761,18 +758,25 @@ public class blueQuarryAutoV2 extends LinearOpMode {
         resetAngle();
         robot.brakeMode();
 
+        boolean cont = Double.isNaN(sensorDistanceLeft.getDistance(DistanceUnit.CM));
 
-        while (Double.isNaN(sensorDistanceLeft.getDistance(DistanceUnit.CM)) && Double.isNaN(sensorDistanceBotBack.getDistance(DistanceUnit.CM)) && opModeIsActive()){
+
+        while (cont == true && opModeIsActive()){
             moveLeft(power);
+
+            if (sensorDistanceLeft.getDistance(DistanceUnit.CM) < 6) {
+                cont = false;
+            }
+
+
+
+
+
             telemetry.addData("front", sensorDistanceLeft.getDistance(DistanceUnit.CM));
             telemetry.addData("back", sensorDistanceBotBack.getDistance(DistanceUnit.CM));
             telemetry.update();
         }
-        while (sensorDistanceLeft.getDistance(DistanceUnit.CM) > 5.5 && sensorDistanceBotBack.getDistance(DistanceUnit.CM) > 5.5 && opModeIsActive()){
-            moveLeft(power);
-            telemetry.addData("front", sensorDistanceLeft.getDistance(DistanceUnit.CM));
-             telemetry.update();
-        }
+
 
         robot.stopMotors();
         robot.floatMode();
