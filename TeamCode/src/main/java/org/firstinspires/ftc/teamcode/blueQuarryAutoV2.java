@@ -99,6 +99,10 @@ public class blueQuarryAutoV2 extends LinearOpMode {
 
 
         approachStones(.2);
+        telemetry.addData("leftDistance", sensorDistanceLeft.getDistance(DistanceUnit.CM));
+        telemetry.update();
+        sleep(1000);
+        alignWithStones(0.2);
 
 
 
@@ -827,63 +831,104 @@ public class blueQuarryAutoV2 extends LinearOpMode {
 
 
 
-    public void alignWithStones (double leftPower) {
+    public void alignWithStones (double power) {
 
         while (sensorColorLeft.red() > 300 || sensorColorBotBack.red() > 300) {
 
             if (sensorColorLeft.red() > 300) {
 
-                //drive backwards
-                robot.reset();
-                resetAngle();
-                sleep(100);
-                double rightPower;
-
-                rightPower = leftPower * 1.2;
-                rightPower = -rightPower + .15;
-                leftPower = -leftPower + .15;
-
-                robot.brakeMode();
-                runtime.reset();
-
                     while (sensorColorLeft.red() > 300) {
 
                         //drive backwards
-                        if (getAngle() > 1) {
-                            robot.fL.setPower(.8 * (.15 + (-rightPower - .15) ));
-                            robot.fR.setPower(1.2 * (-.15 + (leftPower )));
-                            robot.bL.setPower(1.2 * (-.15 + (leftPower )));
-                            robot.bR.setPower(.8 * (-.15 + (rightPower)));
-                        }
-                        else if (getAngle() < -1) {
-                            robot.fL.setPower(1.2 * (.15 + (-rightPower - .15)));
-                            robot.fR.setPower(.8 * (-.15 + (leftPower )));
-                            robot.bL.setPower(.8 * (-.15 + (leftPower)));
-                            robot.bR.setPower(1.2 * (-.15 + (rightPower)));
-                        }
-                        else {
-                            robot.fL.setPower(.15 + (-rightPower - .15));
-                            robot.fR.setPower(-.15 + (leftPower));
-                            robot.bL.setPower(-.15 + (leftPower));
-                            robot.bR.setPower(-.15 + (rightPower));
-                        }
-
-
+                        moveBackward(power);
                     }
+            }
 
-                robot.stopMotors();
+            else if (sensorColorBotBack.red() > 300){
+                //forward
+                while (sensorColorBotBack.red() > 300) {
 
-                robot.floatMode();
-                resetAngle();
+                    moveForward(power);
+                }
+            }
+
+            else {
+                stopM
+            }
+
+
+
+            }
+
+        }
+
+        private void moveBackward (double power) {
+
+            robot.reset();
+            resetAngle();
+            sleep(100);
+
+            robot.brakeMode();
+            runtime.reset();
+
+            if (getAngle() > 1) {
+                robot.fL.setPower(1.2 * power);
+                robot.fR.setPower(0.8 * power);
+                robot.bL.setPower(1.2 * power);
+                robot.bR.setPower(0.8 * power);
+            }
+            else if (getAngle() < -1) {
+                robot.fL.setPower(.8 * power);
+                robot.fR.setPower(1.2 * power);
+                robot.bL.setPower(.8 * power);
+                robot.bR.setPower(1.2 * power);
             }
             else {
-                    while (sensorColorBotBack.red() > 300) {
-                        goStraightGyro(10, 0.2, 10);
-                    }
+                robot.fL.setPower(power);
+                robot.fR.setPower(power);
+                robot.bL.setPower(power);
+                robot.bR.setPower(power);
             }
 
+            robot.stopMotors();
+
+            robot.floatMode();
+            resetAngle();
+
+        }
+
+        private void moveForward(double power) {
+
+            robot.reset();
+            resetAngle();
+            sleep(100);
+
+
+
+            robot.brakeMode();
+            runtime.reset();
+
+            if (getAngle() > 1) {
+                robot.fL.setPower(.8 * power);
+                robot.fR.setPower(1.2 * power);
+                robot.bL.setPower(.8 * power);
+                robot.bR.setPower(1.2 * power);
+            } else if (getAngle() < -1) {
+                robot.fL.setPower(1.2 * power);
+                robot.fR.setPower(.8 * power);
+                robot.bL.setPower(1.2 * power);
+                robot.bR.setPower(.8 * power);
+            } else {
+                robot.fL.setPower(power);
+                robot.fR.setPower(power);
+                robot.bL.setPower(power);
+                robot.bR.setPower(power);
             }
 
+            robot.stopMotors();
+
+            robot.floatMode();
+            resetAngle();
         }
 
     
