@@ -24,26 +24,26 @@ import org.firstinspires.ftc.teamcode.Vision.BitMapVision;
 public class blueQuarryAutoV2 extends LinearOpMode {
 
     BitMapVision bm1 = null;
-    BNO055IMU               imu;
-    Orientation             lastAngles = new Orientation();
-    double lastDegrees;
-    double globalAngle;
-    double referenceAngle;
-
+    //BNO055IMU               imu;
+    //Orientation             lastAngles = new Orientation();
+  //  double lastDegrees;
+    //double globalAngle;
+    //double referenceAngle;
+/*
     ColorSensor sensorColorBotBack;
     ColorSensor sensorColorLeft;
     ColorSensor sensorColorRight;
     DistanceSensor sensorDistanceBotBack;
     DistanceSensor sensorDistanceLeft;
     DistanceSensor sensorDistanceRight;
-
+*/
 
     String skyStonePos = null;
     RobotHw robot = new RobotHw();
 
-    double leftCorrect;
-    double rightCorrect;
-    ElapsedTime runtime = new ElapsedTime();
+   // double leftCorrect;
+    //double rightCorrect;
+    //ElapsedTime runtime = new ElapsedTime();
 
 
 
@@ -57,12 +57,12 @@ public class blueQuarryAutoV2 extends LinearOpMode {
 
 
         robot.init(this);
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+       // BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
-        parameters.mode                = BNO055IMU.SensorMode.IMU;
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.loggingEnabled      = false;
+      //  parameters.mode                = BNO055IMU.SensorMode.IMU;
+       // parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+       // parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+       // parameters.loggingEnabled      = false;
 
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
         // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
@@ -74,11 +74,15 @@ public class blueQuarryAutoV2 extends LinearOpMode {
         //telemetry.addData("Skystone Position: ", skyStonePos);
         //telemetry.update();
 
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
+      //  imu = hardwareMap.get(BNO055IMU.class, "imu");
 
-        imu.initialize(parameters);
-        initColor();
+        //imu.initialize(parameters);
+        //initColor();
         //robot.driveTrain.srvMarker.setPosition(1);
+
+
+        /*
+
 
         telemetry.addData("Mode", "calibrating...");
         telemetry.update();
@@ -95,14 +99,16 @@ public class blueQuarryAutoV2 extends LinearOpMode {
         telemetry.update();
 
         //skyStonePos = "left";
+        /*
+         */
         waitForStart();
 
 
-        approachStones(.2);
-        telemetry.addData("leftDistance", sensorDistanceLeft.getDistance(DistanceUnit.CM));
+        robot.approachStones(.2);
+        telemetry.addData("leftDistance", robot.sensorDistanceLeft.getDistance(DistanceUnit.CM));
         telemetry.update();
         sleep(1000);
-        alignWithStones(0.2);
+        robot.alignWithStones(0.2);
 
 
 
@@ -118,95 +124,95 @@ public class blueQuarryAutoV2 extends LinearOpMode {
             // Middle Pathing
             if (skyStonePos == "center") {
 
-                goStraightGyro(-25, .3, 3); //Move to the stone
+                robot.goStraightGyro(-25, .3, 3); //Move to the stone
                 sleep(500);
-                rotate(-84.5, .35); // Rotate to align grabber with stone
+                robot.rotate(-84.5, .35); // Rotate to align grabber with stone
                 sleep(500);
-                goStraightGyro(-1, 0.3, 2); // Align with center stone
+                robot.goStraightGyro(-1, 0.3, 2); // Align with center stone
                 // sleep(5000);
                 robot.strafeLeft(9.5, .25); // Approach stone
                 robot.grabberL.setPosition(0.98); // Drop grabber
                 sleep(2000);
-                strafeRightGyro(7, .5); // Pull Stone out
+                robot.strafeRightGyro(7, .5); // Pull Stone out
                 // rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .05, .4); // Straighten out
-                goStraightGyro(-60, .5, 7); // Cross the bridge
+                robot.goStraightGyro(-60, .5, 7); // Cross the bridge
                 robot.grabberL.setPosition(.5); // Grabber lets go of stone
                 //rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .77, .4);
                 //second stone
-                goStraightGyro(91, .4, 5); // Go back to the stones
+                robot.goStraightGyro(91, .4, 5); // Go back to the stones
                 sleep(500);
                 //rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .8, .3);
                 robot.strafeLeft(10.5, .25); // go in to get 2nd stone
                 robot.grabberL.setPosition(0.98); // drop grabber do hold stone
                 sleep(1000);
-                strafeRightGyro(10.5, .5); // Pull stone out
-                rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .6, .3); // Straighen out
-                goStraightGyro(-100, .7, 7); // Cross the bridge
+                robot.strafeRightGyro(10.5, .5); // Pull stone out
+                robot.rotate((robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - robot.lastAngles.firstAngle) * .6, .3); // Straighen out
+                robot.goStraightGyro(-100, .7, 7); // Cross the bridge
                 robot.grabberL.setPosition(.5); // Drop the stone
                 sleep(500);
                 robot.strafeLeft(3, .3);
-                goStraightGyro(26, .5, 3); // park
+                robot.goStraightGyro(26, .5, 3); // park
                 sleep(30000);
 
 
 
             } else if (skyStonePos == "left") {
-                goStraightGyro(-25, .35, 3); //(-25, .3 + checkDirection(), 0.35); //Move to the stone
+                robot.goStraightGyro(-25, .35, 3); //(-25, .3 + checkDirection(), 0.35); //Move to the stone
                 sleep(500);
-                rotate(-84.5, .35); // Rotate to align grabber with stone
+                robot.rotate(-84.5, .35); // Rotate to align grabber with stone
                 sleep(500);
-                goStraightGyro(-5.2, 0.3, 0.3); // Align with center stone
+                robot.goStraightGyro(-5.2, 0.3, 0.3); // Align with center stone
                 //  sleep(5000);
                 robot.strafeLeft(8.5, .25); // Approach stone
                 robot.grabberL.setPosition(0.98); // Drop grabber
                 sleep(2000);
-                strafeRightGyro(8.25, .4); // Pull Stone out
+                robot.strafeRightGyro(8.25, .4); // Pull Stone out
                 //rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .7, .3); // Straighten out
-                goStraightGyro(-63, .525, 6); // Cross the bridge
+                robot.goStraightGyro(-63, .525, 6); // Cross the bridge
                 robot.grabberL.setPosition(.5); // Grabber lets go of stone
                 //second stone
-                goStraightGyro(95.5, .38, 5); // Go back to the 2nd stones
+                robot.goStraightGyro(95.5, .38, 5); // Go back to the 2nd stones
                 sleep(500);
                 robot.strafeLeft(11.9, .25); // go in to get 2nd stone
                 robot.grabberL.setPosition(.98); // drop grabber do hold stone
                 sleep(1000);
-                strafeRightGyro(7.7, .5); // Pull stone out
+                robot.strafeRightGyro(7.7, .5); // Pull stone out
                 //rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .84, .3); // Straighen out
-                goStraightGyro(-112, .7, .79); // Cross the bridge
+                robot.goStraightGyro(-112, .7, .79); // Cross the bridge
                 robot.grabberL.setPosition(.5); // Drop the stone
                 sleep(500);
                 robot.strafeLeft(4, .3); //push stones aside
-                goStraightGyro(30, .5, .59); // park
+                robot.goStraightGyro(30, .5, .59); // park
                 sleep(30000);
             }
 
             else { // right
-                goStraightGyro(-25, .35 , 3); //Move to the stone
+                robot.goStraightGyro(-25, .35 , 3); //Move to the stone
                 sleep(500);
-                rotate(-84.5, .35); // Rotate to align grabber with stone
+                robot.rotate(-84.5, .35); // Rotate to align grabber with stone
                 sleep(100);
-                goStraightGyro(11.6, 0.3 , 3); // Align with right stone
+                robot.goStraightGyro(11.6, 0.3 , 3); // Align with right stone
                 //  sleep(5000);
                 robot.strafeLeft(10, .2); // Approach stone
                 robot.grabberL.setPosition(.98); // Drop grabber
                 sleep(1900);
-                strafeRightGyro(11, .5); // Pull Stone out
+                robot.strafeRightGyro(11, .5); // Pull Stone out
                 //rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .75, .3); // Straighten out
-                goStraightGyro(-65, .525, 6); // Cross the bridge
+                robot.goStraightGyro(-65, .525, 6); // Cross the bridge
                 robot.grabberL.setPosition(.5); // Grabber lets go of stone
                 //second stone
-                goStraightGyro(93.45, .415, 7); // Go back to the stones
+                robot.goStraightGyro(93.45, .415, 7); // Go back to the stones
                 sleep(500);
                 robot.strafeLeft(11.3, .2); // go in to get 2nd stone
                 robot.grabberL.setPosition(.98); // drop grabber do hold stone
                 sleep(1000);
-                strafeRightGyro(14, .5); // Pull stone out
-                rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .7, .3); // Straighen out
-                goStraightGyro(-95, .7, 7); // Cross the bridge
+                robot.strafeRightGyro(14, .5); // Pull stone out
+                robot.rotate((robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - robot.lastAngles.firstAngle) * .7, .3); // Straighen out
+                robot.goStraightGyro(-95, .7, 7); // Cross the bridge
                 robot.grabberL.setPosition(.5); // Drop the stone
                 sleep(500);
                 robot.strafeLeft(3, .3);
-                goStraightGyro(30, .5, 3); // park
+                robot.goStraightGyro(30, .5, 3); // park
                 sleep(30000);
             }
         }
@@ -252,686 +258,687 @@ public class blueQuarryAutoV2 extends LinearOpMode {
     /**
      * Resets the cumulative angle tracking to zero.
      */
-    private void resetAngle()
-    {
-        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-
-        globalAngle = 0;
-    }
-
-    /**
-     * Get current cumulative angle rotation from last reset.
-     * @return Angle in degrees. + = left, - = right.
-     */
-    private double getAngle()
-    {
-        // We experimentally determined the Z axis is the axis we want to use for heading angle.
-        // We have to process the angle because the imu works in euler angles so the Z axis is
-        // returned as 0 to +180 or 0 to -180 rolling back to -179 or +179 when rotation passes
-        // 180 degrees. We detect this transition and track the total cumulative angle of rotation.
-
-        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-
-        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
-
-        if (deltaAngle < -180)
-            deltaAngle += 360;
-        else if (deltaAngle > 180)
-            deltaAngle -= 360;
-
-        globalAngle += deltaAngle;
-
-        lastAngles = angles;
-
-        return -globalAngle;
-    }
-
-    /**
-     * See if we are moving in a straight line and if not return a power correction value.
-     * @return Power adjustment, + is adjust left - is adjust right.
-     */
-    private double checkDirection()
-    {
-        // The gain value determines how sensitive the correction is to direction changes.
-        // You will have to experiment with your robot to get small smooth direction changes
-        // to stay on a straight line.
-
-        double correction, angle, gain = .0;
-
-        angle = getAngle();
-
-        if (angle == 0)
-            correction = 0;             // no adjustment.
-        else
-            correction = -angle;        // reverse sign of angle for correction.
-
-        correction = correction * gain;
-
-        return correction;
-    }
-
-    public void correction () {
-        // Overshot
-        Double newTarget;
-        if (getAngle() > lastDegrees) {
-            newTarget = lastDegrees - getAngle();
-            rotate(newTarget, .15 );
-        }
-        else {
-            newTarget = getAngle() - lastDegrees;
-            rotate(newTarget,.15);
-        }
-    }
-
-    public void gyroCorrect() {
-        if (getAngle() > referenceAngle + 1) {
-            rightCorrect = .8;
-        }
-        else if (getAngle() < referenceAngle - 1) {
-            leftCorrect = .8;
-        }
-        else {
-            leftCorrect = 1;
-            rightCorrect = 1;
-        }
-    }
-
-    public void setReferenceAngle() {
-        resetAngle();
-        referenceAngle = getAngle();
-    }
-
-
-    /**
-     * Rotate left or right the number of degrees. Does not support turning more than 180 degrees.
-     * @param degrees Degrees to turn, + is left - is right
-     */
-    public void rotate(double degrees, double power)
-    {
-        /*robot.fL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.bL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.fR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        robot.bR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);*/
-        double  leftPower, rightPower;
-
-
-
-        // restart imu movement tracking.
-        resetAngle();
-        telemetry.addLine().addData("Robot Angle", getAngle());
-        sleep(500);
-
-
-        // getAngle() returns + when rotating counter clockwise (left) and - when rotating
-        // clockwise (right).
-
-        if (degrees > 0)
-        {   // turn right.
-            leftPower = power - .13;
-            rightPower = -power + .13;
-        }
-        else if (degrees < 0)
-        {   // turn left.
-            leftPower = -power + .13;
-            rightPower = power - .13;
-        }
-        else return;
-
-
-        // set power to rotate.
-      /*  robot.fL.setPower(leftPower);
-        robot.bL.setPower(leftPower);
-        robot.fR.setPower(rightPower);
-        robot.bR.setPower(rightPower); */
-
-        // rotate until turn is completed.
-        if (degrees < 0)
-        {
-            // On right turn we have to get off zero first.
-            while (opModeIsActive() && getAngle() == 0) {}
-
-            while (opModeIsActive() && getAngle() > degrees) {
-                robot.fL.setPower(leftPower);
-                robot.bL.setPower(leftPower);
-                robot.fR.setPower(rightPower);
-                robot.bR.setPower(rightPower);
-                telemetry.addData("degrees", getAngle());
-                /*telemetry.addData("lastAngle", lastAngles);
-                telemetry.addData("globalangle", globalAngle);*/
-                telemetry.update();
-            }
-        }
-        else    // right turn.
-            while (opModeIsActive() && getAngle() < degrees) {
-                robot.fL.setPower(.13 + (leftPower * ((degrees - getAngle())/degrees)));
-                robot.bL.setPower(.13 + (leftPower * ((degrees - getAngle())/degrees)));
-                robot.fR.setPower(.13 +(-rightPower * ((degrees - getAngle())/degrees)));
-                robot.bR.setPower(-.13 - (-rightPower * ((degrees - getAngle())/degrees)));
-
-                telemetry.addData("degrees", getAngle());
-                //telemetry.addData("lastangle", lastAngles);
-                //telemetry.addData("globalangle", globalAngle);
-                telemetry.addData("fl", robot.fL.getPower()) ;
-                telemetry.addData("fr", robot.fR.getPower());
-                telemetry.addData("bl", robot.bL.getPower());
-                telemetry.addData("br", robot.bR.getPower());
-
-                telemetry.update();
-
-                /*if (getAngle() > degrees) {
-                    robot.fL.setPower(-leftPower);
-                    robot.bL.setPower(-leftPower);
-                    robot.fR.setPower(rightPower);
-                    robot.bR.setPower(-rightPower);
-                }*/
-            }
-
-        // turn the motors off.
-        robot.stopMotors();
-        lastDegrees = degrees;
-
-        // wait for rotation to stop.
-        sleep(500);
-
-        // reset angle tracking on new heading.
-        //resetAngle();
-    }
-
-    public void straight(double distance, double leftPower, double rightPower) {
-        robot.reset();
-
-        double motorPower1;
-        double motorPower2;
-
-
-
-        // Forward
-        if (distance > 0) {
-            rightPower = rightPower - .15;
-            leftPower = leftPower -.15;
-
-        } // reverse
-        else {
-            rightPower = -rightPower + .15;
-            leftPower = -leftPower + .15;
-        }
-
-        double target = Math.abs(distance * (537.6/15.5));
-
-        robot.fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robot.bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robot.fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robot.bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        if (distance > 0) {
-            while (Math.abs(robot.encoderAvg()) < target && opModeIsActive()) {
-
-                motorPower1 = -.15 + (-rightPower + .15) * ((target - robot.encoderAvg()) / target);
-                motorPower2 = .15 + (leftPower * ((target - robot.encoderAvg()) / target));
-                robot.fL.setPower(motorPower1);
-                robot.fR.setPower(motorPower2);
-                robot.bL.setPower(motorPower2);
-                robot.bR.setPower(motorPower2);
-                //opmode.telemetry.addData("avg", encoderAvg());
-                //opmode.telemetry.addData("fl", fL.getCurrentPosition());
-                //opmode.telemetry.addData("fr", fR.getCurrentPosition());
-                //opmode.telemetry.addData("bl", bL.getCurrentPosition());
-                //opmode.telemetry.addData("br", bR.getCurrentPosition());
-                telemetry.addData("Angle", getAngle());
-                telemetry.addData("fl", robot.fL.getPower());
-                telemetry.addData("fr", robot.fR.getPower());
-                telemetry.addData("bl", robot.bL.getPower());
-                telemetry.addData("br", robot.bR.getPower());
-                telemetry.update();
-            }
-        }
-        else {
-            while (Math.abs(robot.encoderAvg()) < target && opModeIsActive()) {
-                motorPower1 = .15 + (-rightPower - .15) * ((target - robot.encoderAvg()) / target);
-                motorPower2 = -.15 + (leftPower * ((target - robot.encoderAvg()) / target)) + (getAngle());
-                robot.fL.setPower(motorPower1);
-                robot.fR.setPower(motorPower2);
-                robot.bL.setPower(motorPower2);
-                robot.bR.setPower(motorPower2);
-                //opmode.telemetry.addData("avg", encoderAvg());
-                //opmode.telemetry.addData("fl", fL.getCurrentPosition());
-                //opmode.telemetry.addData("fr", fR.getCurrentPosition());
-                //opmode.telemetry.addData("bl", bL.getCurrentPosition());
-                //opmode.telemetry.addData("br", bR.getCurrentPosition());
-                telemetry.addData("Angle", getAngle());
-                telemetry.addData("fl", robot.fL.getPower());
-                telemetry.addData("fr", robot.fR.getPower());
-                telemetry.addData("bl", robot.bL.getPower());
-                telemetry.addData("br", robot.bR.getPower());
-                telemetry.update();
-            }
-        }
-        robot.fL.setPower(0);
-        robot.fR.setPower(0);
-        robot.bL.setPower(0);
-        robot.bR.setPower(0);
-
-        robot.fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        robot.bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        robot.fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        robot.bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-    }
-
-    public void goStraightGyro(double distance, double leftPower, double timeout) {
-
-        robot.reset();
-        resetAngle();
-        sleep(100);
-        double rightPower;
-        // Forward
-        if (distance > 0) {
-            rightPower = leftPower * 1.45;
-            rightPower = rightPower - .15;
-            leftPower = leftPower -.15;
-
-        } // reverse
-        else {
-            rightPower = leftPower * 1.2;
-            rightPower = -rightPower + .15;
-            leftPower = -leftPower + .15;
-        }
-
-        double target = Math.abs(distance * (537.6/15.5));
-
-        robot.brakeMode();
-        runtime.reset();
-        if (distance > 0) {
-            while (Math.abs(robot.encoderAvg()) < target && opModeIsActive() && runtime.seconds() < timeout) {
-                if (getAngle() > 1) {
-                    robot.fL.setPower(1.2 * (-.15 + (-rightPower + .15) * ((target - robot.encoderAvg()) / target)));
-                    robot.fR.setPower(.8 * (.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
-                    robot.bL.setPower(.8 * (.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
-                    robot.bR.setPower(1.2 * (.15 + (rightPower * ((target - robot.encoderAvg()) / target))));
-                }
-                else if (getAngle() < -1) {
-                    robot.fL.setPower(.8 * (-.15 + (-rightPower + .15) * ((target - robot.encoderAvg()) / target)));
-                    robot.fR.setPower(1.2 * (.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
-                    robot.bL.setPower(1.2 * (.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
-                    robot.bR.setPower(.8 * (.15 + (rightPower * ((target - robot.encoderAvg()) / target))));
-                }
-                else {
-                    robot.fL.setPower((-.15 + (-rightPower + .15) * ((target - robot.encoderAvg()) / target)));
-                    robot.fR.setPower((.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
-                    robot.bL.setPower((.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
-                    robot.bR.setPower((.15 + (rightPower * ((target - robot.encoderAvg()) / target))));
-                }
-                //opmode.telemetry.addData("avg", encoderAvg());
-                //opmode.telemetry.addData("fl", fL.getCurrentPosition());
-                //opmode.telemetry.addData("fr", fR.getCurrentPosition());
-                //opmode.telemetry.addData("bl", bL.getCurrentPosition());
-                //opmode.telemetry.addData("br", bR.getCurrentPosition());
-                telemetry.addData("angle", getAngle());
-                telemetry.addData("fl", robot.fL.getPower());
-                telemetry.addData("fr", robot.fR.getPower());
-                telemetry.addData("bl", robot.bL.getPower());
-                telemetry.addData("br", robot.bR.getPower());
-                telemetry.update();
-            }
-        }
-        else {
-            while (Math.abs(robot.encoderAvg()) < target && opModeIsActive() && runtime.seconds() < timeout) {
-                if (getAngle() > 1) {
-                    robot.fL.setPower(.8 * (.15 + (-rightPower - .15) * ((target - robot.encoderAvg()) / target)));
-                    robot.fR.setPower(1.2 * (-.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
-                    robot.bL.setPower(1.2 * (-.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
-                    robot.bR.setPower(.8 * (-.15 + (rightPower * ((target - robot.encoderAvg()) / target))));
-                }
-                else if (getAngle() < -1) {
-                    robot.fL.setPower(1.2 * (.15 + (-rightPower - .15) * ((target - robot.encoderAvg()) / target)));
-                    robot.fR.setPower(.8 * (-.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
-                    robot.bL.setPower(.8 * (-.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
-                    robot.bR.setPower(1.2 * (-.15 + (rightPower * ((target - robot.encoderAvg()) / target))));
-                }
-                else {
-                    robot.fL.setPower(.15 + (-rightPower - .15) * ((target - robot.encoderAvg()) / target));
-                    robot.fR.setPower(-.15 + (leftPower * ((target - robot.encoderAvg()) / target)));
-                    robot.bL.setPower(-.15 + (leftPower * ((target - robot.encoderAvg()) / target)));
-                    robot.bR.setPower(-.15 + (rightPower * ((target - robot.encoderAvg()) / target)));
-                }
-
-                //opmode.telemetry.addData("avg", encoderAvg());
-                //opmode.telemetry.addData("fl", fL.getCurrentPosition());
-                //opmode.telemetry.addData("fr", fR.getCurrentPosition());
-                //opmode.telemetry.addData("bl", bL.getCurrentPosition());
-                //opmode.telemetry.addData("br", bR.getCurrentPosition());
-                telemetry.addData("angle", getAngle());
-                telemetry.addData("fl", robot.fL.getPower());
-                telemetry.addData("fr", robot.fR.getPower());
-                telemetry.addData("bl", robot.bL.getPower());
-                telemetry.addData("br", robot.bR.getPower());
-                telemetry.update();
-            }
-        }
-
-        robot.stopMotors();
-
-        robot.floatMode();
-        resetAngle();
-    }
-
-    public void strafeRightGyro (double distance, double power) {
-
-
-        robot.reset();
-        resetAngle();
-        double target = Math.abs(distance * (537.6/11));
-
-        robot.fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robot.bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robot.fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        robot.bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        while (Math.abs(robot.encoderAvg()) < target && opModeIsActive()) {
-
-            if (getAngle() > 1) {
-                robot.fL.setPower(power * .8);
-                robot.fR.setPower(power * .8);
-                robot.bL.setPower(-power * 1.2);
-                robot.bR.setPower(power * 1.2);
-            }
-            else if (getAngle() < -1) {
-                robot.fL.setPower(power * 1.2);
-                robot.fR.setPower(power * 1.2);
-                robot.bL.setPower(-power * .8);
-                robot.bR.setPower(power * .8);
-            }
-            else {
-                robot.fL.setPower(power);
-                robot.fR.setPower(power);
-                robot.bL.setPower(-power);
-                robot.bR.setPower(power);
-            }
-            //opmode.telemetry.addData("avg", encoderAvg());
-            //opmode.telemetry.addData("fl", fL.getCurrentPosition());
-            //opmode.telemetry.addData("fr", fR.getCurrentPosition());
-            //opmode.telemetry.addData("bl", bL.getCurrentPosition());
-            //opmode.telemetry.addData("br", bR.getCurrentPosition());
-            telemetry.addData("fl", robot.fL.getPower());
-            telemetry.addData("fr", robot.fR.getPower());
-            telemetry.addData("bl", robot.bL.getPower());
-            telemetry.addData("br", robot.bR.getPower());
-            telemetry.update();
-        }
-
-
-
-
-        robot.stopMotors();
-
-        robot.fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        robot.bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        robot.fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        robot.bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-
-
-    }
-
-    public void strafeLeftGyro (double distance, double power) {
-        robot.reset();
-        resetAngle();
-        double target = Math.abs(distance * (537.6/11));
-
-        robot.brakeMode();
-
-        while (Math.abs(robot.encoderAvg()) < target && opModeIsActive()) {
-
-            if (getAngle() > 1) {
-                robot.fL.setPower(-power * 1.2);
-                robot.fR.setPower(power * 1.2);
-                robot.bL.setPower(power * .8);
-                robot.bR.setPower(-power * .8);
-            }
-            else if (getAngle() < -1) {
-                robot.fL.setPower(-power * .8);
-                robot.fR.setPower(power * .8);
-                robot.bL.setPower(power * 1.2);
-                robot.bR.setPower(-power * 1.2);
-            }
-            else {
-                robot.fL.setPower(-power);
-                robot.fR.setPower(power);
-                robot.bL.setPower(power);
-                robot.bR.setPower(-power);
-            }
-            //opmode.telemetry.addData("avg", encoderAvg());
-            //opmode.telemetry.addData("fl", fL.getCurrentPosition());
-            //opmode.telemetry.addData("fr", fR.getCurrentPosition());
-            //opmode.telemetry.addData("bl", bL.getCurrentPosition());
-            //opmode.telemetry.addData("br", bR.getCurrentPosition());
-            telemetry.addData("fl", robot.fL.getPower());
-            telemetry.addData("fr", robot.fR.getPower());
-            telemetry.addData("bl", robot.bL.getPower());
-            telemetry.addData("br", robot.bR.getPower());
-            telemetry.update();
-        }
-        robot.stopMotors();
-
-        robot.floatMode();
-    }
-
-    private void initColor() {
-
-        sensorColorBotBack = hardwareMap.get(ColorSensor.class, "sensorColorBotFront");
-        sensorColorLeft = hardwareMap.get(ColorSensor.class, "sensorColorLeft");
-        sensorColorRight = hardwareMap.get(ColorSensor.class, "sensorColorRight");
-
-        // get a reference to the distance sensor that shares the same name.
-        sensorDistanceLeft = hardwareMap.get(DistanceSensor.class, "sensorColorLeft");
-        sensorDistanceRight = hardwareMap.get(DistanceSensor.class, "sensorColorRight");
-        sensorDistanceBotBack = hardwareMap.get(DistanceSensor.class, "sensorColorBotFront");
-
-        // hsvValues is an array that will hold the hue, saturation, and value information.
-        float hsvValues[] = {0F, 0F, 0F};
-
-        // values is a reference to the hsvValues array.
-        final float values[] = hsvValues;
-
-        // sometimes it helps to multiply the raw RGB values with a scale factor
-        // to amplify/attentuate the measured values.
-        final double SCALE_FACTOR = 255;
-        sensorColorLeft.enableLed(false);
-        sensorColorRight.enableLed(false);
-        sensorColorBotBack.enableLed(false);
-
-        // get a reference to the RelativeLayout so we can change the background
-        // color of the Robot Controller app to match the hue detected by the RGB sensor.
-        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
-        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
-
-        while (opModeIsActive()) {
-            // convert the RGB values to HSV values.
-            // multiply by the SCALE_FACTOR.
-            // then cast it back to int (SCALE_FACTOR is a double)
-            Color.RGBToHSV((int) (sensorColorLeft.red() * SCALE_FACTOR),
-                    (int) (sensorColorLeft.green() * SCALE_FACTOR),
-                    (int) (sensorColorLeft.blue() * SCALE_FACTOR),
-                    hsvValues);
-            Color.RGBToHSV((int) (sensorColorBotBack.red() * SCALE_FACTOR),
-                    (int) (sensorColorBotBack.green() * SCALE_FACTOR),
-                    (int) (sensorColorBotBack.blue() * SCALE_FACTOR),
-                    hsvValues);
-        }
-    }
-
-    public void approachStones (double power) {
-        resetAngle();
-        robot.brakeMode();
-
-        boolean cont = Double.isNaN(sensorDistanceLeft.getDistance(DistanceUnit.CM));
-
-
-        while (cont == true && opModeIsActive()){
-            moveLeft(power);
-
-            if (sensorDistanceLeft.getDistance(DistanceUnit.CM) < 6) {
-                cont = false;
-            }
-
-
-
-
-
-            telemetry.addData("front", sensorDistanceLeft.getDistance(DistanceUnit.CM));
-            telemetry.addData("back", sensorDistanceBotBack.getDistance(DistanceUnit.CM));
-            telemetry.update();
-        }
-
-
-        robot.stopMotors();
-        robot.floatMode();
-    }
-
-    private void moveLeft(double power) {
-        if (getAngle() > 1) {
-            robot.fL.setPower(-power * 1.2);
-            robot.fR.setPower(power * 1.2);
-            robot.bL.setPower(power * .8);
-            robot.bR.setPower(-power * .8);
-        }
-        else if (getAngle() < -1) {
-            robot.fL.setPower(-power * .8);
-            robot.fR.setPower(power * .8);
-            robot.bL.setPower(power * 1.2);
-            robot.bR.setPower(-power * 1.2);
-        }
-        else {
-            robot.fL.setPower(-power);
-            robot.fR.setPower(power);
-            robot.bL.setPower(power);
-            robot.bR.setPower(-power);
-        }
-    }
-
-    private void moveRight(double power) {
-        if (getAngle() > 1) {
-            robot.fL.setPower(power * .8);
-            robot.fR.setPower(-power * .8);
-            robot.bL.setPower(-power * 1.2);
-            robot.bR.setPower(power * 1.2);
-        }
-        else if (getAngle() < -1) {
-            robot.fL.setPower(power * 1.2);
-            robot.fR.setPower(-power * 1.2);
-            robot.bL.setPower(-power * .8);
-            robot.bR.setPower(power * .8);
-        }
-        else {
-            robot.fL.setPower(power);
-            robot.fR.setPower(-power);
-            robot.bL.setPower(-power);
-            robot.bR.setPower(power);
-        }
-    }
-
-
-
-
-    public void alignWithStones (double power) {
-
-        while (sensorColorLeft.red() > 300 || sensorColorBotBack.red() > 300) {
-
-            if (sensorColorLeft.red() > 300) {
-
-                    while (sensorColorLeft.red() > 300) {
-
-                        //drive backwards
-                        moveBackward(power);
-                    }
-            }
-
-            else if (sensorColorBotBack.red() > 300){
-                //forward
-                while (sensorColorBotBack.red() > 300) {
-
-                    moveForward(power);
-                }
-            }
-
-            else {
-                stopM
-            }
-
-
-
-            }
-
-        }
-
-        private void moveBackward (double power) {
-
-            robot.reset();
-            resetAngle();
-            sleep(100);
-
-            robot.brakeMode();
-            runtime.reset();
-
-            if (getAngle() > 1) {
-                robot.fL.setPower(1.2 * power);
-                robot.fR.setPower(0.8 * power);
-                robot.bL.setPower(1.2 * power);
-                robot.bR.setPower(0.8 * power);
-            }
-            else if (getAngle() < -1) {
-                robot.fL.setPower(.8 * power);
-                robot.fR.setPower(1.2 * power);
-                robot.bL.setPower(.8 * power);
-                robot.bR.setPower(1.2 * power);
-            }
-            else {
-                robot.fL.setPower(power);
-                robot.fR.setPower(power);
-                robot.bL.setPower(power);
-                robot.bR.setPower(power);
-            }
-
-            robot.stopMotors();
-
-            robot.floatMode();
-            resetAngle();
-
-        }
-
-        private void moveForward(double power) {
-
-            robot.reset();
-            resetAngle();
-            sleep(100);
-
-
-
-            robot.brakeMode();
-            runtime.reset();
-
-            if (getAngle() > 1) {
-                robot.fL.setPower(.8 * power);
-                robot.fR.setPower(1.2 * power);
-                robot.bL.setPower(.8 * power);
-                robot.bR.setPower(1.2 * power);
-            } else if (getAngle() < -1) {
-                robot.fL.setPower(1.2 * power);
-                robot.fR.setPower(.8 * power);
-                robot.bL.setPower(1.2 * power);
-                robot.bR.setPower(.8 * power);
-            } else {
-                robot.fL.setPower(power);
-                robot.fR.setPower(power);
-                robot.bL.setPower(power);
-                robot.bR.setPower(power);
-            }
-
-            robot.stopMotors();
-
-            robot.floatMode();
-            resetAngle();
-        }
-
-    
+//    private void resetAngle()
+//    {
+//        robot.lastAngles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+//
+//        robot.globalAngle = 0;
+//    }
+//
+//    /**
+//     * Get current cumulative angle rotation from last reset.
+//     * @return Angle in degrees. + = left, - = right.
+//     */
+//    private double getAngle()
+//    {
+//        // We experimentally determined the Z axis is the axis we want to use for heading angle.
+//        // We have to process the angle because the imu works in euler angles so the Z axis is
+//        // returned as 0 to +180 or 0 to -180 rolling back to -179 or +179 when rotation passes
+//        // 180 degrees. We detect this transition and track the total cumulative angle of rotation.
+//
+//        Orientation angles = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+//
+//        double deltaAngle = angles.firstAngle - robot.lastAngles.firstAngle;
+//
+//        if (deltaAngle < -180)
+//            deltaAngle += 360;
+//        else if (deltaAngle > 180)
+//            deltaAngle -= 360;
+//
+//        //globalAngle += deltaAngle;
+//
+//        //lastAngles = angles;
+//
+//        return -globalAngle;
+//    }
+//
+//    /**
+//     * See if we are moving in a straight line and if not return a power correction value.
+//     * @return Power adjustment, + is adjust left - is adjust right.
+//     */
+//    private double checkDirection()
+//    {
+//        // The gain value determines how sensitive the correction is to direction changes.
+//        // You will have to experiment with your robot to get small smooth direction changes
+//        // to stay on a straight line.
+//
+//        double correction, angle, gain = .0;
+//
+//        angle = getAngle();
+//
+//        if (angle == 0)
+//            correction = 0;             // no adjustment.
+//        else
+//            correction = -angle;        // reverse sign of angle for correction.
+//
+//        correction = correction * gain;
+//
+//        return correction;
+//    }
+//
+//    public void correction () {
+//        // Overshot
+//        Double newTarget;
+//        if (getAngle() > lastDegrees) {
+//            newTarget = lastDegrees - getAngle();
+//            rotate(newTarget, .15 );
+//        }
+//        else {
+//            newTarget = getAngle() - lastDegrees;
+//            rotate(newTarget,.15);
+//        }
+//    }
+//
+//    public void gyroCorrect() {
+//        if (getAngle() > referenceAngle + 1) {
+//            rightCorrect = .8;
+//        }
+//        else if (getAngle() < referenceAngle - 1) {
+//            leftCorrect = .8;
+//        }
+//        else {
+//            leftCorrect = 1;
+//            rightCorrect = 1;
+//        }
+//    }
+//
+//    public void setReferenceAngle() {
+//        resetAngle();
+//        referenceAngle = getAngle();
+//    }
+//
+//
+//    /**
+//     * Rotate left or right the number of degrees. Does not support turning more than 180 degrees.
+//     * @param degrees Degrees to turn, + is left - is right
+//     */
+//    public void rotate(double degrees, double power)
+//    {
+//        /*robot.fL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        robot.bL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        robot.fR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//        robot.bR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);*/
+//        double  leftPower, rightPower;
+//
+//
+//
+//        // restart imu movement tracking.
+//        resetAngle();
+//        telemetry.addLine().addData("Robot Angle", getAngle());
+//        sleep(500);
+//
+//
+//        // getAngle() returns + when rotating counter clockwise (left) and - when rotating
+//        // clockwise (right).
+//
+//        if (degrees > 0)
+//        {   // turn right.
+//            leftPower = power - .13;
+//            rightPower = -power + .13;
+//        }
+//        else if (degrees < 0)
+//        {   // turn left.
+//            leftPower = -power + .13;
+//            rightPower = power - .13;
+//        }
+//        else return;
+//
+//
+//        // set power to rotate.
+//      /*  robot.fL.setPower(leftPower);
+//        robot.bL.setPower(leftPower);
+//        robot.fR.setPower(rightPower);
+//        robot.bR.setPower(rightPower); */
+//
+//        // rotate until turn is completed.
+//        if (degrees < 0)
+//        {
+//            // On right turn we have to get off zero first.
+//            while (opModeIsActive() && getAngle() == 0) {}
+//
+//            while (opModeIsActive() && getAngle() > degrees) {
+//                robot.fL.setPower(leftPower);
+//                robot.bL.setPower(leftPower);
+//                robot.fR.setPower(rightPower);
+//                robot.bR.setPower(rightPower);
+//                telemetry.addData("degrees", getAngle());
+//                /*telemetry.addData("lastAngle", lastAngles);
+//                telemetry.addData("globalangle", globalAngle);*/
+//                telemetry.update();
+//            }
+//        }
+//        else    // right turn.
+//            while (opModeIsActive() && getAngle() < degrees) {
+//                robot.fL.setPower(.13 + (leftPower * ((degrees - getAngle())/degrees)));
+//                robot.bL.setPower(.13 + (leftPower * ((degrees - getAngle())/degrees)));
+//                robot.fR.setPower(.13 +(-rightPower * ((degrees - getAngle())/degrees)));
+//                robot.bR.setPower(-.13 - (-rightPower * ((degrees - getAngle())/degrees)));
+//
+//                telemetry.addData("degrees", getAngle());
+//                //telemetry.addData("lastangle", lastAngles);
+//                //telemetry.addData("globalangle", globalAngle);
+//                telemetry.addData("fl", robot.fL.getPower()) ;
+//                telemetry.addData("fr", robot.fR.getPower());
+//                telemetry.addData("bl", robot.bL.getPower());
+//                telemetry.addData("br", robot.bR.getPower());
+//
+//                telemetry.update();
+//
+//                /*if (getAngle() > degrees) {
+//                    robot.fL.setPower(-leftPower);
+//                    robot.bL.setPower(-leftPower);
+//                    robot.fR.setPower(rightPower);
+//                    robot.bR.setPower(-rightPower);
+//                }*/
+//            }
+//
+//        // turn the motors off.
+//        robot.stopMotors();
+//        lastDegrees = degrees;
+//
+//        // wait for rotation to stop.
+//        sleep(500);
+//
+//        // reset angle tracking on new heading.
+//        //resetAngle();
+//    }
+//
+//    public void straight(double distance, double leftPower, double rightPower) {
+//        robot.reset();
+//
+//        double motorPower1;
+//        double motorPower2;
+//
+//
+//
+//        // Forward
+//        if (distance > 0) {
+//            rightPower = rightPower - .15;
+//            leftPower = leftPower -.15;
+//
+//        } // reverse
+//        else {
+//            rightPower = -rightPower + .15;
+//            leftPower = -leftPower + .15;
+//        }
+//
+//        double target = Math.abs(distance * (537.6/15.5));
+//
+//        robot.fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        robot.bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        robot.fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        robot.bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//
+//        if (distance > 0) {
+//            while (Math.abs(robot.encoderAvg()) < target && opModeIsActive()) {
+//
+//                motorPower1 = -.15 + (-rightPower + .15) * ((target - robot.encoderAvg()) / target);
+//                motorPower2 = .15 + (leftPower * ((target - robot.encoderAvg()) / target));
+//                robot.fL.setPower(motorPower1);
+//                robot.fR.setPower(motorPower2);
+//                robot.bL.setPower(motorPower2);
+//                robot.bR.setPower(motorPower2);
+//                //opmode.telemetry.addData("avg", encoderAvg());
+//                //opmode.telemetry.addData("fl", fL.getCurrentPosition());
+//                //opmode.telemetry.addData("fr", fR.getCurrentPosition());
+//                //opmode.telemetry.addData("bl", bL.getCurrentPosition());
+//                //opmode.telemetry.addData("br", bR.getCurrentPosition());
+//                telemetry.addData("Angle", getAngle());
+//                telemetry.addData("fl", robot.fL.getPower());
+//                telemetry.addData("fr", robot.fR.getPower());
+//                telemetry.addData("bl", robot.bL.getPower());
+//                telemetry.addData("br", robot.bR.getPower());
+//                telemetry.update();
+//            }
+//        }
+//        else {
+//            while (Math.abs(robot.encoderAvg()) < target && opModeIsActive()) {
+//                motorPower1 = .15 + (-rightPower - .15) * ((target - robot.encoderAvg()) / target);
+//                motorPower2 = -.15 + (leftPower * ((target - robot.encoderAvg()) / target)) + (getAngle());
+//                robot.fL.setPower(motorPower1);
+//                robot.fR.setPower(motorPower2);
+//                robot.bL.setPower(motorPower2);
+//                robot.bR.setPower(motorPower2);
+//                //opmode.telemetry.addData("avg", encoderAvg());
+//                //opmode.telemetry.addData("fl", fL.getCurrentPosition());
+//                //opmode.telemetry.addData("fr", fR.getCurrentPosition());
+//                //opmode.telemetry.addData("bl", bL.getCurrentPosition());
+//                //opmode.telemetry.addData("br", bR.getCurrentPosition());
+//                telemetry.addData("Angle", getAngle());
+//                telemetry.addData("fl", robot.fL.getPower());
+//                telemetry.addData("fr", robot.fR.getPower());
+//                telemetry.addData("bl", robot.bL.getPower());
+//                telemetry.addData("br", robot.bR.getPower());
+//                telemetry.update();
+//            }
+//        }
+//        robot.fL.setPower(0);
+//        robot.fR.setPower(0);
+//        robot.bL.setPower(0);
+//        robot.bR.setPower(0);
+//
+//        robot.fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//        robot.bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//        robot.fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//        robot.bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//    }
+//
+//    public void goStraightGyro(double distance, double leftPower, double timeout) {
+//
+//        robot.reset();
+//        resetAngle();
+//        sleep(100);
+//        double rightPower;
+//        // Forward
+//        if (distance > 0) {
+//            rightPower = leftPower * 1.45;
+//            rightPower = rightPower - .15;
+//            leftPower = leftPower -.15;
+//
+//        } // reverse
+//        else {
+//            rightPower = leftPower * 1.2;
+//            rightPower = -rightPower + .15;
+//            leftPower = -leftPower + .15;
+//        }
+//
+//        double target = Math.abs(distance * (537.6/15.5));
+//
+//        robot.brakeMode();
+//        runtime.reset();
+//        if (distance > 0) {
+//            while (Math.abs(robot.encoderAvg()) < target && opModeIsActive() && runtime.seconds() < timeout) {
+//                if (getAngle() > 1) {
+//                    robot.fL.setPower(1.2 * (-.15 + (-rightPower + .15) * ((target - robot.encoderAvg()) / target)));
+//                    robot.fR.setPower(.8 * (.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
+//                    robot.bL.setPower(.8 * (.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
+//                    robot.bR.setPower(1.2 * (.15 + (rightPower * ((target - robot.encoderAvg()) / target))));
+//                }
+//                else if (getAngle() < -1) {
+//                    robot.fL.setPower(.8 * (-.15 + (-rightPower + .15) * ((target - robot.encoderAvg()) / target)));
+//                    robot.fR.setPower(1.2 * (.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
+//                    robot.bL.setPower(1.2 * (.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
+//                    robot.bR.setPower(.8 * (.15 + (rightPower * ((target - robot.encoderAvg()) / target))));
+//                }
+//                else {
+//                    robot.fL.setPower((-.15 + (-rightPower + .15) * ((target - robot.encoderAvg()) / target)));
+//                    robot.fR.setPower((.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
+//                    robot.bL.setPower((.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
+//                    robot.bR.setPower((.15 + (rightPower * ((target - robot.encoderAvg()) / target))));
+//                }
+//                //opmode.telemetry.addData("avg", encoderAvg());
+//                //opmode.telemetry.addData("fl", fL.getCurrentPosition());
+//                //opmode.telemetry.addData("fr", fR.getCurrentPosition());
+//                //opmode.telemetry.addData("bl", bL.getCurrentPosition());
+//                //opmode.telemetry.addData("br", bR.getCurrentPosition());
+//                telemetry.addData("angle", getAngle());
+//                telemetry.addData("fl", robot.fL.getPower());
+//                telemetry.addData("fr", robot.fR.getPower());
+//                telemetry.addData("bl", robot.bL.getPower());
+//                telemetry.addData("br", robot.bR.getPower());
+//                telemetry.update();
+//            }
+//        }
+//        else {
+//            while (Math.abs(robot.encoderAvg()) < target && opModeIsActive() && runtime.seconds() < timeout) {
+//                if (getAngle() > 1) {
+//                    robot.fL.setPower(.8 * (.15 + (-rightPower - .15) * ((target - robot.encoderAvg()) / target)));
+//                    robot.fR.setPower(1.2 * (-.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
+//                    robot.bL.setPower(1.2 * (-.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
+//                    robot.bR.setPower(.8 * (-.15 + (rightPower * ((target - robot.encoderAvg()) / target))));
+//                }
+//                else if (getAngle() < -1) {
+//                    robot.fL.setPower(1.2 * (.15 + (-rightPower - .15) * ((target - robot.encoderAvg()) / target)));
+//                    robot.fR.setPower(.8 * (-.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
+//                    robot.bL.setPower(.8 * (-.15 + (leftPower * ((target - robot.encoderAvg()) / target))));
+//                    robot.bR.setPower(1.2 * (-.15 + (rightPower * ((target - robot.encoderAvg()) / target))));
+//                }
+//                else {
+//                    robot.fL.setPower(.15 + (-rightPower - .15) * ((target - robot.encoderAvg()) / target));
+//                    robot.fR.setPower(-.15 + (leftPower * ((target - robot.encoderAvg()) / target)));
+//                    robot.bL.setPower(-.15 + (leftPower * ((target - robot.encoderAvg()) / target)));
+//                    robot.bR.setPower(-.15 + (rightPower * ((target - robot.encoderAvg()) / target)));
+//                }
+//
+//                //opmode.telemetry.addData("avg", encoderAvg());
+//                //opmode.telemetry.addData("fl", fL.getCurrentPosition());
+//                //opmode.telemetry.addData("fr", fR.getCurrentPosition());
+//                //opmode.telemetry.addData("bl", bL.getCurrentPosition());
+//                //opmode.telemetry.addData("br", bR.getCurrentPosition());
+//                telemetry.addData("angle", getAngle());
+//                telemetry.addData("fl", robot.fL.getPower());
+//                telemetry.addData("fr", robot.fR.getPower());
+//                telemetry.addData("bl", robot.bL.getPower());
+//                telemetry.addData("br", robot.bR.getPower());
+//                telemetry.update();
+//            }
+//        }
+//
+//        robot.stopMotors();
+//
+//        robot.floatMode();
+//        resetAngle();
+//    }
+//
+//    public void strafeRightGyro (double distance, double power) {
+//
+//
+//        robot.reset();
+//        resetAngle();
+//        double target = Math.abs(distance * (537.6/11));
+//
+//        robot.fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        robot.bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        robot.fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//        robot.bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//
+//        while (Math.abs(robot.encoderAvg()) < target && opModeIsActive()) {
+//
+//            if (getAngle() > 1) {
+//                robot.fL.setPower(power * .8);
+//                robot.fR.setPower(power * .8);
+//                robot.bL.setPower(-power * 1.2);
+//                robot.bR.setPower(power * 1.2);
+//            }
+//            else if (getAngle() < -1) {
+//                robot.fL.setPower(power * 1.2);
+//                robot.fR.setPower(power * 1.2);
+//                robot.bL.setPower(-power * .8);
+//                robot.bR.setPower(power * .8);
+//            }
+//            else {
+//                robot.fL.setPower(power);
+//                robot.fR.setPower(power);
+//                robot.bL.setPower(-power);
+//                robot.bR.setPower(power);
+//            }
+//            //opmode.telemetry.addData("avg", encoderAvg());
+//            //opmode.telemetry.addData("fl", fL.getCurrentPosition());
+//            //opmode.telemetry.addData("fr", fR.getCurrentPosition());
+//            //opmode.telemetry.addData("bl", bL.getCurrentPosition());
+//            //opmode.telemetry.addData("br", bR.getCurrentPosition());
+//            telemetry.addData("fl", robot.fL.getPower());
+//            telemetry.addData("fr", robot.fR.getPower());
+//            telemetry.addData("bl", robot.bL.getPower());
+//            telemetry.addData("br", robot.bR.getPower());
+//            telemetry.update();
+//        }
+//
+//
+//
+//
+//        robot.stopMotors();
+//
+//        robot.fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//        robot.bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//        robot.fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//        robot.bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//
+//
+//    }
+//
+//    public void strafeLeftGyro (double distance, double power) {
+//        robot.reset();
+//        resetAngle();
+//        double target = Math.abs(distance * (537.6/11));
+//
+//        robot.brakeMode();
+//
+//        while (Math.abs(robot.encoderAvg()) < target && opModeIsActive()) {
+//
+//            if (getAngle() > 1) {
+//                robot.fL.setPower(-power * 1.2);
+//                robot.fR.setPower(power * 1.2);
+//                robot.bL.setPower(power * .8);
+//                robot.bR.setPower(-power * .8);
+//            }
+//            else if (getAngle() < -1) {
+//                robot.fL.setPower(-power * .8);
+//                robot.fR.setPower(power * .8);
+//                robot.bL.setPower(power * 1.2);
+//                robot.bR.setPower(-power * 1.2);
+//            }
+//            else {
+//                robot.fL.setPower(-power);
+//                robot.fR.setPower(power);
+//                robot.bL.setPower(power);
+//                robot.bR.setPower(-power);
+//            }
+//            //opmode.telemetry.addData("avg", encoderAvg());
+//            //opmode.telemetry.addData("fl", fL.getCurrentPosition());
+//            //opmode.telemetry.addData("fr", fR.getCurrentPosition());
+//            //opmode.telemetry.addData("bl", bL.getCurrentPosition());
+//            //opmode.telemetry.addData("br", bR.getCurrentPosition());
+//            telemetry.addData("fl", robot.fL.getPower());
+//            telemetry.addData("fr", robot.fR.getPower());
+//            telemetry.addData("bl", robot.bL.getPower());
+//            telemetry.addData("br", robot.bR.getPower());
+//            telemetry.update();
+//        }
+//        robot.stopMotors();
+//
+//        robot.floatMode();
+//    }
+//
+//    private void initColor() {
+//
+//        sensorColorBotBack = hardwareMap.get(ColorSensor.class, "sensorColorBotFront");
+//        sensorColorLeft = hardwareMap.get(ColorSensor.class, "sensorColorLeft");
+//        sensorColorRight = hardwareMap.get(ColorSensor.class, "sensorColorRight");
+//
+//        // get a reference to the distance sensor that shares the same name.
+//        sensorDistanceLeft = hardwareMap.get(DistanceSensor.class, "sensorColorLeft");
+//        sensorDistanceRight = hardwareMap.get(DistanceSensor.class, "sensorColorRight");
+//        sensorDistanceBotBack = hardwareMap.get(DistanceSensor.class, "sensorColorBotFront");
+//
+//        // hsvValues is an array that will hold the hue, saturation, and value information.
+//        float hsvValues[] = {0F, 0F, 0F};
+//
+//        // values is a reference to the hsvValues array.
+//        final float values[] = hsvValues;
+//
+//        // sometimes it helps to multiply the raw RGB values with a scale factor
+//        // to amplify/attentuate the measured values.
+//        final double SCALE_FACTOR = 255;
+//        sensorColorLeft.enableLed(false);
+//        sensorColorRight.enableLed(false);
+//        sensorColorBotBack.enableLed(false);
+//
+//        // get a reference to the RelativeLayout so we can change the background
+//        // color of the Robot Controller app to match the hue detected by the RGB sensor.
+//        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
+//        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
+//
+//        while (opModeIsActive()) {
+//            // convert the RGB values to HSV values.
+//            // multiply by the SCALE_FACTOR.
+//            // then cast it back to int (SCALE_FACTOR is a double)
+//            Color.RGBToHSV((int) (sensorColorLeft.red() * SCALE_FACTOR),
+//                    (int) (sensorColorLeft.green() * SCALE_FACTOR),
+//                    (int) (sensorColorLeft.blue() * SCALE_FACTOR),
+//                    hsvValues);
+//            Color.RGBToHSV((int) (sensorColorBotBack.red() * SCALE_FACTOR),
+//                    (int) (sensorColorBotBack.green() * SCALE_FACTOR),
+//                    (int) (sensorColorBotBack.blue() * SCALE_FACTOR),
+//                    hsvValues);
+//        }
+//    }
+//
+//    public void approachStones (double power) {
+//        resetAngle();
+//        robot.brakeMode();
+//
+//        boolean cont = Double.isNaN(sensorDistanceLeft.getDistance(DistanceUnit.CM));
+//
+//
+//        while (cont == true && opModeIsActive()){
+//            moveLeft(power);
+//
+//            if (sensorDistanceLeft.getDistance(DistanceUnit.CM) < 6) {
+//                cont = false;
+//            }
+//
+//
+//
+//
+//
+//            telemetry.addData("front", sensorDistanceLeft.getDistance(DistanceUnit.CM));
+//            telemetry.addData("back", sensorDistanceBotBack.getDistance(DistanceUnit.CM));
+//            telemetry.update();
+//        }
+//
+//
+//        robot.stopMotors();
+//        robot.floatMode();
+//    }
+//
+//    private void moveLeft(double power) {
+//        if (getAngle() > 1) {
+//            robot.fL.setPower(-power * 1.2);
+//            robot.fR.setPower(power * 1.2);
+//            robot.bL.setPower(power * .8);
+//            robot.bR.setPower(-power * .8);
+//        }
+//        else if (getAngle() < -1) {
+//            robot.fL.setPower(-power * .8);
+//            robot.fR.setPower(power * .8);
+//            robot.bL.setPower(power * 1.2);
+//            robot.bR.setPower(-power * 1.2);
+//        }
+//        else {
+//            robot.fL.setPower(-power);
+//            robot.fR.setPower(power);
+//            robot.bL.setPower(power);
+//            robot.bR.setPower(-power);
+//        }
+//    }
+//
+//    private void moveRight(double power) {
+//        if (getAngle() > 1) {
+//            robot.fL.setPower(power * .8);
+//            robot.fR.setPower(-power * .8);
+//            robot.bL.setPower(-power * 1.2);
+//            robot.bR.setPower(power * 1.2);
+//        }
+//        else if (getAngle() < -1) {
+//            robot.fL.setPower(power * 1.2);
+//            robot.fR.setPower(-power * 1.2);
+//            robot.bL.setPower(-power * .8);
+//            robot.bR.setPower(power * .8);
+//        }
+//        else {
+//            robot.fL.setPower(power);
+//            robot.fR.setPower(-power);
+//            robot.bL.setPower(-power);
+//            robot.bR.setPower(power);
+//        }
+//    }
+//
+//
+//
+//
+//    public void alignWithStones (double power) {
+//
+//        while (sensorColorLeft.red() > 300 || sensorColorBotBack.red() > 300) {
+//
+//            if (sensorColorLeft.red() > 300) {
+//
+//                    while (sensorColorLeft.red() > 300) {
+//
+//                        //drive backwards
+//                        moveBackward(power);
+//                    }
+//            }
+//
+//            else if (sensorColorBotBack.red() > 300){
+//                //forward
+//                while (sensorColorBotBack.red() > 300) {
+//
+//                    moveForward(power);
+//                }
+//            }
+//
+//            else {
+//                robot.stopMotors();
+//            }
+//
+//
+//
+//
+//            }
+//
+//        }
+//
+//        private void moveBackward (double power) {
+//
+//            robot.reset();
+//            resetAngle();
+//            sleep(100);
+//
+//            robot.brakeMode();
+//            runtime.reset();
+//
+//            if (getAngle() > 1) {
+//                robot.fL.setPower(1.2 * power);
+//                robot.fR.setPower(0.8 * power);
+//                robot.bL.setPower(1.2 * power);
+//                robot.bR.setPower(0.8 * power);
+//            }
+//            else if (getAngle() < -1) {
+//                robot.fL.setPower(.8 * power);
+//                robot.fR.setPower(1.2 * power);
+//                robot.bL.setPower(.8 * power);
+//                robot.bR.setPower(1.2 * power);
+//            }
+//            else {
+//                robot.fL.setPower(power);
+//                robot.fR.setPower(power);
+//                robot.bL.setPower(power);
+//                robot.bR.setPower(power);
+//            }
+//
+//            robot.stopMotors();
+//
+//            robot.floatMode();
+//            resetAngle();
+//
+//        }
+//
+//        private void moveForward(double power) {
+//
+//            robot.reset();
+//            resetAngle();
+//            sleep(100);
+//
+//
+//
+//            robot.brakeMode();
+//            runtime.reset();
+//
+//            if (getAngle() > 1) {
+//                robot.fL.setPower(.8 * power);
+//                robot.fR.setPower(1.2 * power);
+//                robot.bL.setPower(.8 * power);
+//                robot.bR.setPower(1.2 * power);
+//            } else if (getAngle() < -1) {
+//                robot.fL.setPower(1.2 * power);
+//                robot.fR.setPower(.8 * power);
+//                robot.bL.setPower(1.2 * power);
+//                robot.bR.setPower(.8 * power);
+//            } else {
+//                robot.fL.setPower(power);
+//                robot.fR.setPower(power);
+//                robot.bL.setPower(power);
+//                robot.bR.setPower(power);
+//            }
+//
+//            robot.stopMotors();
+//
+//            robot.floatMode();
+//            resetAngle();
+//        }
+//
+//
 
 
 
