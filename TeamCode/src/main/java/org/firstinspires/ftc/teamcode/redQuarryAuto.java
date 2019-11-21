@@ -29,7 +29,7 @@ public class redQuarryAuto extends LinearOpMode {
         waitForStart();
 
         bm1 = new BitMapVision(this);
-        skyStonePos = "center";//bm1.findRedSkystones();
+        skyStonePos = bm1.findRedSkystones();
         telemetry.addData("stone", skyStonePos);
         telemetry.update();
 
@@ -101,17 +101,17 @@ public class redQuarryAuto extends LinearOpMode {
             } else { // right
                 robot.goStraightGyro(-25, .35, 3); //Move to the stone
                 sleep(500);
-                // rotate(1, .35); // Rotate to align grabber with stone    //84.5
+                robot.rotate(84.5, .35); // Rotate to align grabber with stone    //84.5
                 sleep(100);
                 robot.goStraightGyro(-11.6, 0.3, 3); // Align with right stone
-                sleep(5000);
-                robot.strafeRightGyro(100, .2); // Approach stone //10
+                //sleep(5000);
+                robot.strafeRightGyro(8.5, .2); // Approach stone //10
                 robot.grabberR.setPosition(0.02); // Drop grabber
-                robot.goStraightGyro(-.6, .2, .2);
+                //EXTRA ALIGN: robot.goStraightGyro(-.6, .2, .2);
 
-                sleep(5000);
-                robot.strafeLeft(100, .5); // Pull Stone out //11
-                //rotate((imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - lastAngles.firstAngle) * .75, .3); // Straighten out
+                //sleep(5000);
+                robot.strafeLeft(8.5, .5); // Pull Stone out //11
+                robot.rotate((robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - robot.lastAngles.firstAngle) * .75, .3); // Straighten out
                 robot.goStraightGyro(-65, .525, 6); // Cross the bridge
                 robot.grabberR.setPosition(.5); // Grabber lets go of stone
                 //second stone

@@ -40,7 +40,7 @@ public class RobotHw {
     LinearOpMode opmode;
 
     // Time
-    private ElapsedTime runtime = new ElapsedTime();
+    public ElapsedTime runtime = new ElapsedTime();
 
     // Tick Conversion
     static final double COUNTS_PER_MOTOR_REV = 380;    // eg: TETRIX Motor Encoder
@@ -50,14 +50,14 @@ public class RobotHw {
             (WHEEL_DIAMETER_INCHES * 3.1415);
 
 
-    BNO055IMU imu;
-    Orientation lastAngles = new Orientation();
-    double lastDegrees;
-    double globalAngle;
-    double referenceAngle;
+    public BNO055IMU imu;
+    public Orientation lastAngles = new Orientation();
+    public double lastDegrees;
+    public double globalAngle;
+    public double referenceAngle;
 
-    double leftCorrect;
-    double rightCorrect;
+    public double leftCorrect;
+    public double rightCorrect;
 
 
     // Initialize Components
@@ -359,12 +359,15 @@ public class RobotHw {
                 //opmode.telemetry.addData("fr", fR.getCurrentPosition());
                 //opmode.telemetry.addData("bl", bL.getCurrentPosition());
                 //opmode.telemetry.addData("br", bR.getCurrentPosition());
+                /*
                 opmode.telemetry.addData("angle", getAngle());
                 opmode.telemetry.addData("fl", fL.getPower());
                 opmode.telemetry.addData("fr", fR.getPower());
                 opmode.telemetry.addData("bl", bL.getPower());
                 opmode.telemetry.addData("br", bR.getPower());
                 opmode.telemetry.update();
+                */
+
             }
         }
         else {
