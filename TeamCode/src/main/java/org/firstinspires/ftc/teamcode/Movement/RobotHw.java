@@ -1,9 +1,15 @@
 package org.firstinspires.ftc.teamcode.Movement;
 
+import android.app.Activity;
+import android.graphics.Color;
+import android.view.View;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -11,6 +17,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class RobotHw {
@@ -59,6 +66,13 @@ public class RobotHw {
     public double leftCorrect;
     public double rightCorrect;
 
+    public ColorSensor sensorColorBotBack;
+    public ColorSensor sensorColorLeft;
+    public ColorSensor sensorColorRight;
+    public DistanceSensor sensorDistanceBotBack;
+    public DistanceSensor sensorDistanceLeft;
+    public DistanceSensor sensorDistanceRight;
+
 
     // Initialize Components
     public void init(LinearOpMode lOpmode) {
@@ -92,6 +106,7 @@ public class RobotHw {
         fR.setDirection(DcMotor.Direction.REVERSE);
         bR.setDirection(DcMotor.Direction.REVERSE);
 
+        initColor();
         //intakeL.setDirection(DcMotor.Direction.FORWARD);
         //intakeR.setDirection(DcMotor.Direction.REVERSE);
 
@@ -665,6 +680,219 @@ public class RobotHw {
         bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+    }
+
+    public void initColor() {
+
+        sensorColorBotBack = hwMap.get(ColorSensor.class, "sensorColorBotFront");
+        sensorColorLeft = hwMap.get(ColorSensor.class, "sensorColorLeft");
+        sensorColorRight = hwMap.get(ColorSensor.class, "sensorColorRight");
+
+        // get a reference to the distance sensor that shares the same name.
+        sensorDistanceLeft = hwMap.get(DistanceSensor.class, "sensorColorLeft");
+        sensorDistanceRight = hwMap.get(DistanceSensor.class, "sensorColorRight");
+        sensorDistanceBotBack = hwMap.get(DistanceSensor.class, "sensorColorBotFront");
+
+        // hsvValues is an array that will hold the hue, saturation, and value information.
+        float hsvValues[] = {0F, 0F, 0F};
+
+        // values is a reference to the hsvValues array.
+        final float values[] = hsvValues;
+
+        // sometimes it helps to multiply the raw RGB values with a scale factor
+        // to amplify/attentuate the measured values.
+        final double SCALE_FACTOR = 255;
+        sensorColorLeft.enableLed(false);
+        sensorColorRight.enableLed(false);
+        sensorColorBotBack.enableLed(false);
+
+        // get a reference to the RelativeLayout so we can change the background
+        // color of the Robot Controller app to match the hue detected by the RGB sensor.
+        int relativeLayoutId = hwMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hwMap.appContext.getPackageName());
+        final View relativeLayout = ((Activity) hwMap.appContext).findViewById(relativeLayoutId);
+
+        while (opmode.opModeIsActive()) {
+            // convert the RGB values to HSV values.
+            // multiply by the SCALE_FACTOR.
+            // then cast it back to int (SCALE_FACTOR is a double)
+            Color.RGBToHSV((int) (sensorColorLeft.red() * SCALE_FACTOR),
+                    (int) (sensorColorLeft.green() * SCALE_FACTOR),
+                    (int) (sensorColorLeft.blue() * SCALE_FACTOR),
+                    hsvValues);
+            Color.RGBToHSV((int) (sensorColorBotBack.red() * SCALE_FACTOR),
+                    (int) (sensorColorBotBack.green() * SCALE_FACTOR),
+                    (int) (sensorColorBotBack.blue() * SCALE_FACTOR),
+                    hsvValues);
+        }
+    }
+
+    public void moveLeft(double power) {
+        if (getAngle() > 1) {
+            fL.setPower(-power * 1.2);
+            fR.setPower(power * 1.2);
+            bL.setPower(power * .8);
+            bR.setPower(-power * .8);
+        }
+        else if (getAngle() < -1) {
+            fL.setPower(-power * .8);
+            fR.setPower(power * .8);
+            bL.setPower(power * 1.2);
+            bR.setPower(-power * 1.2);
+        }
+        else {
+            fL.setPower(-power);
+            fR.setPower(power);
+            bL.setPower(power);
+            bR.setPower(-power);
+        }
+    }
+
+    public void moveRight(double power) {
+        if (getAngle() > 1) {
+            fL.setPower(power * .8);
+            fR.setPower(-power * .8);
+            bL.setPower(-power * 1.2);
+            bR.setPower(power * 1.2);
+        }
+        else if (getAngle() < -1) {
+            fL.setPower(power * 1.2);
+            fR.setPower(-power * 1.2);
+            bL.setPower(-power * .8);
+            bR.setPower(power * .8);
+        }
+        else {
+            fL.setPower(power);
+            fR.setPower(-power);
+            bL.setPower(-power);
+            bR.setPower(power);
+        }
+    }
+
+
+
+    public void approachStones (double power) {
+        resetAngle();
+        brakeMode();
+
+        boolean cont = Double.isNaN(sensorDistanceLeft.getDistance(DistanceUnit.CM));
+
+
+        while (cont == true && opmode.opModeIsActive()){
+            moveLeft(power);
+
+            if (sensorDistanceLeft.getDistance(DistanceUnit.CM) < 6) {
+                cont = false;
+            }
+
+
+
+
+
+            opmode.telemetry.addData("front", sensorDistanceLeft.getDistance(DistanceUnit.CM));
+            opmode.telemetry.addData("back", sensorDistanceBotBack.getDistance(DistanceUnit.CM));
+            opmode.telemetry.update();
+        }
+
+
+        stopMotors();
+        floatMode();
+    }
+
+
+
+    public void alignWithStones (double power) {
+
+        brakeMode();
+        while (opmode.opModeIsActive() && sensorColorLeft.red() > 300 || sensorColorBotBack.red() > 300) {
+
+            if (sensorColorLeft.red() > 300) {
+
+                moveBackward(power);
+            }
+
+            else if (sensorColorBotBack.red() > 300){
+                //forward
+                moveForward(power);
+            }
+
+            else {
+                stopMotors();
+            }
+
+
+
+
+        }
+        floatMode();
+    }
+
+    public void moveBackward (double power) {
+
+        //reset();
+        resetAngle();
+        opmode.sleep(100);
+
+        //brakeMode();
+        runtime.reset();
+
+        if (getAngle() > 1) {
+            fL.setPower(1.2 * power);
+            fR.setPower(0.8 * power);
+            bL.setPower(1.2 * power);
+            bR.setPower(0.8 * power);
+        }
+        else if (getAngle() < -1) {
+            fL.setPower(.8 * power);
+            fR.setPower(1.2 * power);
+            bL.setPower(.8 * power);
+            bR.setPower(1.2 * power);
+        }
+        else {
+            fL.setPower(power);
+            fR.setPower(power);
+            bL.setPower(power);
+            bR.setPower(power);
+        }
+
+        //stopMotors();
+
+        //floatMode();
+        //resetAngle();
+
+    }
+
+    public void moveForward(double power) {
+
+        //reset();
+        resetAngle();
+        opmode.sleep(100);
+
+
+
+        //brakeMode();
+        runtime.reset();
+
+        if (getAngle() > 1) {
+            fL.setPower(.8 * power);
+            fR.setPower(1.2 * power);
+            bL.setPower(.8 * power);
+            bR.setPower(1.2 * power);
+        } else if (getAngle() < -1) {
+            fL.setPower(1.2 * power);
+            fR.setPower(.8 * power);
+            bL.setPower(1.2 * power);
+            bR.setPower(.8 * power);
+        } else {
+            fL.setPower(power);
+            fR.setPower(power);
+            bL.setPower(power);
+            bR.setPower(power);
+        }
+
+        //stopMotors();
+
+       // floatMode();
+        //resetAngle();
     }
 
 }
