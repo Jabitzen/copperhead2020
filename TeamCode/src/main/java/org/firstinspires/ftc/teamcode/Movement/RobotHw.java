@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Movement;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -10,6 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class RobotHw {
 
@@ -46,6 +48,17 @@ public class RobotHw {
     static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
+
+
+    BNO055IMU imu;
+    Orientation lastAngles = new Orientation();
+    double lastDegrees;
+    double globalAngle;
+    double referenceAngle;
+
+    double leftCorrect;
+    double rightCorrect;
+
 
     // Initialize Components
     public void init(LinearOpMode lOpmode) {
@@ -95,6 +108,31 @@ public class RobotHw {
         fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+
+        parameters.mode = BNO055IMU.SensorMode.IMU;
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled = false;
+
+        imu = opmode.hardwareMap.get(BNO055IMU.class, "imu");
+
+        imu.initialize(parameters);
+        //driveTrain.srvMarker.setPosition(1);
+
+        opmode.telemetry.addData("Mode", "calibrating...");
+        opmode.telemetry.update();
+
+        // make sure the imu gyro is calibrated before continuing.
+        while (!opmode.isStopRequested() && !imu.isGyroCalibrated()) {
+            opmode.sleep(50);
+            opmode.idle();
+        }
+
+        opmode.telemetry.addData("Mode", "waiting for start");
+        opmode.telemetry.addData("imu calib status", imu.getCalibrationStatus().toString());
+        opmode.telemetry.update();
+
         opmode.telemetry.addData("fl", fL.getCurrentPosition());
         opmode.telemetry.addData("fr", fR.getCurrentPosition());
         opmode.telemetry.addData("bl", bL.getCurrentPosition());
@@ -139,93 +177,6 @@ public class RobotHw {
                 bR.setPower(power);
             }
         }
-    }
-
-    public void goStraightGyro(double distance, double leftPower, double rightPower, double heading) {
-        reset();
-        // Forward
-        if (distance > 0) {
-            rightPower = rightPower - .15;
-            leftPower = leftPower - .15;
-
-        } // reverse
-        else {
-            rightPower = -rightPower + .15;
-            leftPower = -leftPower + .15;
-        }
-
-        double target = Math.abs(distance * (537.6 / 15.5));
-
-        brakeMode();
-
-        if (distance > 0) {
-            while (Math.abs(encoderAvg()) < target && opmode.opModeIsActive()) {
-
-                if (heading > 1) {
-                    fL.setPower((.15 + (rightPower - .15) * ((target - encoderAvg()) / target)));
-                    fR.setPower(.8 * (.15 + (leftPower * ((target - encoderAvg()) / target))));
-                    bL.setPower(.8 * (.15 + (leftPower * ((target - encoderAvg()) / target))));
-                    bR.setPower((.15 + (rightPower * ((target - encoderAvg()) / target))));
-                } else if (heading < -1) {
-                    fL.setPower(.8 * (.15 + (rightPower - .15) * ((target - encoderAvg()) / target)));
-                    fR.setPower((.15 + (leftPower * ((target - encoderAvg()) / target))));
-                    bL.setPower((.15 + (leftPower * ((target - encoderAvg()) / target))));
-                    bR.setPower(.8 * (.15 + (rightPower * ((target - encoderAvg()) / target))));
-                } else {
-                    fL.setPower((.15 + (rightPower - .15) * ((target - encoderAvg()) / target)));
-                    fR.setPower((.15 + (leftPower * ((target - encoderAvg()) / target))));
-                    bL.setPower((.15 + (leftPower * ((target - encoderAvg()) / target))));
-                    bR.setPower((.15 + (rightPower * ((target - encoderAvg()) / target))));
-                }
-                /* debugging code, uncomment if needed
-                opmode.telemetry.addData("avg", encoderAvg());
-                opmode.telemetry.addData("fl", fL.getCurrentPosition());
-                opmode.telemetry.addData("fr", fR.getCurrentPosition());
-                opmode.telemetry.addData("bl", bL.getCurrentPosition());
-                opmode.telemetry.addData("br", bR.getCurrentPosition());
-                opmode.telemetry.addData("fl", fL.getPower());
-                opmode.telemetry.addData("fr", fR.getPower());
-                opmode.telemetry.addData("bl", bL.getPower());
-                opmode.telemetry.addData("br", bR.getPower());
-                opmode.telemetry.update();
-                */
-            }
-        } else {
-            while (Math.abs(encoderAvg()) < target && opmode.opModeIsActive()) {
-                if (heading > 1) {
-                    fL.setPower((-.15 + (-rightPower + .15) * ((target - encoderAvg()) / target)));
-                    fR.setPower(.8 * (-.15 + (-leftPower * ((target - encoderAvg()) / target))));
-                    bL.setPower(.8 * (-.15 + (-leftPower * ((target - encoderAvg()) / target))));
-                    bR.setPower((-.15 + (-rightPower + .15) * ((target - encoderAvg()) / target)));
-                } else if (heading < -1) {
-                    fL.setPower(.8 * (-.15 + (-rightPower + .15) * ((target - encoderAvg()) / target)));
-                    fR.setPower((-.15 + (-leftPower * ((target - encoderAvg()) / target))));
-                    bL.setPower((-.15 + (-leftPower * ((target - encoderAvg()) / target))));
-                    bR.setPower(.8 * (-.15 + (-rightPower + .15) * ((target - encoderAvg()) / target)));
-                } else {
-                    fL.setPower(-.15 + (-rightPower + .15) * ((target - encoderAvg()) / target));
-                    fR.setPower(-.15 + (-leftPower + .15) * ((target - encoderAvg()) / target));
-                    bL.setPower(-.15 + (-leftPower + .15) * ((target - encoderAvg()) / target));
-                    bR.setPower(-.15 + (-rightPower + .15) * ((target - encoderAvg()) / target));
-                }
-                /* debugging code, uncomment if needed
-                opmode.telemetry.addData("avg", encoderAvg());
-                opmode.telemetry.addData("fl", fL.getCurrentPosition());
-                opmode.telemetry.addData("fr", fR.getCurrentPosition());
-                opmode.telemetry.addData("bl", bL.getCurrentPosition());
-                opmode.telemetry.addData("br", bR.getCurrentPosition());
-                opmode.telemetry.addData("fl", fL.getPower());
-                opmode.telemetry.addData("fr", fR.getPower());
-                opmode.telemetry.addData("bl", bL.getPower());
-                opmode.telemetry.addData("br", bR.getPower());
-                opmode.telemetry.update();
-                */
-            }
-        }
-
-        stopMotors();
-
-        floatMode();
     }
 
     // Set motors to zero power
@@ -358,6 +309,359 @@ public class RobotHw {
         bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+
+    public void goStraightGyro(double distance, double leftPower, double timeout) {
+        fL.setDirection(DcMotor.Direction.FORWARD);
+        reset();
+        resetAngle();
+        opmode.sleep(100);
+        double rightPower;
+        // Forward
+        if (distance > 0) {
+            rightPower = leftPower * 1.45;
+            rightPower = rightPower - .15;
+            leftPower = leftPower -.15;
+
+        } // reverse
+        else {
+            rightPower = leftPower * 1.2;
+            rightPower = -rightPower + .15;
+            leftPower = -leftPower + .15;
+        }
+
+        double target = Math.abs(distance * (537.6/15.5));
+
+        brakeMode();
+        runtime.reset();
+        if (distance > 0) {
+            while (Math.abs(encoderAvg()) < target && opmode.opModeIsActive() && runtime.seconds() < timeout) {
+                if (getAngle() > 1) {
+                    fL.setPower(.8 * (-.15 + (-rightPower + .15) * ((target - encoderAvg()) / target)));
+                    fR.setPower(1.2 * (.15 + (leftPower * ((target - encoderAvg()) / target))));
+                    bL.setPower(.8 * (.15 + (leftPower * ((target - encoderAvg()) / target))));
+                    bR.setPower(1.2 * (.15 + (rightPower * ((target - encoderAvg()) / target))));
+                }
+                else if (getAngle() < -1) {
+                    fL.setPower(1.2 * (-.15 + (-rightPower + .15) * ((target - encoderAvg()) / target)));
+                    fR.setPower(.8 * (.15 + (leftPower * ((target - encoderAvg()) / target))));
+                    bL.setPower(1.2 * (.15 + (leftPower * ((target - encoderAvg()) / target))));
+                    bR.setPower(.8 * (.15 + (rightPower * ((target - encoderAvg()) / target))));
+                }
+                else {
+                    fL.setPower((-.15 + (-rightPower + .15) * ((target - encoderAvg()) / target)));
+                    fR.setPower((.15 + (leftPower * ((target - encoderAvg()) / target))));
+                    bL.setPower((.15 + (leftPower * ((target - encoderAvg()) / target))));
+                    bR.setPower((.15 + (rightPower * ((target - encoderAvg()) / target))));
+                }
+                //opmode.telemetry.addData("avg", encoderAvg());
+                //opmode.telemetry.addData("fl", fL.getCurrentPosition());
+                //opmode.telemetry.addData("fr", fR.getCurrentPosition());
+                //opmode.telemetry.addData("bl", bL.getCurrentPosition());
+                //opmode.telemetry.addData("br", bR.getCurrentPosition());
+                opmode.telemetry.addData("angle", getAngle());
+                opmode.telemetry.addData("fl", fL.getPower());
+                opmode.telemetry.addData("fr", fR.getPower());
+                opmode.telemetry.addData("bl", bL.getPower());
+                opmode.telemetry.addData("br", bR.getPower());
+                opmode.telemetry.update();
+            }
+        }
+        else {
+            while (Math.abs(encoderAvg()) < target && opmode.opModeIsActive() && runtime.seconds() < timeout) {
+                if (getAngle() > 1) {
+                    fL.setPower(1.2 * (.15 + (-rightPower - .15) * ((target - encoderAvg()) / target)));
+                    fR.setPower(.8 * (-.15 + (leftPower * ((target - encoderAvg()) / target))));
+                    bL.setPower(1.2 * (-.15 + (leftPower * ((target - encoderAvg()) / target))));
+                    bR.setPower(.8 * (-.15 + (rightPower * ((target - encoderAvg()) / target))));
+                }
+                else if (getAngle() < -1) {
+                    fL.setPower(.8 * (.15 + (-rightPower - .15) * ((target - encoderAvg()) / target)));
+                    fR.setPower(1.2 * (-.15 + (leftPower * ((target - encoderAvg()) / target))));
+                    bL.setPower(.8 * (-.15 + (leftPower * ((target - encoderAvg()) / target))));
+                    bR.setPower(1.2 * (-.15 + (rightPower * ((target - encoderAvg()) / target))));
+                }
+                else {
+                    fL.setPower(.15 + (-rightPower - .15) * ((target - encoderAvg()) / target));
+                    fR.setPower(-.15 + (leftPower * ((target - encoderAvg()) / target)));
+                    bL.setPower(-.15 + (leftPower * ((target - encoderAvg()) / target)));
+                    bR.setPower(-.15 + (rightPower * ((target - encoderAvg()) / target)));
+                }
+
+                //opmode.telemetry.addData("avg", encoderAvg());
+                //opmode.telemetry.addData("fl", fL.getCurrentPosition());
+                //opmode.telemetry.addData("fr", fR.getCurrentPosition());
+                //opmode.telemetry.addData("bl", bL.getCurrentPosition());
+                //opmode.telemetry.addData("br", bR.getCurrentPosition());
+                opmode.telemetry.addData("angle", getAngle());
+                opmode.telemetry.addData("fl", fL.getPower());
+                opmode.telemetry.addData("fr", fR.getPower());
+                opmode.telemetry.addData("bl", bL.getPower());
+                opmode.telemetry.addData("br", bR.getPower());
+                opmode.telemetry.update();
+            }
+        }
+
+        stopMotors();
+        fL.setDirection(DcMotor.Direction.REVERSE);
+        floatMode();
+        resetAngle();
+    }
+
+
+    public void resetAngle() {
+        lastAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        globalAngle = 0;
+    }
+
+    public double getAngle() {
+        // We experimentally determined the Z axis is the axis we want to use for heading angle.
+        // We have to process the angle because the imu works in euler angles so the Z axis is
+        // returned as 0 to +180 or 0 to -180 rolling back to -179 or +179 when rotation passes
+        // 180 degrees. We detect this transition and track the total cumulative angle of rotation.
+
+        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+
+        double deltaAngle = angles.firstAngle - lastAngles.firstAngle;
+
+        if (deltaAngle < -180)
+            deltaAngle += 360;
+        else if (deltaAngle > 180)
+            deltaAngle -= 360;
+
+        globalAngle += deltaAngle;
+
+        lastAngles = angles;
+
+        return -globalAngle;
+    }
+
+    public double checkDirection() {
+        // The gain value determines how sensitive the correction is to direction changes.
+        // You will have to experiment with your robot to get small smooth direction changes
+        // to stay on a straight line.
+
+        double correction, angle, gain = .0;
+
+        angle = getAngle();
+
+        if (angle == 0)
+            correction = 0;             // no adjustment.
+        else
+            correction = -angle;        // reverse sign of angle for correction.
+
+        correction = correction * gain;
+
+        return correction;
+    }
+
+
+    public void rotate(double degrees, double power) {
+        fR.setDirection(DcMotor.Direction.FORWARD);
+
+        fL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        bL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        fR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        bR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        double leftPower, rightPower;
+
+
+        // restart imu movement tracking.
+        resetAngle();
+        opmode.telemetry.addLine().addData("Robot Angle", getAngle());
+        opmode.sleep(500);
+
+
+        // getAngle() returns + when rotating counter clockwise (left) and - when rotating
+        // clockwise (right).
+
+        if (degrees > 0) {   // turn right.
+            leftPower = power - .13;
+            rightPower = -power + .13;
+        } else if (degrees < 0) {   // turn left.
+            leftPower = -power + .13;
+            rightPower = power - .13;
+        } else return;
+
+
+        // set power to rotate.
+        fL.setPower(leftPower);
+        bL.setPower(leftPower);
+        fR.setPower(rightPower);
+        bR.setPower(rightPower);
+
+        // rotate until turn is completed.
+        if (degrees < 0) {
+            // On right turn we have to get off zero first.
+
+            while (opmode.opModeIsActive() && getAngle() > degrees) {
+                fL.setPower(-.13 + (leftPower * ((degrees - getAngle()) / degrees)));
+                bL.setPower(-.13 + (leftPower * ((degrees - getAngle()) / degrees)));
+                fR.setPower(-.13 + (-rightPower * ((degrees - getAngle()) / degrees)));
+                bR.setPower(.13 - (-rightPower * ((degrees - getAngle()) / degrees)));
+
+                opmode.telemetry.addData("degrees", getAngle());
+                opmode.telemetry.addData("lastAngle", lastAngles);
+                opmode.telemetry.addData("globalangle", globalAngle);
+                opmode.telemetry.addData("fl", fL.getPower());
+                opmode.telemetry.addData("fr", fR.getPower());
+                opmode.telemetry.addData("bl", bL.getPower());
+                opmode.telemetry.addData("br", bR.getPower());
+                opmode.telemetry.update();
+            }
+        } else    // right turn.
+            while (opmode.opModeIsActive() && getAngle() < degrees) {
+                fL.setPower(.13 + (leftPower * ((degrees - getAngle()) / degrees)));
+                bL.setPower(.13 + (leftPower * ((degrees - getAngle()) / degrees)));
+                fR.setPower(.13 + (-rightPower * ((degrees - getAngle()) / degrees)));
+                bR.setPower(-.13 - (-rightPower * ((degrees - getAngle()) / degrees)));
+
+                opmode.telemetry.addData("degrees", getAngle());
+                //telemetry.addData("lastangle", lastAngles);
+                //telemetry.addData("globalangle", globalAngle);
+                opmode.telemetry.addData("fl", fL.getPower());
+                opmode.telemetry.addData("fr", fR.getPower());
+                opmode.telemetry.addData("bl", bL.getPower());
+                opmode.telemetry.addData("br", bR.getPower());
+
+                opmode.telemetry.update();
+
+                if (getAngle() > degrees) {
+                    fL.setPower(-leftPower);
+                    bL.setPower(-leftPower);
+                    fR.setPower(rightPower);
+                    bR.setPower(-rightPower);
+                }
+            }
+
+ //turn the motors off.
+        fR.setDirection(DcMotor.Direction.REVERSE);
+        stopMotors();
+        lastDegrees = degrees;
+
+        // wait for rotation to stop.
+        opmode.sleep(500);
+
+        // reset angle tracking on new heading.
+        resetAngle();
+    }
+
+    public void gyroCorrect() {
+        if (getAngle() > referenceAngle + 1) {
+            rightCorrect = .8;
+        }
+        else if (getAngle() < referenceAngle - 1) {
+            leftCorrect = .8;
+        }
+        else {
+            leftCorrect = 1;
+            rightCorrect = 1;
+        }
+    }
+
+    public void setReferenceAngle() {
+        resetAngle();
+        referenceAngle = getAngle();
+    }
+
+    public void strafeRightGyro (double distance, double power) {
+
+
+        reset();
+        resetAngle();
+        double target = Math.abs(distance * (537.6/11));
+
+        fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        while (Math.abs(encoderAvg()) < target && opmode.opModeIsActive()) {
+
+            if (getAngle() > 1) {
+                fL.setPower(power * .8);
+                fR.setPower(-power * .8);
+                bL.setPower(-power * 1.2);
+                bR.setPower(power * 1.2);
+            }
+            else if (getAngle() < -1) {
+                fL.setPower(power * 1.2);
+                fR.setPower(-power * 1.2);
+                bL.setPower(-power * .8);
+                bR.setPower(power * .8);
+            }
+            else {
+                fL.setPower(power);
+                fR.setPower(-power);
+                bL.setPower(-power);
+                bR.setPower(power);
+            }
+            //opmode.telemetry.addData("avg", encoderAvg());
+            //opmode.telemetry.addData("fl", fL.getCurrentPosition());
+            //opmode.telemetry.addData("fr", fR.getCurrentPosition());
+            //opmode.telemetry.addData("bl", bL.getCurrentPosition());
+            //opmode.telemetry.addData("br", bR.getCurrentPosition());
+            opmode.telemetry.addData("fl", fL.getPower());
+            opmode.telemetry.addData("fr", fR.getPower());
+            opmode.telemetry.addData("bl", bL.getPower());
+            opmode.telemetry.addData("br", bR.getPower());
+            opmode.telemetry.update();
+        }
+        stopMotors();
+
+        fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+    }
+    public void strafeLeftGyro (double distance, double power) {
+        reset();
+        resetAngle();
+        double target = Math.abs(distance * (537.6/11));
+
+        fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        while (Math.abs(encoderAvg()) < target && opmode.opModeIsActive()) {
+
+            if (getAngle() > 1) {
+                fL.setPower(-power * 1.2);
+                fR.setPower(power * 1.2);
+                bL.setPower(power * .8);
+                bR.setPower(-power * .8);
+            }
+            else if (getAngle() < -1) {
+                fL.setPower(-power * .8);
+                fR.setPower(power * .8);
+                bL.setPower(power * 1.2);
+                bR.setPower(-power * 1.2);
+            }
+            else {
+                fL.setPower(-power);
+                fR.setPower(power);
+                bL.setPower(power);
+                bR.setPower(-power);
+            }
+            //opmode.telemetry.addData("avg", encoderAvg());
+            //opmode.telemetry.addData("fl", fL.getCurrentPosition());
+            //opmode.telemetry.addData("fr", fR.getCurrentPosition());
+            //opmode.telemetry.addData("bl", bL.getCurrentPosition());
+            //opmode.telemetry.addData("br", bR.getCurrentPosition());
+            opmode.telemetry.addData("fl", fL.getPower());
+            opmode.telemetry.addData("fr", fR.getPower());
+            opmode.telemetry.addData("bl", bL.getPower());
+            opmode.telemetry.addData("br", bR.getPower());
+            opmode.telemetry.update();
+        }
+        stopMotors();
+
+        fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
 }
