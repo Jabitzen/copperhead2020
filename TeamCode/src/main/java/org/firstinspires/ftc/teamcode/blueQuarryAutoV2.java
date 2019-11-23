@@ -103,16 +103,20 @@ public class blueQuarryAutoV2 extends LinearOpMode {
          */
         waitForStart();
 
+        while (opModeIsActive()) {
+            robot.approachStones(.2);
+            telemetry.addData("leftDistance", robot.sensorDistanceLeft.getDistance(DistanceUnit.CM));
+            telemetry.update();
+            sleep(1000);
+            robot.alignWithStones(0.15);
+            telemetry.addLine("done 2");
+            telemetry.update();
+            sleep(30000);
+        }
 
-        robot.approachStones(.2);
-        telemetry.addData("leftDistance", robot.sensorDistanceLeft.getDistance(DistanceUnit.CM));
-        telemetry.update();
-        sleep(1000);
-        robot.alignWithStones(0.2);
 
 
 
-        sleep(30000);
         bm1 = new BitMapVision(this);
         skyStonePos = bm1.findBlueSkystones();
         telemetry.addData("stone", skyStonePos);

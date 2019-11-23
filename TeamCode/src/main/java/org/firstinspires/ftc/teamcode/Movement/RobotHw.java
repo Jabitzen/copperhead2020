@@ -19,6 +19,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.opencv.core.Mat;
 
 public class RobotHw {
 
@@ -801,29 +802,74 @@ public class RobotHw {
 
 
     public void alignWithStones (double power) {
-
+        boolean finished = false;
         brakeMode();
-        while (opmode.opModeIsActive() && sensorColorLeft.red() > 300 || sensorColorBotBack.red() > 300) {
+        resetAngle();
+        boolean forward;
+        int front = Math.abs(sensorColorLeft.red() - sensorColorLeft.blue()) + Math.abs(sensorColorLeft.green() - sensorColorLeft.blue());
+        int back = Math.abs(sensorColorBotBack.red() - sensorColorBotBack.blue()) + Math.abs(sensorColorBotBack.green() - sensorColorBotBack.blue());
+        if (front > back) {
+            forward = false;
+        }
+        else {
+            forward = true;
+        }
 
-            if (sensorColorLeft.red() > 300) {
+        while (opmode.opModeIsActive() && (sensorColorLeft.red() > 350 || sensorColorBotBack.red() > 350) && finished == false) {
 
-                moveBackward(power);
+            if (!forward  && !Double.isNaN(sensorDistanceLeft.getDistance(DistanceUnit.CM))) {
+                //Backward
+                if (getAngle() > 1) {
+                    fL.setPower(1.2 * -power);
+                    fR.setPower(0.8 * -power);
+                    bL.setPower(1.2 * -power);
+                    bR.setPower(0.8 * -power);
+                }
+                else if (getAngle() < -1) {
+                    fL.setPower(.8 * -power);
+                    fR.setPower(1.2 * -power);
+                    bL.setPower(.8 * -power);
+                    bR.setPower(1.2 * -power);
+                }
+                else {
+                    fL.setPower(-power);
+                    fR.setPower(-power);
+                    bL.setPower(-power);
+                    bR.setPower(-power);
+                }
             }
-
-            else if (sensorColorBotBack.red() > 300){
-                //forward
-                moveForward(power);
+            else if (forward && !Double.isNaN(sensorDistanceBotBack.getDistance(DistanceUnit.CM))){
+                //Forward
+                if (getAngle() > 1) {
+                    fL.setPower(.8 * power);
+                    fR.setPower(1.2 * power);
+                    bL.setPower(.8 * power);
+                    bR.setPower(1.2 * power);
+                } else if (getAngle() < -1) {
+                    fL.setPower(1.2 * power);
+                    fR.setPower(.8 * power);
+                    bL.setPower(1.2 * power);
+                    bR.setPower(.8 * power);
+                } else {
+                    fL.setPower(power);
+                    fR.setPower(power);
+                    bL.setPower(power);
+                    bR.setPower(power);
+                }
             }
-
             else {
                 stopMotors();
+                finished = true;
             }
 
-
-
+            opmode.telemetry.addData("leftColor", sensorColorLeft.red());
+            opmode.telemetry.addData("backColor", sensorColorBotBack.red());
+            opmode.telemetry.update();
 
         }
+        stopMotors();
         floatMode();
+        opmode.telemetry.addLine("done 2");
     }
 
     public void moveBackward (double power) {
@@ -870,7 +916,7 @@ public class RobotHw {
 
 
         //brakeMode();
-        runtime.reset();
+        //runtime.reset();
 
         if (getAngle() > 1) {
             fL.setPower(.8 * power);
