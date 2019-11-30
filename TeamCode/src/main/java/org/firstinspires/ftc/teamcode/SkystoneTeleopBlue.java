@@ -5,34 +5,49 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.Movement.RobotHw;
+
 
 @TeleOp(name="Skystone TeleOP Blue", group="Pushbot")
 
 // @ AUTHOR HAYDEN WARREN
 public class SkystoneTeleopBlue extends LinearOpMode{
 
+    RobotHw robot = new RobotHw();
 
+    /*
     public DcMotor fL = null;
     public DcMotor fR = null;
     public DcMotor bL = null;
     public DcMotor bR = null;
 
+
     public Servo grabberL = null;
     public Servo grabberR = null;
     public Servo clamp = null;
-
+*/
     public double rightstickx;
     public double leftstickx;
     public double leftstickyfront;
     public double leftstickyback;
 
+    public double foundationDistance;
+    public double liftHeight = 0;
+    public double liftDistance;
+    public double liftAngle;
 
-    public int constant;
+    public boolean automode = false;
+
+
+
+
+    public int constant = 1;
+
 
 
     @Override
     public void runOpMode() throws InterruptedException {
-
+/*
         fL  = hardwareMap.get(DcMotor.class, "fL");
         fR  = hardwareMap.get(DcMotor.class, "fR");
         bL  = hardwareMap.get(DcMotor.class, "bL");
@@ -51,7 +66,8 @@ public class SkystoneTeleopBlue extends LinearOpMode{
         bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-
+*/
+        robot.init(this);
         waitForStart();
 
         while (opModeIsActive()) {
@@ -60,26 +76,26 @@ public class SkystoneTeleopBlue extends LinearOpMode{
 
             // Left grabber
             if (gamepad2.right_trigger > .1) {
-                grabberR.setPosition(.8); // Up
+                robot.grabberR.setPosition(.8); // Up
             }
             if (gamepad2.right_bumper) {
-                grabberR.setPosition(0.02); // Down
+                robot.grabberR.setPosition(0.02); // Down
             }
 
             // Right grabber
             if (gamepad1.b) {
-                grabberL.setPosition(0.6); // Up
+                robot.grabberL.setPosition(0.6); // Up
             }
             if (gamepad1.dpad_right) {
-                grabberL.setPosition(0.98); // Down
+                robot.grabberL.setPosition(0.98); // Down
             }
 
             // Foundation Clamp
             if (gamepad1.a) {
-                clamp.setPosition(0); // Down
+                robot.clamp.setPosition(0); // Down
             }
             if (gamepad1.y) {
-                clamp.setPosition(.9); // Up
+                robot.clamp.setPosition(.9); // Up
             }
 
             // Reverse Mode
@@ -89,6 +105,68 @@ public class SkystoneTeleopBlue extends LinearOpMode{
             if (gamepad1.dpad_up){
                 constant = 1; // Forward
             }
+
+
+            robot.liftExtend.setPower(gamepad2.left_stick_y);
+            robot.liftRotate.setPower(gamepad2.right_stick_y);
+
+            if(gamepad2.x){
+                automode = true;
+                liftHeight = 0;
+            }
+
+            if(gamepad2.b){
+                automode = false;
+            }
+
+            while(automode){
+                //foundationDistance = sensor reading;
+                if(gamepad2.dpad_up){
+                    liftHeight+=12.7; //a stone is 12.7 cm high, in cm because thats the units of range sensor
+                }
+
+                if(gamepad2.dpad_up){
+                    liftHeight-=12.7;
+                }
+
+                liftDistance = Math.sqrt((foundationDistance * foundationDistance) + (liftHeight * liftHeight));
+                liftAngle = Math.asin(liftHeight/liftDistance);
+
+                robot.rotateTo(liftAngle);
+                robot.extendTo(liftDistance);
+
+
+            }
+
+            if(gamepad2.left_bumper){
+                robot. intakeL.setPower(1);
+            }
+            else{
+                robot.intakeL.setPower(0);
+            }
+
+
+            if(gamepad2.right_bumper){
+                robot.intakeR.setPower(1);
+            }
+            else{
+                robot.intakeR.setPower(0);
+            }
+
+
+            if(gamepad2.left_bumper){
+                robot.liftExtend.setPower(-.5);
+            }
+
+            if(gamepad2.dpad_left){
+                robot.liftRotate.setPower(.5);
+            }
+
+            if(gamepad2.dpad_right){
+                robot.liftRotate.setPower(-.5);
+            }
+
+
         }
     }
 
@@ -107,6 +185,8 @@ public class SkystoneTeleopBlue extends LinearOpMode{
 
         double rightX = leftstickx;
 
+
+
         final double v1 = rFront * Math.cos(robotAngleFront) + rightX;
         final double v2 = rFront * Math.sin(robotAngleFront) - rightX;
         final double v3 = rBack * Math.sin(robotAngleBack) + rightX;
@@ -124,10 +204,10 @@ public class SkystoneTeleopBlue extends LinearOpMode{
 
          */
 
-        fL.setPower(-v1);
-        fR.setPower(-v2);
-        bL.setPower(-v3);// * .79);
-        bR.setPower(v4);// * .79);
+        robot.fL.setPower(-v1);
+        robot.fR.setPower(-v2);
+        robot.bL.setPower(-v3);// * .79);
+        robot.bR.setPower(v4);// * .79);
     }
     /* -----------------------------Deadzone Calculations--------------------------------------
     public double rightStickX() {

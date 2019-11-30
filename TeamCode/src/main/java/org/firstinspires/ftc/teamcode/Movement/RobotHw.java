@@ -30,8 +30,8 @@ public class RobotHw {
     public DcMotor bR = null;
     public DcMotor intakeR = null;
     public DcMotor intakeL = null;
-    public DcMotor lift = null;
-    public DcMotor rotateMotor = null;
+    public DcMotor liftExtend = null;
+    public DcMotor liftRotate = null;
 
     // Servos
     public Servo clip = null;
@@ -74,6 +74,8 @@ public class RobotHw {
     public DistanceSensor sensorDistanceLeft;
     public DistanceSensor sensorDistanceRight;
 
+    public double degreesToTicks;
+
 
     // Initialize Components
     public void init(LinearOpMode lOpmode) {
@@ -81,17 +83,19 @@ public class RobotHw {
         // Hardware map
         hwMap = opmode.hardwareMap;
 
+        degreesToTicks = 0; //add in actual conversion
+
         // Define and Initialize Motors
         fL = opmode.hardwareMap.get(DcMotor.class, "fL");
         fR = opmode.hardwareMap.get(DcMotor.class, "fR");
         bL = opmode.hardwareMap.get(DcMotor.class, "bL");
         bR = opmode.hardwareMap.get(DcMotor.class, "bR");
 
-        //intakeR  = hwMap.get(DcMotor.class, "intakeR");
-        //intakeL  = hwMap.get(DcMotor.class, "intakeL");
+        intakeR  = hwMap.get(DcMotor.class, "intakeR");
+        intakeL  = hwMap.get(DcMotor.class, "intakeL");
 
-        //lift = hwMap.get(DcMotor.class, "lift");
-        //rotateMotor = hwMap.get(DcMotor.class, "rotateMotor");
+        liftExtend = hwMap.get(DcMotor.class, "liftExtend");
+        liftRotate = hwMap.get(DcMotor.class, "liftRotate");
 
         //Define and initialize servos
         clip = hwMap.get(Servo.class, "clip");
@@ -102,10 +106,10 @@ public class RobotHw {
         grabberR = hwMap.get(Servo.class, "grabberR");
 
         //set direction of motors
-        fL.setDirection(DcMotor.Direction.REVERSE);
+        fL.setDirection(DcMotor.Direction.FORWARD);
         bL.setDirection(DcMotor.Direction.FORWARD);
-        fR.setDirection(DcMotor.Direction.REVERSE);
-        bR.setDirection(DcMotor.Direction.REVERSE);
+        fR.setDirection(DcMotor.Direction.FORWARD);
+        bR.setDirection(DcMotor.Direction.FORWARD);
 
         initColor();
         //intakeL.setDirection(DcMotor.Direction.FORWARD);
@@ -123,6 +127,9 @@ public class RobotHw {
         bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
+        liftExtend.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        liftRotate.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
 
@@ -287,6 +294,15 @@ public class RobotHw {
         opmode.idle();
         bR.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         opmode.idle();
+        liftRotate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        opmode.idle();
+        liftExtend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        opmode.idle();
+        liftExtend.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        opmode.idle();
+        liftRotate.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        opmode.idle();
+
     }
 
     // Return avg of all 4 motor encoder values
@@ -939,6 +955,24 @@ public class RobotHw {
 
        // floatMode();
         //resetAngle();
+    }
+
+    public void rotateTo(double angle){
+        liftRotate.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        while(liftRotate.getCurrentPosition() < (angle * degreesToTicks)){
+            liftRotate.setPower(.3);
+        }
+
+        liftRotate.setPower(0);
+    }
+
+    public void extendTo(double length){
+        liftExtend.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        while(liftExtend.getCurrentPosition() < length){
+            liftExtend.setPower(.3);
+        }
+
+        liftExtend.setPower(0);
     }
 
 }
