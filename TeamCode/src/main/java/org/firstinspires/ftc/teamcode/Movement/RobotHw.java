@@ -8,6 +8,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -21,6 +22,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.opencv.core.Mat;
 
+
 public class RobotHw {
 
     // Motors
@@ -32,14 +34,13 @@ public class RobotHw {
     public DcMotor intakeL = null;
     public DcMotor liftExtend = null;
     public DcMotor liftRotate = null;
-
     // Servos
-    public Servo clip = null;
-    public Servo claw = null;
-    public Servo rotate = null;
+    //public Servo clip = null;
+    //public Servo claw = null;
+    //public Servo rotate = null;
     public Servo clamp = null;
-    public Servo grabberL = null;
-    public Servo grabberR = null;
+    public Servo grabber = null;
+    //public Servo grabberR = null;
 
     // HardwareMap
     HardwareMap hwMap;
@@ -69,7 +70,7 @@ public class RobotHw {
 
     public ColorSensor sensorColorBotBack;
     public ColorSensor sensorColorLeft;
-    public ColorSensor sensorColorRight;
+   // public ColorSensor sensorColorRight;
     public DistanceSensor sensorDistanceBotBack;
     public DistanceSensor sensorDistanceLeft;
     public DistanceSensor sensorDistanceRight;
@@ -98,12 +99,14 @@ public class RobotHw {
         liftRotate = hwMap.get(DcMotor.class, "liftRotate");
 
         //Define and initialize servos
-        clip = hwMap.get(Servo.class, "clip");
-        claw = hwMap.get(Servo.class, "claw");
-        rotate = hwMap.get(Servo.class, "rotate");
+        //clip = hwMap.get(Servo.class, "clip");
+        //claw = hwMap.get(Servo.class, "claw");
+        //rotate = hwMap.get(Servo.class, "rotate");
         clamp = hwMap.get(Servo.class, "clamp");
-        grabberL = hwMap.get(Servo.class, "grabberL");
-        grabberR = hwMap.get(Servo.class, "grabberR");
+        grabber = hwMap.get(Servo.class, "grabber");
+        //grabberR = hwMap.get(Servo.class, "grabberR");
+
+        degreesToTicks = 1120.0 / 360.0;
 
         //set direction of motors
         fL.setDirection(DcMotor.Direction.FORWARD);
@@ -703,11 +706,11 @@ public class RobotHw {
 
         sensorColorBotBack = hwMap.get(ColorSensor.class, "sensorColorBotFront");
         sensorColorLeft = hwMap.get(ColorSensor.class, "sensorColorLeft");
-        sensorColorRight = hwMap.get(ColorSensor.class, "sensorColorRight");
+       // sensorColorRight = hwMap.get(ColorSensor.class, "sensorColorRight");
 
         // get a reference to the distance sensor that shares the same name.
         sensorDistanceLeft = hwMap.get(DistanceSensor.class, "sensorColorLeft");
-        sensorDistanceRight = hwMap.get(DistanceSensor.class, "sensorColorRight");
+        //sensorDistanceRight = hwMap.get(DistanceSensor.class, "sensorColorRight");
         sensorDistanceBotBack = hwMap.get(DistanceSensor.class, "sensorColorBotFront");
 
         // hsvValues is an array that will hold the hue, saturation, and value information.
@@ -720,7 +723,7 @@ public class RobotHw {
         // to amplify/attentuate the measured values.
         final double SCALE_FACTOR = 255;
         sensorColorLeft.enableLed(false);
-        sensorColorRight.enableLed(false);
+       // sensorColorRight.enableLed(false);
         sensorColorBotBack.enableLed(false);
 
         // get a reference to the RelativeLayout so we can change the background

@@ -35,6 +35,7 @@ public class SkystoneTeleopBlue extends LinearOpMode{
     public double liftHeight = 0;
     public double liftDistance;
     public double liftAngle;
+    //public double ticksInDegree = 1120.0 / 360.0;
 
     public boolean automode = false;
 
@@ -76,18 +77,18 @@ public class SkystoneTeleopBlue extends LinearOpMode{
 
             // Left grabber
             if (gamepad2.right_trigger > .1) {
-                robot.grabberR.setPosition(.8); // Up
+                robot.grabber.setPosition(.8); // Up
             }
             if (gamepad2.right_bumper) {
-                robot.grabberR.setPosition(0.02); // Down
+                robot.grabber.setPosition(0.02); // Down
             }
 
             // Right grabber
             if (gamepad1.b) {
-                robot.grabberL.setPosition(0.6); // Up
+                robot.grabber.setPosition(0.6); // Up
             }
             if (gamepad1.dpad_right) {
-                robot.grabberL.setPosition(0.98); // Down
+                robot.grabber.setPosition(0.98); // Down
             }
 
             // Foundation Clamp
@@ -107,8 +108,8 @@ public class SkystoneTeleopBlue extends LinearOpMode{
             }
 
 
-            robot.liftExtend.setPower(gamepad2.left_stick_y);
-            robot.liftRotate.setPower(gamepad2.right_stick_y);
+            robot.liftExtend.setPower(Math.abs(gamepad2.left_stick_y) * gamepad2.left_stick_y);
+            robot.liftRotate.setPower(Math.abs(gamepad2.right_stick_y) * gamepad2.right_stick_y);
 
             if(gamepad2.x){
                 automode = true;
@@ -125,7 +126,7 @@ public class SkystoneTeleopBlue extends LinearOpMode{
                     liftHeight+=12.7; //a stone is 12.7 cm high, in cm because thats the units of range sensor
                 }
 
-                if(gamepad2.dpad_up){
+                if(gamepad2.dpad_down){
                     liftHeight-=12.7;
                 }
 
@@ -139,7 +140,7 @@ public class SkystoneTeleopBlue extends LinearOpMode{
             }
 
             if(gamepad2.left_bumper){
-                robot. intakeL.setPower(1);
+                robot.intakeL.setPower(1);
             }
             else{
                 robot.intakeL.setPower(0);
@@ -147,13 +148,13 @@ public class SkystoneTeleopBlue extends LinearOpMode{
 
 
             if(gamepad2.right_bumper){
-                robot.intakeR.setPower(1);
+                robot.intakeR.setPower(-1);
             }
             else{
                 robot.intakeR.setPower(0);
             }
 
-
+/*
             if(gamepad2.left_bumper){
                 robot.liftExtend.setPower(-.5);
             }
@@ -165,6 +166,8 @@ public class SkystoneTeleopBlue extends LinearOpMode{
             if(gamepad2.dpad_right){
                 robot.liftRotate.setPower(-.5);
             }
+            */
+
 
 
         }

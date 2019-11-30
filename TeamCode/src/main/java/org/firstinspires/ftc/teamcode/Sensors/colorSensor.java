@@ -87,9 +87,9 @@ public class colorSensor extends LinearOpMode {
      */
     ColorSensor sensorColorBotBack;
     ColorSensor sensorColorLeft;
-    ColorSensor sensorColorRight;
+    //ColorSensor sensorColorRight;
     DistanceSensor sensorDistanceLeft;
-    DistanceSensor sensorDistanceRight;
+    //DistanceSensor sensorDistanceRight;
 
     @Override
     public void runOpMode() {
@@ -97,11 +97,11 @@ public class colorSensor extends LinearOpMode {
         // get a reference to the color sensor.
         sensorColorBotBack = hardwareMap.get(ColorSensor.class, "sensorColorBotFront");
         sensorColorLeft = hardwareMap.get(ColorSensor.class, "sensorColorLeft");
-        sensorColorRight = hardwareMap.get(ColorSensor.class, "sensorColorRight");
+        //sensorColorRight = hardwareMap.get(ColorSensor.class, "sensorColorRight");
 
         // get a reference to the distance sensor that shares the same name.
         sensorDistanceLeft = hardwareMap.get(DistanceSensor.class, "sensorColorLeft");
-        sensorDistanceRight = hardwareMap.get(DistanceSensor.class, "sensorColorRight");
+       // sensorDistanceRight = hardwareMap.get(DistanceSensor.class, "sensorColorRight");
 
         // hsvValues is an array that will hold the hue, saturation, and value information.
         float hsvValues[] = {0F, 0F, 0F};
@@ -113,7 +113,7 @@ public class colorSensor extends LinearOpMode {
         // to amplify/attentuate the measured values.
         final double SCALE_FACTOR = 255;
         sensorColorLeft.enableLed(false);
-        sensorColorRight.enableLed(false);
+        //sensorColorRight.enableLed(false);
         sensorColorBotBack.enableLed(false);
 
         // get a reference to the RelativeLayout so we can change the background
@@ -145,8 +145,8 @@ public class colorSensor extends LinearOpMode {
             // send the info back to driver station using telemetry function.
             telemetry.addData("Left Distance (cm)",
                     String.format(Locale.US, "%.02f", sensorDistanceLeft.getDistance(DistanceUnit.CM)));
-            telemetry.addData("Right Distance (cm)",
-                    String.format(Locale.US, "%.02f", sensorDistanceRight.getDistance(DistanceUnit.CM)));
+            //telemetry.addData("Right Distance (cm)",
+               //     String.format(Locale.US, "%.02f", sensorDistanceRight.getDistance(DistanceUnit.CM)));
             //telemetry.addData("Alpha", sensorColor.alpha());
             telemetry.addData("Red  ", sensorColorLeft.red());
             //telemetry.addData("Green", sensorColor.green());
@@ -160,8 +160,8 @@ public class colorSensor extends LinearOpMode {
             telemetry.addLine("bot");
             telemetry.addData("Left Distance (cm)",
                     String.format(Locale.US, "%.02f", sensorDistanceLeft.getDistance(DistanceUnit.CM)));
-            telemetry.addData("Right Distance (cm)",
-                    String.format(Locale.US, "%.02f", sensorDistanceRight.getDistance(DistanceUnit.CM)));
+          //  telemetry.addData("Right Distance (cm)",
+                  //  String.format(Locale.US, "%.02f", sensorDistanceRight.getDistance(DistanceUnit.CM)));
             //telemetry.addData("Alpha", sensorColor.alpha());
             telemetry.addData("Red  ", sensorColorBotBack.red());
             //telemetry.addData("Green", sensorColor.green());
