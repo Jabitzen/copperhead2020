@@ -76,20 +76,20 @@ public class SkystoneTeleopBlue extends LinearOpMode{
             trigMecanum();
 
             // Left grabber
-            if (gamepad2.right_trigger > .1) {
-                robot.grabber.setPosition(.8); // Up
-            }
-            if (gamepad2.right_bumper) {
-                robot.grabber.setPosition(0.02); // Down
-            }
-
-            // Right grabber
-            if (gamepad1.b) {
-                robot.grabber.setPosition(0.6); // Up
-            }
-            if (gamepad1.dpad_right) {
-                robot.grabber.setPosition(0.98); // Down
-            }
+//            if (gamepad2.right_trigger > .1) {
+//                robot.grabber.setPosition(.8); // Up
+//            }
+//            if (gamepad2.right_bumper) {
+//                robot.grabber.setPosition(0.02); // Down
+//            }
+//
+//            // Right grabber
+//            if (gamepad1.b) {
+//                robot.grabber.setPosition(0.6); // Up
+//            }
+//            if (gamepad1.dpad_right) {
+//                robot.grabber.setPosition(0.98); // Down
+//            }
 
             // Foundation Clamp
             if (gamepad1.a) {
@@ -132,6 +132,7 @@ public class SkystoneTeleopBlue extends LinearOpMode{
 
                 liftDistance = Math.sqrt((foundationDistance * foundationDistance) + (liftHeight * liftHeight));
                 liftAngle = Math.asin(liftHeight/liftDistance);
+
                 if (gamepad2.a){
                     robot.rotateTo(liftAngle);
                     sleep(750);
