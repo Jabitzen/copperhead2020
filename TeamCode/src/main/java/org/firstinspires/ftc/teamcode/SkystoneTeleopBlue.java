@@ -132,9 +132,11 @@ public class SkystoneTeleopBlue extends LinearOpMode{
 
                 liftDistance = Math.sqrt((foundationDistance * foundationDistance) + (liftHeight * liftHeight));
                 liftAngle = Math.asin(liftHeight/liftDistance);
-
-                robot.rotateTo(liftAngle);
-                robot.extendTo(liftDistance);
+                if (gamepad2.a){
+                    robot.rotateTo(liftAngle);
+                    sleep(750);
+                    robot.extendTo(liftDistance / 3.0);
+                }
 
 
             }
