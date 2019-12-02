@@ -92,12 +92,17 @@ public class SkystoneTeleopBlue extends LinearOpMode{
 //            }
 
             // Foundation Clamp
-            if (gamepad1.a) {
-                robot.clamp.setPosition(0); // Down
+            if (gamepad2.a) {
+                robot.clamp.setPosition(-1); // Down
             }
-            if (gamepad1.y) {
-                robot.clamp.setPosition(.9); // Up
+            if (gamepad2.y) {
+                robot.clamp.setPosition(-0.5); // Up
             }
+
+            telemetry.addData("a", gamepad2.a);
+            telemetry.addData("y", gamepad2.y);
+            telemetry.addData("position", robot.clamp.getPosition());
+            telemetry.update();
 
             // Reverse Mode
             if (gamepad1.dpad_down){
@@ -107,9 +112,15 @@ public class SkystoneTeleopBlue extends LinearOpMode{
                 constant = 1; // Forward
             }
 
-
-            robot.liftExtend.setPower(Math.abs(gamepad2.left_stick_y) * gamepad2.left_stick_y);
-            robot.liftRotate.setPower(Math.abs(gamepad2.right_stick_y) * gamepad2.right_stick_y);
+            if (gamepad2.left_bumper){
+                robot.liftExtend.setPower(.8);
+            }
+            if (gamepad2.right_bumper){
+                robot.liftExtend.setPower(-.8);
+            }
+            if (!gamepad2.left_bumper && !gamepad2.right_bumper){
+                robot.liftExtend.setPower(0);
+            }
 
             if(gamepad2.x){
                 automode = true;
@@ -133,7 +144,7 @@ public class SkystoneTeleopBlue extends LinearOpMode{
                 liftDistance = Math.sqrt((foundationDistance * foundationDistance) + (liftHeight * liftHeight));
                 liftAngle = Math.asin(liftHeight/liftDistance);
 
-                if (gamepad2.a){
+                if (gamepad2.b){
                     robot.rotateTo(liftAngle);
                     sleep(750);
                     robot.extendTo(liftDistance / 3.0);
@@ -142,28 +153,26 @@ public class SkystoneTeleopBlue extends LinearOpMode{
 
             }
 
-            if(gamepad2.left_bumper){
+            if(gamepad2.left_stick_y == 1){
                 robot.intakeL.setPower(1);
             }
-            else if(gamepad2.left_trigger > 0.1){
+            if(gamepad2.left_stick_y == -1){
                 robot.intakeL.setPower(-1);
             }
-            else{
+            if(gamepad2.left_stick_y == 0){
                 robot.intakeL.setPower(0);
             }
 
 
-            if(gamepad2.right_bumper){
+            if(gamepad2.right_stick_y == 1){
                 robot.intakeR.setPower(-1);
             }
-            else if(gamepad2.right_trigger > 0.1){
+            if(gamepad2.right_stick_y == -1){
                 robot.intakeR.setPower(1);
             }
-            else{
+            if(gamepad2.right_stick_y == 0){
                 robot.intakeR.setPower(0);
             }
-
-
 
 /*
             if(gamepad2.left_bumper){
