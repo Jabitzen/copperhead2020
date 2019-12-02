@@ -68,12 +68,17 @@ public class RobotHw {
     public double leftCorrect;
     public double rightCorrect;
 
-    public ColorSensor sensorColorBotBack;
-    public ColorSensor sensorColorLeft;
-   // public ColorSensor sensorColorRight;
-    public DistanceSensor sensorDistanceBotBack;
-    public DistanceSensor sensorDistanceLeft;
-    public DistanceSensor sensorDistanceRight;
+    public ColorSensor sensorColorBMid;
+    public ColorSensor sensorColorBEdge;
+    public ColorSensor sensorColorBotFront;
+   // public ColorSensor sensorColorRMid;
+   // public ColorSensor sensorColorREdge;
+   // public ColorSensor sensorColorBotBack;
+
+    public DistanceSensor sensorDistanceBMid;
+    public DistanceSensor sensorDistanceBEdge;
+   // public DistanceSensor sensorDistanceRMid;
+    //public DistanceSensor sensorDistanceREdge;
 
     public double degreesToTicks;
 
@@ -704,14 +709,15 @@ public class RobotHw {
 
     public void initColor() {
 
-        sensorColorBotBack = hwMap.get(ColorSensor.class, "sensorColorBotFront");
-        sensorColorLeft = hwMap.get(ColorSensor.class, "sensorColorLeft");
+        sensorColorBMid = hwMap.get(ColorSensor.class, "sensorColorBMid");
+        sensorColorBEdge = hwMap.get(ColorSensor.class, "sensorColorBEdge");
+        sensorColorBotFront = hwMap.get(ColorSensor.class, "sensorColorBotFront");
        // sensorColorRight = hwMap.get(ColorSensor.class, "sensorColorRight");
 
         // get a reference to the distance sensor that shares the same name.
-        sensorDistanceLeft = hwMap.get(DistanceSensor.class, "sensorColorLeft");
+        sensorDistanceBEdge = hwMap.get(DistanceSensor.class, "sensorColorBEdge");
         //sensorDistanceRight = hwMap.get(DistanceSensor.class, "sensorColorRight");
-        sensorDistanceBotBack = hwMap.get(DistanceSensor.class, "sensorColorBotFront");
+        sensorDistanceBMid = hwMap.get(DistanceSensor.class, "sensorColorBMid");
 
         // hsvValues is an array that will hold the hue, saturation, and value information.
         float hsvValues[] = {0F, 0F, 0F};
@@ -722,9 +728,9 @@ public class RobotHw {
         // sometimes it helps to multiply the raw RGB values with a scale factor
         // to amplify/attentuate the measured values.
         final double SCALE_FACTOR = 255;
-        sensorColorLeft.enableLed(false);
+        sensorColorBEdge.enableLed(false);
        // sensorColorRight.enableLed(false);
-        sensorColorBotBack.enableLed(false);
+        sensorColorBMid.enableLed(false);
 
         // get a reference to the RelativeLayout so we can change the background
         // color of the Robot Controller app to match the hue detected by the RGB sensor.
@@ -735,13 +741,13 @@ public class RobotHw {
             // convert the RGB values to HSV values.
             // multiply by the SCALE_FACTOR.
             // then cast it back to int (SCALE_FACTOR is a double)
-            Color.RGBToHSV((int) (sensorColorLeft.red() * SCALE_FACTOR),
-                    (int) (sensorColorLeft.green() * SCALE_FACTOR),
-                    (int) (sensorColorLeft.blue() * SCALE_FACTOR),
+            Color.RGBToHSV((int) (sensorColorBEdge.red() * SCALE_FACTOR),
+                    (int) (sensorColorBEdge.green() * SCALE_FACTOR),
+                    (int) (sensorColorBEdge.blue() * SCALE_FACTOR),
                     hsvValues);
-            Color.RGBToHSV((int) (sensorColorBotBack.red() * SCALE_FACTOR),
-                    (int) (sensorColorBotBack.green() * SCALE_FACTOR),
-                    (int) (sensorColorBotBack.blue() * SCALE_FACTOR),
+            Color.RGBToHSV((int) (sensorColorBMid.red() * SCALE_FACTOR),
+                    (int) (sensorColorBMid.green() * SCALE_FACTOR),
+                    (int) (sensorColorBMid.blue() * SCALE_FACTOR),
                     hsvValues);
         }
     }
@@ -794,13 +800,13 @@ public class RobotHw {
         resetAngle();
         brakeMode();
 
-        boolean cont = Double.isNaN(sensorDistanceLeft.getDistance(DistanceUnit.CM));
+        boolean cont = Double.isNaN(sensorDistanceBEdge.getDistance(DistanceUnit.CM));
 
 
         while (cont == true && opmode.opModeIsActive()){
             moveLeft(power);
 
-            if (sensorDistanceLeft.getDistance(DistanceUnit.CM) < 6) {
+            if (sensorDistanceBEdge.getDistance(DistanceUnit.CM) < 6) {
                 cont = false;
             }
 
@@ -808,8 +814,8 @@ public class RobotHw {
 
 
 
-            opmode.telemetry.addData("front", sensorDistanceLeft.getDistance(DistanceUnit.CM));
-            opmode.telemetry.addData("back", sensorDistanceBotBack.getDistance(DistanceUnit.CM));
+            opmode.telemetry.addData("front", sensorDistanceBEdge.getDistance(DistanceUnit.CM));
+            opmode.telemetry.addData("back", sensorDistanceBMid.getDistance(DistanceUnit.CM));
             opmode.telemetry.update();
         }
 
@@ -825,8 +831,8 @@ public class RobotHw {
         brakeMode();
         resetAngle();
         boolean forward;
-        int front = Math.abs(sensorColorLeft.red() - sensorColorLeft.blue()) + Math.abs(sensorColorLeft.green() - sensorColorLeft.blue());
-        int back = Math.abs(sensorColorBotBack.red() - sensorColorBotBack.blue()) + Math.abs(sensorColorBotBack.green() - sensorColorBotBack.blue());
+        int front = Math.abs(sensorColorBEdge.red() - sensorColorBEdge.blue()) + Math.abs(sensorColorBEdge.green() - sensorColorBEdge.blue());
+        int back = Math.abs(sensorColorBMid.red() - sensorColorBMid.blue()) + Math.abs(sensorColorBMid.green() - sensorColorBMid.blue());
         if (front > back) {
             forward = false;
         }
@@ -834,9 +840,10 @@ public class RobotHw {
             forward = true;
         }
 
-        while (opmode.opModeIsActive() && (sensorColorLeft.red() > 350 || sensorColorBotBack.red() > 350) && finished == false) {
+        //sensor > 350 or sensor > 350
+        while (opmode.opModeIsActive() && ((front - back > 350) || (back - front > 350)) && finished == false) {
 
-            if (!forward  && !Double.isNaN(sensorDistanceLeft.getDistance(DistanceUnit.CM))) {
+            if (!forward  && !Double.isNaN(sensorDistanceBEdge.getDistance(DistanceUnit.CM))) {
                 //Backward
                 if (getAngle() > 1) {
                     fL.setPower(1.2 * -power);
@@ -857,7 +864,7 @@ public class RobotHw {
                     bR.setPower(-power);
                 }
             }
-            else if (forward && !Double.isNaN(sensorDistanceBotBack.getDistance(DistanceUnit.CM))){
+            else if (forward && !Double.isNaN(sensorDistanceBMid.getDistance(DistanceUnit.CM))){
                 //Forward
                 if (getAngle() > 1) {
                     fL.setPower(.8 * power);
@@ -881,8 +888,8 @@ public class RobotHw {
                 finished = true;
             }
 
-            opmode.telemetry.addData("leftColor", sensorColorLeft.red());
-            opmode.telemetry.addData("backColor", sensorColorBotBack.red());
+            opmode.telemetry.addData("leftColor", sensorColorBEdge.red());
+            opmode.telemetry.addData("backColor", sensorColorBMid.red());
             opmode.telemetry.update();
 
         }
@@ -890,6 +897,31 @@ public class RobotHw {
         floatMode();
         opmode.telemetry.addLine("done 2");
     }
+
+    public void alignStonesV2 (double power) {
+
+        double conditionBEdge = (sensorColorBEdge.red() * sensorColorBEdge.green()) / (sensorColorBEdge.blue() * sensorColorBEdge.blue());
+        double conditionBMid = (sensorColorBMid.red() * sensorColorBMid.green()) / (sensorColorBMid.blue() * sensorColorBMid.blue());
+        
+    }
+
+    public void crossLineRed () {
+
+       while (sensorColorBMid.red() < 200) {
+           moveForward(0.3);
+       }
+
+       stopMotors();
+    }
+
+  /*  public void crossLineBlue () {
+
+        while (sensorColorBotFront.red() < 200) {
+            moveBackward(0.3);
+        }
+
+        stopMotors();
+    } */
 
     public void moveBackward (double power) {
 
