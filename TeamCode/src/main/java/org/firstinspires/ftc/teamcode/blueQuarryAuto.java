@@ -20,8 +20,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Movement.RobotHw;
 import org.firstinspires.ftc.teamcode.Vision.BitMapVision;
 
-@Autonomous(name="blueQuarryAutoV2", group="12596")
-public class blueQuarryAutoV2 extends LinearOpMode {
+@Autonomous(name="blueQuarryAuto", group="12596")
+public class blueQuarryAuto extends LinearOpMode {
 
     BitMapVision bm1 = null;
     //BNO055IMU               imu;
