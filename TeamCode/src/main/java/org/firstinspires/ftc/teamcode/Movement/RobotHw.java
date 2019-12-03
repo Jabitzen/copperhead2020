@@ -768,7 +768,7 @@ public class RobotHw {
         else {
             fL.setPower(-power);
             fR.setPower(power);
-            bL.setPower(power);
+            bL.setPower(-power);
             bR.setPower(-power);
         }
     }
@@ -903,18 +903,24 @@ public class RobotHw {
         double conditionBEdge = (sensorColorBEdge.red() * sensorColorBEdge.green()) / (sensorColorBEdge.blue() * sensorColorBEdge.blue());
         double conditionBMid = (sensorColorBMid.red() * sensorColorBMid.green()) / (sensorColorBMid.blue() * sensorColorBMid.blue());
 
-        while (conditionBMid < 2 || conditionBEdge < 2) {
+        while ((conditionBMid > 2 || conditionBEdge > 2) && opmode.opModeIsActive()) {
+            conditionBMid = (sensorColorBMid.red() * sensorColorBMid.green()) / (sensorColorBMid.blue() * sensorColorBMid.blue());
+            conditionBEdge = (sensorColorBEdge.red() * sensorColorBEdge.green()) / (sensorColorBEdge.blue() * sensorColorBEdge.blue());
             if (conditionBEdge > 2 && conditionBMid < 2) {
-                moveForward(power);
+                moveBackward(power);
             }
 
             else if (conditionBEdge < 2 && conditionBMid > 2) {
-                moveBackward(power);
+                moveForward(power);
             }
 
             else {
                 moveBackward(power);
             }
+
+            opmode.telemetry.addData("edge", conditionBEdge);
+            opmode.telemetry.addData("mid", conditionBMid);
+            opmode.telemetry.update();
         }
 
         stopMotors();
@@ -950,19 +956,19 @@ public class RobotHw {
         if (getAngle() > 1) {
             fL.setPower(1.2 * power);
             fR.setPower(0.8 * power);
-            bL.setPower(1.2 * power);
+            bL.setPower(1.2 * -power);
             bR.setPower(0.8 * power);
         }
         else if (getAngle() < -1) {
             fL.setPower(.8 * power);
             fR.setPower(1.2 * power);
-            bL.setPower(.8 * power);
+            bL.setPower(.8 * -power);
             bR.setPower(1.2 * power);
         }
         else {
             fL.setPower(power);
             fR.setPower(power);
-            bL.setPower(power);
+            bL.setPower(-power);
             bR.setPower(power);
         }
 
