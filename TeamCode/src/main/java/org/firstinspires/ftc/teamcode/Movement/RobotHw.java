@@ -756,13 +756,13 @@ public class RobotHw {
         if (getAngle() > 1) {
             fL.setPower(-power * 1.2);
             fR.setPower(power * 1.2);
-            bL.setPower(power * .8);
+            bL.setPower(-power * .8);
             bR.setPower(-power * .8);
         }
         else if (getAngle() < -1) {
             fL.setPower(-power * .8);
             fR.setPower(power * .8);
-            bL.setPower(power * 1.2);
+            bL.setPower(-power * 1.2);
             bR.setPower(-power * 1.2);
         }
         else {
@@ -777,19 +777,19 @@ public class RobotHw {
         if (getAngle() > 1) {
             fL.setPower(power * .8);
             fR.setPower(-power * .8);
-            bL.setPower(-power * 1.2);
+            bL.setPower(power * 1.2);
             bR.setPower(power * 1.2);
         }
         else if (getAngle() < -1) {
             fL.setPower(power * 1.2);
             fR.setPower(-power * 1.2);
-            bL.setPower(-power * .8);
+            bL.setPower(power * .8);
             bR.setPower(power * .8);
         }
         else {
             fL.setPower(power);
             fR.setPower(-power);
-            bL.setPower(-power);
+            bL.setPower(power);
             bR.setPower(power);
         }
     }
@@ -993,17 +993,17 @@ public class RobotHw {
         if (getAngle() > 1) {
             fL.setPower(.8 * power);
             fR.setPower(1.2 * power);
-            bL.setPower(.8 * power);
+            bL.setPower(.8 * -power);
             bR.setPower(1.2 * power);
         } else if (getAngle() < -1) {
             fL.setPower(1.2 * power);
             fR.setPower(.8 * power);
-            bL.setPower(1.2 * power);
+            bL.setPower(1.2 * -power);
             bR.setPower(.8 * power);
         } else {
             fL.setPower(power);
             fR.setPower(power);
-            bL.setPower(power);
+            bL.setPower(-power);
             bR.setPower(power);
         }
 
