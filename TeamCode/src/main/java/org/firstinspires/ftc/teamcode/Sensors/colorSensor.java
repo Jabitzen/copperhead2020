@@ -85,22 +85,22 @@ public class colorSensor extends LinearOpMode {
      * to the target object.
      *
      */
-    ColorSensor sensorColorBotBack;
-    ColorSensor sensorColorLeft;
+    ColorSensor sensorColorBMid;
+    ColorSensor sensorColorBEdge;
     //ColorSensor sensorColorRight;
-    DistanceSensor sensorDistanceLeft;
+    DistanceSensor sensorDistanceBEdge;
     //DistanceSensor sensorDistanceRight;
 
     @Override
     public void runOpMode() {
 
         // get a reference to the color sensor.
-        sensorColorBotBack = hardwareMap.get(ColorSensor.class, "sensorColorBotFront");
-        sensorColorLeft = hardwareMap.get(ColorSensor.class, "sensorColorLeft");
+        sensorColorBMid = hardwareMap.get(ColorSensor.class, "sensorColorBotFront");
+        sensorColorBEdge = hardwareMap.get(ColorSensor.class, "sensorColorBEdge");
         //sensorColorRight = hardwareMap.get(ColorSensor.class, "sensorColorRight");
 
         // get a reference to the distance sensor that shares the same name.
-        sensorDistanceLeft = hardwareMap.get(DistanceSensor.class, "sensorColorLeft");
+        sensorDistanceBEdge = hardwareMap.get(DistanceSensor.class, "sensorColorBEdge");
        // sensorDistanceRight = hardwareMap.get(DistanceSensor.class, "sensorColorRight");
 
         // hsvValues is an array that will hold the hue, saturation, and value information.
@@ -112,9 +112,9 @@ public class colorSensor extends LinearOpMode {
         // sometimes it helps to multiply the raw RGB values with a scale factor
         // to amplify/attentuate the measured values.
         final double SCALE_FACTOR = 255;
-        sensorColorLeft.enableLed(false);
+        sensorColorBEdge.enableLed(false);
         //sensorColorRight.enableLed(false);
-        sensorColorBotBack.enableLed(false);
+        sensorColorBMid.enableLed(false);
 
         // get a reference to the RelativeLayout so we can change the background
         // color of the Robot Controller app to match the hue detected by the RGB sensor.
@@ -131,45 +131,46 @@ public class colorSensor extends LinearOpMode {
             // convert the RGB values to HSV values.
             // multiply by the SCALE_FACTOR.
             // then cast it back to int (SCALE_FACTOR is a double)
-            Color.RGBToHSV((int) (sensorColorLeft.red() * SCALE_FACTOR),
-                    (int) (sensorColorLeft.green() * SCALE_FACTOR),
-                    (int) (sensorColorLeft.blue() * SCALE_FACTOR),
+            Color.RGBToHSV((int) (sensorColorBEdge.red() * SCALE_FACTOR),
+                    (int) (sensorColorBEdge.green() * SCALE_FACTOR),
+                    (int) (sensorColorBEdge.blue() * SCALE_FACTOR),
                     hsvValues);
-            Color.RGBToHSV((int) (sensorColorBotBack.red() * SCALE_FACTOR),
-                    (int) (sensorColorBotBack.green() * SCALE_FACTOR),
-                    (int) (sensorColorBotBack.blue() * SCALE_FACTOR),
+            Color.RGBToHSV((int) (sensorColorBMid.red() * SCALE_FACTOR),
+                    (int) (sensorColorBMid.green() * SCALE_FACTOR),
+                    (int) (sensorColorBMid.blue() * SCALE_FACTOR),
                     hsvValues);
 
 
 
             // send the info back to driver station using telemetry function.
+            telemetry.addData ("calcBEdge", (sensorColorBEdge.red() * sensorColorBEdge.green()) / (sensorColorBEdge.blue() * sensorColorBEdge.blue()));
             telemetry.addData("Left Distance (cm)",
-                    String.format(Locale.US, "%.02f", sensorDistanceLeft.getDistance(DistanceUnit.CM)));
+                    String.format(Locale.US, "%.02f", sensorDistanceBEdge.getDistance(DistanceUnit.CM)));
             //telemetry.addData("Right Distance (cm)",
                //     String.format(Locale.US, "%.02f", sensorDistanceRight.getDistance(DistanceUnit.CM)));
             //telemetry.addData("Alpha", sensorColor.alpha());
-            telemetry.addData("Red  ", sensorColorLeft.red());
+            telemetry.addData("Red  ", sensorColorBEdge.red());
             //telemetry.addData("Green", sensorColor.green());
-            telemetry.addData("Blue ", sensorColorLeft.blue());
+            telemetry.addData("Blue ", sensorColorBEdge.blue());
             //telemetry.addData("Hue", hsvValues[0]);
-            telemetry.addData("Green ", sensorColorLeft.green());
+            telemetry.addData("Green ", sensorColorBEdge.green());
             //telemetry.addData("Hue", hsvValues[0]);
-            telemetry.addData("Hue ", sensorColorLeft.alpha());
+            telemetry.addData("Hue ", sensorColorBEdge.alpha());
             //telemetry.addData("Hue", hsvValues[0]);
 
             telemetry.addLine("bot");
             telemetry.addData("Left Distance (cm)",
-                    String.format(Locale.US, "%.02f", sensorDistanceLeft.getDistance(DistanceUnit.CM)));
+                    String.format(Locale.US, "%.02f", sensorDistanceBEdge.getDistance(DistanceUnit.CM)));
           //  telemetry.addData("Right Distance (cm)",
                   //  String.format(Locale.US, "%.02f", sensorDistanceRight.getDistance(DistanceUnit.CM)));
             //telemetry.addData("Alpha", sensorColor.alpha());
-            telemetry.addData("Red  ", sensorColorBotBack.red());
+            telemetry.addData("Red  ", sensorColorBMid.red());
             //telemetry.addData("Green", sensorColor.green());
-            telemetry.addData("Blue ", sensorColorBotBack.blue());
+            telemetry.addData("Blue ", sensorColorBMid.blue());
             //telemetry.addData("Hue", hsvValues[0]);
-            telemetry.addData("Green ", sensorColorBotBack.green());
+            telemetry.addData("Green ", sensorColorBMid.green());
             //telemetry.addData("Hue", hsvValues[0]);
-            telemetry.addData("Alpha ", sensorColorBotBack.alpha());
+            telemetry.addData("Alpha ", sensorColorBMid.alpha());
             //telemetry.addData("Hue", hsvValues[0]);
 
             // change the background color to match the color detected by the RGB sensor.
