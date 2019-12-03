@@ -902,7 +902,22 @@ public class RobotHw {
 
         double conditionBEdge = (sensorColorBEdge.red() * sensorColorBEdge.green()) / (sensorColorBEdge.blue() * sensorColorBEdge.blue());
         double conditionBMid = (sensorColorBMid.red() * sensorColorBMid.green()) / (sensorColorBMid.blue() * sensorColorBMid.blue());
-        
+
+        while (conditionBMid < 2 || conditionBEdge < 2) {
+            if (conditionBEdge > 2 && conditionBMid < 2) {
+                moveForward(power);
+            }
+
+            else if (conditionBEdge < 2 && conditionBMid > 2) {
+                moveBackward(power);
+            }
+
+            else {
+                moveBackward(power);
+            }
+        }
+
+        stopMotors();
     }
 
     public void crossLineRed () {
