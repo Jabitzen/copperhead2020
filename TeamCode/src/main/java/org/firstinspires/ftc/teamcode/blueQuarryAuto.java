@@ -105,7 +105,7 @@ public class blueQuarryAuto extends LinearOpMode {
 
         while (opModeIsActive()) {
             robot.approachStones(.2);
-            telemetry.addData("leftDistance", robot.sensorDistanceBEdge.getDistance(DistanceUnit.CM));
+           // telemetry.addData("edge", robot.sensorDistanceBEdge.getDistance(DistanceUnit.CM));
             telemetry.update();
             sleep(1000);
             robot.alignStonesV2(0.2);
