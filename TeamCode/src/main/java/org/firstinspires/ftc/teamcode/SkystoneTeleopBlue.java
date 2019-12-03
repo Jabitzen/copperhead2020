@@ -70,7 +70,7 @@ public class SkystoneTeleopBlue extends LinearOpMode{
 */
         robot.init(this);
         waitForStart();
-        robot.rotate.setPosition(.1);
+        //robot.rotate.setPosition(.1);
         while (opModeIsActive()) {
             // Sin Cos Atan inputs for mecanum
             trigMecanum();
