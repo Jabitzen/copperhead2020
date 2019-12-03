@@ -36,8 +36,8 @@ public class RobotHw {
     public DcMotor liftRotate = null;
     // Servos
     //public Servo clip = null;
-    //public Servo claw = null;
-    //public Servo rotate = null;
+    public Servo claw = null;
+    public Servo rotate = null;
     public Servo clamp = null;
     public Servo grabber = null;
     //public Servo grabberR = null;
@@ -105,8 +105,8 @@ public class RobotHw {
 
         //Define and initialize servos
         //clip = hwMap.get(Servo.class, "clip");
-        //claw = hwMap.get(Servo.class, "claw");
-        //rotate = hwMap.get(Servo.class, "rotate");
+        claw = hwMap.get(Servo.class, "claw");
+        rotate = hwMap.get(Servo.class, "rotate");
         clamp = hwMap.get(Servo.class, "clamp");
         grabber = hwMap.get(Servo.class, "grabber");
         //grabberR = hwMap.get(Servo.class, "grabberR");
