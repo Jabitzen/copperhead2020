@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.Movement.RobotHw;
 
 
-@TeleOp(name="Skystone TeleOP Blue", group="Pushbot")
+@TeleOp(name="Skystone TeleOP", group="Pushbot")
 
 // @ AUTHOR HAYDEN WARREN
 public class SkystoneTeleop extends LinearOpMode{
@@ -70,7 +70,7 @@ public class SkystoneTeleop extends LinearOpMode{
 */
         robot.init(this);
         waitForStart();
-        //robot.rotate.setPosition(.1);
+        robot.rotate.setPosition(1);
         while (opModeIsActive()) {
             // Sin Cos Atan inputs for mecanum
             trigMecanum();
@@ -91,21 +91,21 @@ public class SkystoneTeleop extends LinearOpMode{
 //                robot.grabber.setPosition(0.98); // Down
 //            }
 
-            // Foundation Clamp
+           /* // Foundation Clamp
             if (gamepad2.y) {
                 robot.clamp.setPosition(0.3); // Down
             }
             if (gamepad2.a) {
                 robot.clamp.setPosition(1); // Up
-            }
+            } */
 
-            // Claw
+          /*  // Claw
             if (gamepad2.x) {
                 robot.claw.setPosition(0); // Down
             }
             if (gamepad2.b) {
                 robot.claw.setPosition(.5); // Up
-            }
+            } */
 
             //Rotate
             if(gamepad2.dpad_left){

@@ -95,7 +95,7 @@ public class colorSensor extends LinearOpMode {
     public void runOpMode() {
 
         // get a reference to the color sensor.
-        sensorColorBMid = hardwareMap.get(ColorSensor.class, "sensorColorBotFront");
+        sensorColorBMid = hardwareMap.get(ColorSensor.class, "sensorColorBMid");
         sensorColorBEdge = hardwareMap.get(ColorSensor.class, "sensorColorBEdge");
         //sensorColorRight = hardwareMap.get(ColorSensor.class, "sensorColorRight");
 

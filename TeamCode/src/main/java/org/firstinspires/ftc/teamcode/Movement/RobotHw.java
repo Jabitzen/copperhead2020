@@ -36,9 +36,9 @@ public class RobotHw {
     public DcMotor liftRotate = null;
     // Servos
     //public Servo clip = null;
-    public Servo claw = null;
+   // public Servo claw = null;
     public Servo rotate = null;
-    public Servo clamp = null;
+   // public Servo clamp = null;
     public Servo grabber = null;
     //public Servo grabberR = null;
 
@@ -70,15 +70,15 @@ public class RobotHw {
 
     public ColorSensor sensorColorBMid;
     public ColorSensor sensorColorBEdge;
-    public ColorSensor sensorColorBotFront;
-   // public ColorSensor sensorColorRMid;
-   // public ColorSensor sensorColorREdge;
+    //public ColorSensor sensorColorBotFront;
+    public ColorSensor sensorColorRMid;
+    public ColorSensor sensorColorREdge;
    // public ColorSensor sensorColorBotBack;
 
     public DistanceSensor sensorDistanceBMid;
     public DistanceSensor sensorDistanceBEdge;
-   // public DistanceSensor sensorDistanceRMid;
-    //public DistanceSensor sensorDistanceREdge;
+    public DistanceSensor sensorDistanceRMid;
+    public DistanceSensor sensorDistanceREdge;
 
     public double degreesToTicks;
 
@@ -105,9 +105,9 @@ public class RobotHw {
 
         //Define and initialize servos
         //clip = hwMap.get(Servo.class, "clip");
-        claw = hwMap.get(Servo.class, "claw");
+       // claw = hwMap.get(Servo.class, "claw");
         rotate = hwMap.get(Servo.class, "rotate");
-        clamp = hwMap.get(Servo.class, "clamp");
+       // clamp = hwMap.get(Servo.class, "clamp");
         grabber = hwMap.get(Servo.class, "grabber");
         //grabberR = hwMap.get(Servo.class, "grabberR");
 
@@ -353,6 +353,9 @@ public class RobotHw {
 
     public void goStraightGyro(double distance, double leftPower, double timeout) {
         fL.setDirection(DcMotor.Direction.FORWARD);
+        fR.setDirection(DcMotor.Direction.REVERSE);
+        bR.setDirection(DcMotor.Direction.REVERSE);
+
         reset();
         resetAngle();
         opmode.sleep(100);
@@ -447,6 +450,8 @@ public class RobotHw {
 
         stopMotors();
         fL.setDirection(DcMotor.Direction.REVERSE);
+        fR.setDirection(DcMotor.Direction.FORWARD);
+        bR.setDirection(DcMotor.Direction.FORWARD);
         floatMode();
         resetAngle();
     }
@@ -711,13 +716,17 @@ public class RobotHw {
 
         sensorColorBMid = hwMap.get(ColorSensor.class, "sensorColorBMid");
         sensorColorBEdge = hwMap.get(ColorSensor.class, "sensorColorBEdge");
-        sensorColorBotFront = hwMap.get(ColorSensor.class, "sensorColorBotFront");
+        sensorColorRMid = hwMap.get(ColorSensor.class, "sensorColorRMid");
+        sensorColorREdge = hwMap.get(ColorSensor.class, "sensorColorREdge");
+       // sensorColorBotFront = hwMap.get(ColorSensor.class, "sensorColorBotFront");
        // sensorColorRight = hwMap.get(ColorSensor.class, "sensorColorRight");
 
         // get a reference to the distance sensor that shares the same name.
         sensorDistanceBEdge = hwMap.get(DistanceSensor.class, "sensorColorBEdge");
         //sensorDistanceRight = hwMap.get(DistanceSensor.class, "sensorColorRight");
         sensorDistanceBMid = hwMap.get(DistanceSensor.class, "sensorColorBMid");
+        sensorDistanceREdge = hwMap.get(DistanceSensor.class, "sensorColorREdge");
+        sensorDistanceRMid = hwMap.get(DistanceSensor.class, "sensorColorRMid");
 
         // hsvValues is an array that will hold the hue, saturation, and value information.
         float hsvValues[] = {0F, 0F, 0F};
@@ -731,6 +740,10 @@ public class RobotHw {
         sensorColorBEdge.enableLed(false);
        // sensorColorRight.enableLed(false);
         sensorColorBMid.enableLed(false);
+
+        sensorColorREdge.enableLed(false);
+        // sensorColorRight.enableLed(false);
+        sensorColorRMid.enableLed(false);
 
         // get a reference to the RelativeLayout so we can change the background
         // color of the Robot Controller app to match the hue detected by the RGB sensor.
@@ -748,6 +761,15 @@ public class RobotHw {
             Color.RGBToHSV((int) (sensorColorBMid.red() * SCALE_FACTOR),
                     (int) (sensorColorBMid.green() * SCALE_FACTOR),
                     (int) (sensorColorBMid.blue() * SCALE_FACTOR),
+                    hsvValues);
+
+            Color.RGBToHSV((int) (sensorColorREdge.red() * SCALE_FACTOR),
+                    (int) (sensorColorREdge.green() * SCALE_FACTOR),
+                    (int) (sensorColorREdge.blue() * SCALE_FACTOR),
+                    hsvValues);
+            Color.RGBToHSV((int) (sensorColorRMid.red() * SCALE_FACTOR),
+                    (int) (sensorColorRMid.green() * SCALE_FACTOR),
+                    (int) (sensorColorRMid.blue() * SCALE_FACTOR),
                     hsvValues);
         }
     }
@@ -796,7 +818,35 @@ public class RobotHw {
 
 
 
-    public void approachStones (double power) {
+    public void approachStonesRed (double power) {
+        resetAngle();
+        brakeMode();
+
+        boolean cont = Double.isNaN(sensorDistanceREdge.getDistance(DistanceUnit.CM));
+
+
+        while (cont == true && opmode.opModeIsActive()){
+            moveLeft(power);
+
+            if (sensorDistanceREdge.getDistance(DistanceUnit.CM) < 6) {
+                cont = false;
+            }
+
+
+
+
+
+            opmode.telemetry.addData("front", sensorDistanceREdge.getDistance(DistanceUnit.CM));
+            opmode.telemetry.addData("back", sensorDistanceRMid.getDistance(DistanceUnit.CM));
+            opmode.telemetry.update();
+        }
+
+
+        stopMotors();
+        floatMode();
+    }
+
+    public void approachStonesBlue (double power) {
         resetAngle();
         brakeMode();
 
@@ -826,79 +876,7 @@ public class RobotHw {
 
 
 
-    public void alignWithStones (double power) {
-        boolean finished = false;
-        brakeMode();
-        resetAngle();
-        boolean forward;
-        int front = Math.abs(sensorColorBEdge.red() - sensorColorBEdge.blue()) + Math.abs(sensorColorBEdge.green() - sensorColorBEdge.blue());
-        int back = Math.abs(sensorColorBMid.red() - sensorColorBMid.blue()) + Math.abs(sensorColorBMid.green() - sensorColorBMid.blue());
-        if (front > back) {
-            forward = false;
-        }
-        else {
-            forward = true;
-        }
-
-        //sensor > 350 or sensor > 350
-        while (opmode.opModeIsActive() && ((front - back > 350) || (back - front > 350)) && finished == false) {
-
-            if (!forward  && !Double.isNaN(sensorDistanceBEdge.getDistance(DistanceUnit.CM))) {
-                //Backward
-                if (getAngle() > 1) {
-                    fL.setPower(1.2 * -power);
-                    fR.setPower(0.8 * -power);
-                    bL.setPower(1.2 * -power);
-                    bR.setPower(0.8 * -power);
-                }
-                else if (getAngle() < -1) {
-                    fL.setPower(.8 * -power);
-                    fR.setPower(1.2 * -power);
-                    bL.setPower(.8 * -power);
-                    bR.setPower(1.2 * -power);
-                }
-                else {
-                    fL.setPower(-power);
-                    fR.setPower(-power);
-                    bL.setPower(-power);
-                    bR.setPower(-power);
-                }
-            }
-            else if (forward && !Double.isNaN(sensorDistanceBMid.getDistance(DistanceUnit.CM))){
-                //Forward
-                if (getAngle() > 1) {
-                    fL.setPower(.8 * power);
-                    fR.setPower(1.2 * power);
-                    bL.setPower(.8 * power);
-                    bR.setPower(1.2 * power);
-                } else if (getAngle() < -1) {
-                    fL.setPower(1.2 * power);
-                    fR.setPower(.8 * power);
-                    bL.setPower(1.2 * power);
-                    bR.setPower(.8 * power);
-                } else {
-                    fL.setPower(power);
-                    fR.setPower(power);
-                    bL.setPower(power);
-                    bR.setPower(power);
-                }
-            }
-            else {
-                stopMotors();
-                finished = true;
-            }
-
-            opmode.telemetry.addData("leftColor", sensorColorBEdge.red());
-            opmode.telemetry.addData("backColor", sensorColorBMid.red());
-            opmode.telemetry.update();
-
-        }
-        stopMotors();
-        floatMode();
-        opmode.telemetry.addLine("done 2");
-    }
-
-    public void alignStonesV2 (double power) {
+    public void alignStonesB (double power) {
 
         double conditionBEdge = (sensorColorBEdge.red() * sensorColorBEdge.green()) / (sensorColorBEdge.blue() * sensorColorBEdge.blue());
         double conditionBMid = (sensorColorBMid.red() * sensorColorBMid.green()) / (sensorColorBMid.blue() * sensorColorBMid.blue());
@@ -920,6 +898,34 @@ public class RobotHw {
 
             opmode.telemetry.addData("edge", conditionBEdge);
             opmode.telemetry.addData("mid", conditionBMid);
+            opmode.telemetry.update();
+        }
+
+        stopMotors();
+    }
+
+    public void alignStonesR (double power) {
+
+        double conditionREdge = (sensorColorREdge.red() * sensorColorREdge.green()) / (sensorColorREdge.blue() * sensorColorREdge.blue());
+        double conditionRMid = (sensorColorRMid.red() * sensorColorRMid.green()) / (sensorColorRMid.blue() * sensorColorRMid.blue());
+
+        while ((conditionRMid > 3 || conditionREdge > 3) && opmode.opModeIsActive()) {
+            conditionRMid = (sensorColorBMid.red() * sensorColorBMid.green()) / (sensorColorBMid.blue() * sensorColorBMid.blue());
+            conditionREdge = (sensorColorBEdge.red() * sensorColorBEdge.green()) / (sensorColorBEdge.blue() * sensorColorBEdge.blue());
+            if (conditionREdge > 3 && conditionRMid < 3) {
+                moveBackward(power);
+            }
+
+            else if (conditionREdge < 3 && conditionRMid > 3) {
+                moveForward(power);
+            }
+
+            else {
+                moveBackward(power);
+            }
+
+            opmode.telemetry.addData("edge", conditionREdge);
+            opmode.telemetry.addData("mid", conditionRMid);
             opmode.telemetry.update();
         }
 
