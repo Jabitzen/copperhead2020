@@ -880,10 +880,15 @@ public class RobotHw {
 
         double conditionBEdge = (sensorColorBEdge.red() * sensorColorBEdge.green()) / (sensorColorBEdge.blue() * sensorColorBEdge.blue());
         double conditionBMid = (sensorColorBMid.red() * sensorColorBMid.green()) / (sensorColorBMid.blue() * sensorColorBMid.blue());
-
+        opmode.telemetry.addData("edge",conditionBEdge);
+        opmode.telemetry.addData("mid",conditionBMid);
+        opmode.telemetry.update();
         while ((conditionBMid > 2 || conditionBEdge > 2) && opmode.opModeIsActive()) {
             conditionBMid = (sensorColorBMid.red() * sensorColorBMid.green()) / (sensorColorBMid.blue() * sensorColorBMid.blue());
             conditionBEdge = (sensorColorBEdge.red() * sensorColorBEdge.green()) / (sensorColorBEdge.blue() * sensorColorBEdge.blue());
+            opmode.telemetry.addData("edge",conditionBEdge);
+            opmode.telemetry.addData("mid",conditionBMid);
+            opmode.telemetry.update();
             if (conditionBEdge > 2 && conditionBMid < 2) {
                 moveBackward(power);
             }
