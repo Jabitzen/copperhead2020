@@ -15,17 +15,6 @@ public class SkystoneTeleop extends LinearOpMode{
 
     RobotHw robot = new RobotHw();
 
-    /*
-    public DcMotor fL = null;
-    public DcMotor fR = null;
-    public DcMotor bL = null;
-    public DcMotor bR = null;
-
-
-    public Servo grabberL = null;
-    public Servo grabberR = null;
-    public Servo clamp = null;
-*/
     public double rightstickx;
     public double leftstickx;
     public double leftstickyfront;
@@ -50,26 +39,7 @@ public class SkystoneTeleop extends LinearOpMode{
 
     @Override
     public void runOpMode() throws InterruptedException {
-/*
-        fL  = hardwareMap.get(DcMotor.class, "fL");
-        fR  = hardwareMap.get(DcMotor.class, "fR");
-        bL  = hardwareMap.get(DcMotor.class, "bL");
-        bR  = hardwareMap.get(DcMotor.class, "bR");
 
-        grabberL = hardwareMap.get(Servo.class, "grabberL");
-        grabberR = hardwareMap.get(Servo.class, "grabberR");
-        clamp = hardwareMap.get(Servo.class, "clamp");
-
-        fL.setDirection(DcMotor.Direction.FORWARD);
-        bL.setDirection(DcMotor.Direction.FORWARD);
-        fR.setDirection(DcMotor.Direction.FORWARD);
-        bR.setDirection(DcMotor.Direction.FORWARD);
-
-        fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-*/
         robot.init(this);
         waitForStart();
         robot.rotate.setPosition(.245);
@@ -78,29 +48,29 @@ public class SkystoneTeleop extends LinearOpMode{
             // Sin Cos Atan inputs for mecanum
             trigMecanum();
 
-            // Left grabber
+            // Red grabber
             if (gamepad1.right_bumper) {
-                robot.grabber.setPosition(0.2); // Up
+                robot.grabberR.setPosition(0.2); // Up
             }
-            if (gamepad2.right_bumper) {
-                robot.grabber.setPosition(0.65); // Down
+            if (gamepad1.right_trigger == 1) {
+                robot.grabberR.setPosition(0.65); // Down
             }
 
-//            // Right grabber
-//            if (gamepad1.b) {
-//                robot.grabber.setPosition(0.6); // Up
-//            }
-//            if (gamepad1.dpad_right) {
-//                robot.grabber.setPosition(0.98); // Down
-//            }
+            // Blue grabber
+            if (gamepad1.left_bumper) {
+                robot.grabberB.setPosition(0.4); // Up
+            }
+            if (gamepad1.left_trigger == 1) {
+                robot.grabberB.setPosition(0.7); // Down
+            }
 
            // Foundation Clamp
             if (gamepad2.y) { //down
-                robot.clamp.setPosition(0.1);
+                robot.clamp.setPosition(0.2);
             }
 
             if (gamepad2.a) { //down
-                robot.clamp.setPosition(1);
+                robot.clamp.setPosition(.97);
 
             }
 
