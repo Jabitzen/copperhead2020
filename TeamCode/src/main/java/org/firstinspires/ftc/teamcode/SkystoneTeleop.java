@@ -30,6 +30,7 @@ public class SkystoneTeleop extends LinearOpMode{
     public double leftstickx;
     public double leftstickyfront;
     public double leftstickyback;
+    public int clampcount = 1;
 
     public double foundationDistance;
     public double liftHeight = 0;
@@ -38,7 +39,8 @@ public class SkystoneTeleop extends LinearOpMode{
     //public double ticksInDegree = 1120.0 / 360.0;
 
     public boolean automode = false;
-
+    public boolean cylindricalMeat = true;
+    public boolean bigdick = false;
 
 
 
@@ -70,19 +72,20 @@ public class SkystoneTeleop extends LinearOpMode{
 */
         robot.init(this);
         waitForStart();
-        robot.rotate.setPosition(1);
+        robot.rotate.setPosition(.245);
+        //robot.clamp.setPosition(1);
         while (opModeIsActive()) {
             // Sin Cos Atan inputs for mecanum
             trigMecanum();
 
             // Left grabber
-//            if (gamepad2.right_trigger > .1) {
-//                robot.grabber.setPosition(.8); // Up
-//            }
-//            if (gamepad2.right_bumper) {
-//                robot.grabber.setPosition(0.02); // Down
-//            }
-//
+            if (gamepad1.right_bumper) {
+                robot.grabber.setPosition(0.2); // Up
+            }
+            if (gamepad2.right_bumper) {
+                robot.grabber.setPosition(0.65); // Down
+            }
+
 //            // Right grabber
 //            if (gamepad1.b) {
 //                robot.grabber.setPosition(0.6); // Up
@@ -91,30 +94,36 @@ public class SkystoneTeleop extends LinearOpMode{
 //                robot.grabber.setPosition(0.98); // Down
 //            }
 
-           /* // Foundation Clamp
-            if (gamepad2.y) {
-                robot.clamp.setPosition(0.3); // Down
+           // Foundation Clamp
+            if (gamepad2.y) { //down
+                robot.clamp.setPosition(0.1);
             }
-            if (gamepad2.a) {
-                robot.clamp.setPosition(1); // Up
-            } */
 
-          /*  // Claw
+            if (gamepad2.a) { //down
+                robot.clamp.setPosition(1);
+
+            }
+
+
+
+            // Claw
             if (gamepad2.x) {
-                robot.claw.setPosition(0); // Down
+                robot.claw.setPosition(.8); // up
             }
             if (gamepad2.b) {
-                robot.claw.setPosition(.5); // Up
-            } */
+                robot.claw.setPosition(0); // down
+            }
 
             //Rotate
             if(gamepad2.dpad_left){
-                robot.rotate.setPosition((robot.rotate.getPosition() - 0.25) % 1);
+                robot.rotate.setPosition(.6);
             }
 
             if(gamepad2.dpad_right){
-                robot.rotate.setPosition((robot.rotate.getPosition() + 0.25) % 1);
+                robot.rotate.setPosition(.245);
             }
+
+
 
             // Reverse Mode
             if (gamepad1.dpad_down){
@@ -123,16 +132,22 @@ public class SkystoneTeleop extends LinearOpMode{
             if (gamepad1.dpad_up){
                 constant = 1; // Forward
             }
-            //lift extending
+            //intake
             if (gamepad2.left_bumper){
-                robot.liftExtend.setPower(1);
+                robot.intakeL.setPower(1);
             }
+            else{
+                robot.intakeL.setPower(0);
+            }
+
             if (gamepad2.right_bumper){
-                robot.liftExtend.setPower(-1);
+                robot.intakeR.setPower(-1);
             }
-            if (!gamepad2.left_bumper && !gamepad2.right_bumper){
-                robot.liftExtend.setPower(0);
+            else{
+                robot.intakeR.setPower(0);
             }
+
+            robot.liftExtend.setPower(gamepad2.left_stick_y);
 
 //            if(gamepad2.x){
 //                automode = true;

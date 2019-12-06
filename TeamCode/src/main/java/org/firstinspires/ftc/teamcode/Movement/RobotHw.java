@@ -36,9 +36,9 @@ public class RobotHw {
     public DcMotor liftRotate = null;
     // Servos
     //public Servo clip = null;
-   // public Servo claw = null;
+    public Servo claw = null;
     public Servo rotate = null;
-   // public Servo clamp = null;
+    public Servo clamp = null;
     public Servo grabber = null;
     //public Servo grabberR = null;
 
@@ -105,9 +105,9 @@ public class RobotHw {
 
         //Define and initialize servos
         //clip = hwMap.get(Servo.class, "clip");
-       // claw = hwMap.get(Servo.class, "claw");
+        claw = hwMap.get(Servo.class, "claw");
         rotate = hwMap.get(Servo.class, "rotate");
-       // clamp = hwMap.get(Servo.class, "clamp");
+        clamp = hwMap.get(Servo.class, "clamp");
         grabber = hwMap.get(Servo.class, "grabber");
         //grabberR = hwMap.get(Servo.class, "grabberR");
 
@@ -507,6 +507,8 @@ public class RobotHw {
 
     public void rotate(double degrees, double power) {
         fR.setDirection(DcMotor.Direction.FORWARD);
+        fL.setDirection(DcMotor.Direction.REVERSE);
+        bR.setDirection(DcMotor.Direction.REVERSE);
 
         fL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         bL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -584,6 +586,8 @@ public class RobotHw {
             }
 
  //turn the motors off.
+        fL.setDirection(DcMotor.Direction.FORWARD);
+        bR.setDirection(DcMotor.Direction.FORWARD);
         fR.setDirection(DcMotor.Direction.REVERSE);
         stopMotors();
         lastDegrees = degrees;
@@ -749,7 +753,7 @@ public class RobotHw {
         // color of the Robot Controller app to match the hue detected by the RGB sensor.
         int relativeLayoutId = hwMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hwMap.appContext.getPackageName());
         final View relativeLayout = ((Activity) hwMap.appContext).findViewById(relativeLayoutId);
-
+        /*
         while (opmode.opModeIsActive()) {
             // convert the RGB values to HSV values.
             // multiply by the SCALE_FACTOR.
@@ -772,6 +776,8 @@ public class RobotHw {
                     (int) (sensorColorRMid.blue() * SCALE_FACTOR),
                     hsvValues);
         }
+        */
+
     }
 
     public void moveLeft(double power) {
@@ -819,15 +825,19 @@ public class RobotHw {
 
 
     public void approachStonesRed (double power) {
+        opmode.telemetry.addData("ran method", 0);
         resetAngle();
         brakeMode();
+        double speed = 1;
 
         boolean cont = Double.isNaN(sensorDistanceREdge.getDistance(DistanceUnit.CM));
 
 
         while (cont == true && opmode.opModeIsActive()){
-            moveLeft(power);
-
+            moveLeft(power * speed);
+            if (!Double.isNaN(sensorDistanceREdge.getDistance(DistanceUnit.CM))) {
+                speed = .5;
+            }
             if (sensorDistanceREdge.getDistance(DistanceUnit.CM) < 6) {
                 cont = false;
             }

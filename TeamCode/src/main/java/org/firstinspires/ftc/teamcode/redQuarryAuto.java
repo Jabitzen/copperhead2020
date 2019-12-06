@@ -60,19 +60,20 @@ public class redQuarryAuto extends LinearOpMode {
 
             if (skyStonePos == "center") {
 
-                robot.goStraightGyro(-25, .3, 3); //Move to the stone
+                robot.goStraightGyro(25, .5, 3); //Move to the stone
                 sleep(500);
-                robot.rotate(84.5, .35); // Rotate to align grabber with stone
+                robot.rotate(90, .5); // Rotate to align grabber with stone
                 sleep(500);
-                robot.goStraightGyro(-1, 0.3, 2); // Align with center stone
-
-                robot.strafeRightGyro(9.5, .25); // Approach stone
-              //  robot.grabber.setPosition(0.02); // Drop grabber
-                robot.goStraightGyro(-.6, .2, .2);
-                sleep(2000);
-                robot.strafeLeft(7, .5); // Pull Stone out
+                robot.goStraightGyro(-1, 0.5, 2); // Align with center stone
+                sleep(30);
+                robot.approachStonesRed(9.5); // Approach stone
+                robot.grabber.setPosition(0.02); // Drop grabber
+                robot.alignStonesR(.1);
+                sleep(500);
+                robot.strafeLeftGyro(7, .5); // Pull Stone out
                 robot.goStraightGyro(-60, .5, 7); // Cross the bridge
-               // robot.grabber.setPosition(.5); // Grabber lets go of stone
+                robot.grabber.setPosition(.5); // Grabber lets go of stone
+                sleep(30000);
 
                 //second stone
                 robot.goStraightGyro(91, .4, 5); // Go back to the stones
