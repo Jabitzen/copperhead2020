@@ -136,12 +136,18 @@ public class SkystoneTeleop extends LinearOpMode{
             if (gamepad2.left_bumper){
                 robot.intakeL.setPower(1);
             }
+            else if (gamepad2.left_trigger == 1){
+                robot.intakeL.setPower(-1);
+            }
             else{
                 robot.intakeL.setPower(0);
             }
 
             if (gamepad2.right_bumper){
                 robot.intakeR.setPower(-1);
+            }
+            else if (gamepad2.right_trigger == 1){
+                robot.intakeL.setPower(1);
             }
             else{
                 robot.intakeR.setPower(0);
