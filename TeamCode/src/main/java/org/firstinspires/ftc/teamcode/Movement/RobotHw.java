@@ -73,7 +73,7 @@ public class RobotHw {
     //public ColorSensor sensorColorBotFront;
     public ColorSensor sensorColorRMid;
     public ColorSensor sensorColorREdge;
-   // public ColorSensor sensorColorBotBack;
+    public ColorSensor sensorColorBotBack;
 
     public DistanceSensor sensorDistanceBMid;
     public DistanceSensor sensorDistanceBEdge;
@@ -352,7 +352,7 @@ public class RobotHw {
     }
 
     public void goStraightGyro(double distance, double leftPower, double timeout) {
-        fL.setDirection(DcMotor.Direction.FORWARD);
+        fL.setDirection(DcMotor.Direction.REVERSE);
         fR.setDirection(DcMotor.Direction.REVERSE);
         bR.setDirection(DcMotor.Direction.REVERSE);
 
@@ -449,7 +449,7 @@ public class RobotHw {
         }
 
         stopMotors();
-        fL.setDirection(DcMotor.Direction.REVERSE);
+        fL.setDirection(DcMotor.Direction.FORWARD);
         fR.setDirection(DcMotor.Direction.FORWARD);
         bR.setDirection(DcMotor.Direction.FORWARD);
         floatMode();
@@ -507,7 +507,7 @@ public class RobotHw {
 
     public void rotate(double degrees, double power) {
         fR.setDirection(DcMotor.Direction.FORWARD);
-        fL.setDirection(DcMotor.Direction.REVERSE);
+        fL.setDirection(DcMotor.Direction.FORWARD);
         bR.setDirection(DcMotor.Direction.REVERSE);
 
         fL.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -527,11 +527,11 @@ public class RobotHw {
         // clockwise (right).
 
         if (degrees > 0) {   // turn right.
-            leftPower = power - .13;
-            rightPower = -power + .13;
+            leftPower = power - .14;
+            rightPower = -power + .14;
         } else if (degrees < 0) {   // turn left.
-            leftPower = -power + .13;
-            rightPower = power - .13;
+            leftPower = -power + .14;
+            rightPower = power - .14;
         } else return;
 
 
@@ -546,10 +546,10 @@ public class RobotHw {
             // On right turn we have to get off zero first.
 
             while (opmode.opModeIsActive() && getAngle() > degrees) {
-                fL.setPower(-.13 + (leftPower * ((degrees - getAngle()) / degrees)));
-                bL.setPower(-.13 + (leftPower * ((degrees - getAngle()) / degrees)));
-                fR.setPower(-.13 + (-rightPower * ((degrees - getAngle()) / degrees)));
-                bR.setPower(.13 - (-rightPower * ((degrees - getAngle()) / degrees)));
+                fL.setPower(-.14 + (leftPower * ((degrees - getAngle()) / degrees)));
+                bL.setPower(-.14 + (leftPower * ((degrees - getAngle()) / degrees)));
+                fR.setPower(-.14 + (-rightPower * ((degrees - getAngle()) / degrees)));
+                bR.setPower(.14 - (-rightPower * ((degrees - getAngle()) / degrees)));
 
                 opmode.telemetry.addData("degrees", getAngle());
                 opmode.telemetry.addData("lastAngle", lastAngles);
@@ -562,10 +562,10 @@ public class RobotHw {
             }
         } else    // right turn.
             while (opmode.opModeIsActive() && getAngle() < degrees) {
-                fL.setPower(.13 + (leftPower * ((degrees - getAngle()) / degrees)));
-                bL.setPower(.13 + (leftPower * ((degrees - getAngle()) / degrees)));
-                fR.setPower(.13 + (-rightPower * ((degrees - getAngle()) / degrees)));
-                bR.setPower(-.13 - (-rightPower * ((degrees - getAngle()) / degrees)));
+                fL.setPower(.14 + (leftPower * ((degrees - getAngle()) / degrees)));
+                bL.setPower(.14 + (leftPower * ((degrees - getAngle()) / degrees)));
+                fR.setPower(.14 + (-rightPower * ((degrees - getAngle()) / degrees)));
+                bR.setPower(-.14 - (-rightPower * ((degrees - getAngle()) / degrees)));
 
                 opmode.telemetry.addData("degrees", getAngle());
                 //telemetry.addData("lastangle", lastAngles);
@@ -577,18 +577,14 @@ public class RobotHw {
 
                 opmode.telemetry.update();
 
-                if (getAngle() > degrees) {
-                    fL.setPower(-leftPower);
-                    bL.setPower(-leftPower);
-                    fR.setPower(rightPower);
-                    bR.setPower(-rightPower);
-                }
+
             }
 
- //turn the motors off.
+            //turn the motors off.
         fL.setDirection(DcMotor.Direction.FORWARD);
         bR.setDirection(DcMotor.Direction.FORWARD);
-        fR.setDirection(DcMotor.Direction.REVERSE);
+        fR.setDirection(DcMotor.Direction.FORWARD);
+        bL.setDirection(DcMotor.Direction.FORWARD);
         stopMotors();
         lastDegrees = degrees;
 
@@ -618,7 +614,8 @@ public class RobotHw {
     }
 
     public void strafeRightGyro (double distance, double power) {
-
+        bR.setDirection(DcMotorSimple.Direction.REVERSE);
+        fR.setDirection(DcMotorSimple.Direction.REVERSE);
 
         reset();
         resetAngle();
@@ -666,8 +663,11 @@ public class RobotHw {
         bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        bR.setDirection(DcMotorSimple.Direction.FORWARD);
+        fR.setDirection(DcMotorSimple.Direction.FORWARD);
     }
-    public void strafeLeftGyro (double distance, double power) {
+    public void strafeLeftGyro (double distance, double power, int time) {
+        runtime.reset();
         reset();
         resetAngle();
         double target = Math.abs(distance * (537.6/11));
@@ -677,7 +677,7 @@ public class RobotHw {
         fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        while (Math.abs(encoderAvg()) < target && opmode.opModeIsActive()) {
+        while (Math.abs(encoderAvg()) < target && opmode.opModeIsActive() && runtime.seconds() < time) {
 
             if (getAngle() > 1) {
                 fL.setPower(-power * 1.2);
@@ -722,7 +722,7 @@ public class RobotHw {
         sensorColorBEdge = hwMap.get(ColorSensor.class, "sensorColorBEdge");
         sensorColorRMid = hwMap.get(ColorSensor.class, "sensorColorRMid");
         sensorColorREdge = hwMap.get(ColorSensor.class, "sensorColorREdge");
-       // sensorColorBotFront = hwMap.get(ColorSensor.class, "sensorColorBotFront");
+        sensorColorBotBack = hwMap.get(ColorSensor.class, "sensorColorBotBack");
        // sensorColorRight = hwMap.get(ColorSensor.class, "sensorColorRight");
 
         // get a reference to the distance sensor that shares the same name.
@@ -830,15 +830,19 @@ public class RobotHw {
         brakeMode();
         double speed = 1;
 
-        boolean cont = Double.isNaN(sensorDistanceREdge.getDistance(DistanceUnit.CM));
+        boolean cont = true;
 
 
         while (cont == true && opmode.opModeIsActive()){
-            moveLeft(power * speed);
+            //moveLeft(power * speed);
+            fL.setPower(-.5 * speed);
+            fR.setPower(-.5 * speed);
+            bL.setPower(.5 * speed);
+            bR.setPower(.5 * speed);
             if (!Double.isNaN(sensorDistanceREdge.getDistance(DistanceUnit.CM))) {
                 speed = .5;
             }
-            if (sensorDistanceREdge.getDistance(DistanceUnit.CM) < 6) {
+            if (sensorDistanceREdge.getDistance(DistanceUnit.CM) < 5.5 && sensorDistanceRMid.getDistance(DistanceUnit.CM) < 5.5) {
                 cont = false;
             }
 
@@ -851,6 +855,8 @@ public class RobotHw {
             opmode.telemetry.update();
         }
 
+        strafeLeftGyro(2, 0.2, 1);
+
 
         stopMotors();
         floatMode();
@@ -860,15 +866,23 @@ public class RobotHw {
         resetAngle();
         brakeMode();
 
-        boolean cont = Double.isNaN(sensorDistanceBEdge.getDistance(DistanceUnit.CM));
+        boolean cont = true;
+        double speed = 1;
 
 
         while (cont == true && opmode.opModeIsActive()){
-            moveLeft(power);
+            fL.setPower(-.5 * speed);
+            fR.setPower(-.5 * speed);
+            bL.setPower(.5 * speed);
+            bR.setPower(.5 * speed);
 
-            if (sensorDistanceBEdge.getDistance(DistanceUnit.CM) < 6) {
+            if (!Double.isNaN(sensorDistanceBEdge.getDistance(DistanceUnit.CM))) {
+                speed = .5;
+            }
+            if (sensorDistanceBEdge.getDistance(DistanceUnit.CM) < 5.5 && sensorDistanceBMid.getDistance(DistanceUnit.CM) < 5.5) {
                 cont = false;
             }
+
 
 
 
@@ -901,6 +915,9 @@ public class RobotHw {
             opmode.telemetry.update();
             if (conditionBEdge > 2 && conditionBMid < 2) {
                 moveBackward(power);
+                if (conditionBEdge <= 2) {
+                    grabberB.setPosition(0.15);
+                }
             }
 
             else if (conditionBEdge < 2 && conditionBMid > 2) {
@@ -923,26 +940,35 @@ public class RobotHw {
 
         double conditionREdge = (sensorColorREdge.red() * sensorColorREdge.green()) / (sensorColorREdge.blue() * sensorColorREdge.blue());
         double conditionRMid = (sensorColorRMid.red() * sensorColorRMid.green()) / (sensorColorRMid.blue() * sensorColorRMid.blue());
+        runtime.reset();
+        brakeMode();
 
         while ((conditionRMid > 3 || conditionREdge > 3) && opmode.opModeIsActive()) {
-            conditionRMid = (sensorColorBMid.red() * sensorColorBMid.green()) / (sensorColorBMid.blue() * sensorColorBMid.blue());
-            conditionREdge = (sensorColorBEdge.red() * sensorColorBEdge.green()) / (sensorColorBEdge.blue() * sensorColorBEdge.blue());
+            conditionRMid = (sensorColorRMid.red() * sensorColorRMid.green()) / (sensorColorRMid.blue() * sensorColorRMid.blue());
+            conditionREdge = (sensorColorREdge.red() * sensorColorREdge.green()) / (sensorColorREdge.blue() * sensorColorREdge.blue());
             if (conditionREdge > 3 && conditionRMid < 3) {
-                moveBackward(power);
+                moveForward(power);
+                if (conditionREdge <= 3) {
+                    grabberR.setPosition(0.65);
+                }
+
+
             }
 
             else if (conditionREdge < 3 && conditionRMid > 3) {
-                moveForward(power);
+                moveBackward(power);
             }
 
             else {
-                moveBackward(power);
+                moveForward(power);
+
             }
 
             opmode.telemetry.addData("edge", conditionREdge);
             opmode.telemetry.addData("mid", conditionRMid);
             opmode.telemetry.update();
         }
+
 
         stopMotors();
     }
@@ -975,19 +1001,19 @@ public class RobotHw {
         runtime.reset();
 
         if (getAngle() > 1) {
-            fL.setPower(1.2 * power);
+            fL.setPower(1.2 * -power);
             fR.setPower(0.8 * power);
             bL.setPower(1.2 * -power);
             bR.setPower(0.8 * power);
         }
         else if (getAngle() < -1) {
-            fL.setPower(.8 * power);
+            fL.setPower(.8 * -power);
             fR.setPower(1.2 * power);
             bL.setPower(.8 * -power);
             bR.setPower(1.2 * power);
         }
         else {
-            fL.setPower(power);
+            fL.setPower(-power);
             fR.setPower(power);
             bL.setPower(-power);
             bR.setPower(power);
@@ -1013,19 +1039,19 @@ public class RobotHw {
 
         if (getAngle() > 1) {
             fL.setPower(.8 * power);
-            fR.setPower(1.2 * power);
-            bL.setPower(.8 * -power);
-            bR.setPower(1.2 * power);
+            fR.setPower(1.2 * -power);
+            bL.setPower(.8 * power);
+            bR.setPower(1.2 * -power);
         } else if (getAngle() < -1) {
             fL.setPower(1.2 * power);
-            fR.setPower(.8 * power);
-            bL.setPower(1.2 * -power);
-            bR.setPower(.8 * power);
+            fR.setPower(.8 * -power);
+            bL.setPower(1.2 * power);
+            bR.setPower(.8 * -power);
         } else {
             fL.setPower(power);
-            fR.setPower(power);
-            bL.setPower(-power);
-            bR.setPower(power);
+            fR.setPower(-power);
+            bL.setPower(power);
+            bR.setPower(-power);
         }
 
         //stopMotors();

@@ -32,7 +32,13 @@ public class goForward extends LinearOpMode {
         //sleep(1000);
         //robot.strafeRightGyro(40, .4);
         //sleep(1000);
-        robot.goStraightGyro(5, .4, 3);
-        sleep(30000);
+        //robot.fL.setPower(1);
+        //robot.approachStonesRed(.5);CUM CUM CUM CUM CUM
+        /*robot.fL.setPower(0.5);
+        robot.fR.setPower(-0.5);
+        robot.bL.setPower(0.5);
+        robot.bR.setPower(-0.5);*/
+        robot.goStraightGyro(7, 0.5, 5);
+        sleep(5000);
         }
 }

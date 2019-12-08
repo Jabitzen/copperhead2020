@@ -42,39 +42,36 @@ public class SkystoneTeleop extends LinearOpMode{
 
         robot.init(this);
         waitForStart();
-        robot.rotate.setPosition(.245);
+
         //robot.clamp.setPosition(1);
         while (opModeIsActive()) {
+            robot.rotate.setPosition(.245);
             // Sin Cos Atan inputs for mecanum
             trigMecanum();
 
             // Red grabber
             if (gamepad1.right_bumper) {
-                robot.grabberR.setPosition(0.2); // Up
+                robot.grabberR.setPosition(0.65); // Down
             }
             if (gamepad1.right_trigger == 1) {
-                robot.grabberR.setPosition(0.65); // Down
+                robot.grabberR.setPosition(0.2); // Up
             }
 
             // Blue grabber
             if (gamepad1.left_bumper) {
-                robot.grabberB.setPosition(0.4); // Up
+                robot.grabberB.setPosition(0.15); // Down
             }
             if (gamepad1.left_trigger == 1) {
-                robot.grabberB.setPosition(0.7); // Down
+                robot.grabberB.setPosition(0.55); // Up
             }
 
-           // Foundation Clamp
+            // Foundation Clamp
             if (gamepad2.y) { //down
                 robot.clamp.setPosition(0.2);
             }
-
             if (gamepad2.a) { //down
-                robot.clamp.setPosition(.97);
-
+                robot.clamp.setPosition(.99);
             }
-
-
 
             // Claw
             if (gamepad2.x) {
@@ -85,15 +82,12 @@ public class SkystoneTeleop extends LinearOpMode{
             }
 
             //Rotate
-            if(gamepad2.dpad_left){
+            if (gamepad2.dpad_left){
                 robot.rotate.setPosition(.6);
             }
-
-            if(gamepad2.dpad_right){
+            if (gamepad2.dpad_right){
                 robot.rotate.setPosition(.245);
             }
-
-
 
             // Reverse Mode
             if (gamepad1.dpad_down){
@@ -102,26 +96,21 @@ public class SkystoneTeleop extends LinearOpMode{
             if (gamepad1.dpad_up){
                 constant = 1; // Forward
             }
+
             //intake
-            if (gamepad2.left_bumper){
+            if (gamepad2.right_trigger > .1){
                 robot.intakeL.setPower(1);
+                robot.intakeR.setPower(-1);
             }
-            else if (gamepad2.left_trigger == 1){
+            else if (gamepad2.left_trigger > .1){
                 robot.intakeL.setPower(-1);
+                robot.intakeR.setPower(1);
             }
             else{
                 robot.intakeL.setPower(0);
-            }
-
-            if (gamepad2.right_bumper){
-                robot.intakeR.setPower(-1);
-            }
-            else if (gamepad2.right_trigger == 1){
-                robot.intakeL.setPower(1);
-            }
-            else{
                 robot.intakeR.setPower(0);
             }
+
 
             robot.liftExtend.setPower(gamepad2.left_stick_y);
 
@@ -155,44 +144,6 @@ public class SkystoneTeleop extends LinearOpMode{
 //
 //
 //            }
-            //left intake
-            if(gamepad2.left_stick_y == 1){
-                robot.intakeL.setPower(1);
-            }
-            if(gamepad2.left_stick_y == -1){
-                robot.intakeL.setPower(-1);
-            }
-            if(gamepad2.left_stick_y == 0){
-                robot.intakeL.setPower(0);
-            }
-
-            //right intake
-            if(gamepad2.right_stick_y == 1){
-                robot.intakeR.setPower(-1);
-            }
-            if(gamepad2.right_stick_y == -1){
-                robot.intakeR.setPower(1);
-            }
-            if(gamepad2.right_stick_y == 0){
-                robot.intakeR.setPower(0);
-            }
-
-/*
-            if(gamepad2.left_bumper){
-                robot.liftExtend.setPower(-.5);
-            }
-
-            if(gamepad2.dpad_left){
-                robot.liftRotate.setPower(.5);
-            }
-
-            if(gamepad2.dpad_right){
-                robot.liftRotate.setPower(-.5);
-            }
-            */
-
-
-
         }
     }
 
@@ -230,7 +181,7 @@ public class SkystoneTeleop extends LinearOpMode{
 
          */
 
-        robot.fL.setPower(-v1);
+        robot.fL.setPower(v1);
         robot.fR.setPower(-v2);
         robot.bL.setPower(-v3);// * .79);
         robot.bR.setPower(v4);// * .79);

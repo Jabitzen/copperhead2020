@@ -28,9 +28,10 @@ public class testAnything extends LinearOpMode{
         waitForStart();
 
         while (opModeIsActive()) {
-            telemetry.addLine("ran program");
-            robot.approachStonesRed(.5);
-            sleep(30000);
+            telemetry.addData("reading", robot.sensorColorBotBack.red());
+            telemetry.update();
+            //robot.approachStonesRed(.5);
+           // sleep(30000);
         }
     }
 }

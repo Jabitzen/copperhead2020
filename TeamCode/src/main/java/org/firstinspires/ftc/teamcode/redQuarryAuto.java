@@ -60,20 +60,23 @@ public class redQuarryAuto extends LinearOpMode {
 
             if (skyStonePos == "center") {
 
-                robot.goStraightGyro(25, .4, 3); //Move to the stone
+                robot.goStraightGyro(25, .3, 3); //Move to the stone
                 sleep(500);
                 robot.rotate(90, .4); // Rotate to align grabberR with stone
                 sleep(500);
-                robot.goStraightGyro(-1, 0.5, 2); // Align with center stone
+                robot.goStraightGyro(1, 0.5, 2); // Align with center stone
                 sleep(30);
                 robot.approachStonesRed(5); // Approach stone
-                sleep(30000);
-                robot.alignStonesR(.65);
-                robot.grabberR.setPosition(0.2); // Drop grabberR
+
+                robot.alignStonesR(.14);
+                robot.grabberR.setPosition(0.65); // Drop grabberR
+                sleep(1500);
+                robot.goStraightGyro(-4, 0.2, 1);
                 sleep(500);
                 robot.strafeRightGyro(7, .5); // Pull Stone out
-                robot.goStraightGyro(-60, .5, 7); // Cross the bridge
-                robot.grabberR.setPosition(.5); // grabberR lets go of stone
+                robot.goStraightGyro(55, .8, 7); // Cross the bridge
+                robot.grabberR.setPosition(.2); // grabberR lets go of stone
+                robot.goStraightGyro(-13, 0.7, 5);
                 sleep(30000);
 
                 //second stone
@@ -93,6 +96,26 @@ public class redQuarryAuto extends LinearOpMode {
 
 
             } else if (skyStonePos == "left") {
+
+                robot.goStraightGyro(25, .3, 3); //Move to the stone
+                sleep(500);
+                robot.rotate(90, .4); // Rotate to align grabberR with stone
+                sleep(500);
+                robot.goStraightGyro(1, 0.5, 2); // Align with center stone
+                sleep(30);
+                robot.approachStonesRed(5); // Approach stone
+
+                robot.alignStonesR(.14);
+                robot.grabberR.setPosition(0.65); // Drop grabberR
+                sleep(1500);
+                robot.goStraightGyro(-4, 0.2, 1);
+                sleep(500);
+                robot.strafeRightGyro(7, .5); // Pull Stone out
+                robot.goStraightGyro(70, .8, 7); // Cross the bridge
+                robot.grabberR.setPosition(.2); // grabberR lets go of stone
+                robot.goStraightGyro(-13, 0.7, 5);
+                sleep(30000);
+
                 robot.goStraightGyro(-25, .35, 3); //(-25, .3 + checkDirection(), 0.35); //Move to the stone
                 sleep(500);
                 robot.rotate(84.5, .35); // Rotate to align grabberR with stone
@@ -123,6 +146,26 @@ public class redQuarryAuto extends LinearOpMode {
                 robot.goStraightGyro(30, .5, .59); // park
                 sleep(30000);
             } else { // right
+
+                robot.goStraightGyro(25, .3, 3); //Move to the stone
+                sleep(500);
+                robot.rotate(90, .4); // Rotate to align grabberR with stone
+                sleep(500);
+                robot.goStraightGyro(1, 0.5, 2); // Align with center stone
+                sleep(30);
+                robot.approachStonesRed(5); // Approach stone
+
+                robot.alignStonesR(.14);
+                robot.grabberR.setPosition(0.65); // Drop grabberR
+                sleep(1500);
+                robot.goStraightGyro(-4, 0.2, 1);
+                sleep(500);
+                robot.strafeRightGyro(7, .5); // Pull Stone out
+                robot.goStraightGyro(48, .8, 7); // Cross the bridge
+                robot.grabberR.setPosition(.2); // grabberR lets go of stone
+                robot.goStraightGyro(-13, 0.7, 5);
+                sleep(30000);
+
                 robot.goStraightGyro(-25, .35, 3); //Move to the stone
                 sleep(500);
                 robot.rotate(84.5, .35); // Rotate to align grabberR with stone    //84.5
