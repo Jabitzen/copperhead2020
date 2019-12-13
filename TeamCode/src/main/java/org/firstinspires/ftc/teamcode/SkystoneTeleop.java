@@ -43,9 +43,9 @@ public class SkystoneTeleop extends LinearOpMode{
         robot.init(this);
         waitForStart();
 
-        //robot.clamp.setPosition(1);
+        robot.clamp.setPosition(.245);
         while (opModeIsActive()) {
-            robot.rotate.setPosition(.245);
+            //robot.rotate.setPosition(1);
             // Sin Cos Atan inputs for mecanum
             trigMecanum();
 
@@ -84,6 +84,7 @@ public class SkystoneTeleop extends LinearOpMode{
             //Rotate
             if (gamepad2.dpad_left){
                 robot.rotate.setPosition(.6);
+                telemetry.addLine("sensed it");
             }
             if (gamepad2.dpad_right){
                 robot.rotate.setPosition(.245);

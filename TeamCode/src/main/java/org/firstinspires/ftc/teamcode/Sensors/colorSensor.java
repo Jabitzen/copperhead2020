@@ -87,6 +87,8 @@ public class colorSensor extends LinearOpMode {
      */
     ColorSensor sensorColorBMid;
     ColorSensor sensorColorBEdge;
+    ColorSensor sensorColorRMid;
+    ColorSensor sensorColorREdge;
     //ColorSensor sensorColorRight;
     DistanceSensor sensorDistanceBEdge;
     //DistanceSensor sensorDistanceRight;
@@ -97,6 +99,8 @@ public class colorSensor extends LinearOpMode {
         // get a reference to the color sensor.
         sensorColorBMid = hardwareMap.get(ColorSensor.class, "sensorColorBMid");
         sensorColorBEdge = hardwareMap.get(ColorSensor.class, "sensorColorBEdge");
+        sensorColorRMid = hardwareMap.get(ColorSensor.class, "sensorColorRMid");
+        sensorColorREdge = hardwareMap.get(ColorSensor.class, "sensorColorREdge");
         //sensorColorRight = hardwareMap.get(ColorSensor.class, "sensorColorRight");
 
         // get a reference to the distance sensor that shares the same name.
@@ -115,6 +119,9 @@ public class colorSensor extends LinearOpMode {
         sensorColorBEdge.enableLed(false);
         //sensorColorRight.enableLed(false);
         sensorColorBMid.enableLed(false);
+        sensorColorREdge.enableLed(false);
+        //sensorColorRight.enableLed(false);
+        sensorColorRMid.enableLed(false);
 
         // get a reference to the RelativeLayout so we can change the background
         // color of the Robot Controller app to match the hue detected by the RGB sensor.
@@ -140,10 +147,23 @@ public class colorSensor extends LinearOpMode {
                     (int) (sensorColorBMid.blue() * SCALE_FACTOR),
                     hsvValues);
 
+            Color.RGBToHSV((int) (sensorColorREdge.red() * SCALE_FACTOR),
+                    (int) (sensorColorREdge.green() * SCALE_FACTOR),
+                    (int) (sensorColorREdge.blue() * SCALE_FACTOR),
+                    hsvValues);
+            Color.RGBToHSV((int) (sensorColorRMid.red() * SCALE_FACTOR),
+                    (int) (sensorColorRMid.green() * SCALE_FACTOR),
+                    (int) (sensorColorRMid.blue() * SCALE_FACTOR),
+                    hsvValues);
+
 
 
             // send the info back to driver station using telemetry function.
             telemetry.addData ("calcBEdge", (sensorColorBEdge.red() * sensorColorBEdge.green()) / (sensorColorBEdge.blue() * sensorColorBEdge.blue()));
+            telemetry.addData ("calcBMid", (sensorColorBMid.red() * sensorColorBMid.green()) / (sensorColorBMid.blue() * sensorColorBMid.blue()));
+            telemetry.addData ("calcREdge", (sensorColorREdge.red() * sensorColorREdge.green()) / (sensorColorREdge.blue() * sensorColorREdge.blue()));
+            telemetry.addData ("calcRMid", (sensorColorRMid.red() * sensorColorRMid.green()) / (sensorColorRMid.blue() * sensorColorRMid.blue()));
+
             telemetry.addData("Left Distance (cm)",
                     String.format(Locale.US, "%.02f", sensorDistanceBEdge.getDistance(DistanceUnit.CM)));
             //telemetry.addData("Right Distance (cm)",
@@ -172,15 +192,16 @@ public class colorSensor extends LinearOpMode {
             //telemetry.addData("Hue", hsvValues[0]);
             telemetry.addData("Alpha ", sensorColorBMid.alpha());
             //telemetry.addData("Hue", hsvValues[0]);
-
-            // change the background color to match the color detected by the RGB sensor.
-            // pass a reference to the hue, saturation, and value array as an argument
-            // to the HSVToColor method.
-            relativeLayout.post(new Runnable() {
-                public void run() {
-                    relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, values));
-                }
-            });
+            telemetry.update();
+//
+//            // change the background color to match the color detected by the RGB sensor.
+//            // pass a reference to the hue, saturation, and value array as an argument
+//            // to the HSVToColor method.
+//            relativeLayout.post(new Runnable() {
+//                public void run() {
+//                    relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, values));
+//                }
+//            });
 
             telemetry.update();
         }
