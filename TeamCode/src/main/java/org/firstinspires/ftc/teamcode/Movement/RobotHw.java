@@ -41,6 +41,8 @@ public class RobotHw {
     public Servo clamp = null;
     public Servo grabberR = null;
     public Servo grabberB = null;
+    public Servo gripB = null;
+    public Servo gripR = null;
 
     // HardwareMap
     HardwareMap hwMap;
@@ -110,6 +112,8 @@ public class RobotHw {
         clamp = hwMap.get(Servo.class, "clamp");
         grabberR = hwMap.get(Servo.class, "grabberR");
         grabberB = hwMap.get(Servo.class, "grabberB");
+        gripB = hwMap.get(Servo.class, "gripB");
+        gripR = hwMap.get(Servo.class, "gripR");
 
         degreesToTicks = 1120.0 / 360.0;
 
