@@ -126,6 +126,26 @@ public class SkystoneTeleop extends LinearOpMode{
 
             robot.liftExtend.setPower(gamepad2.left_stick_y);
 
+            if(gamepad1.x)
+            {
+                robot.gripR.setPosition(0.55);
+            }
+
+            if(gamepad1.b)
+            {
+                robot.gripR.setPosition(0.95);
+            }
+
+            if(gamepad1.a)
+            {
+                robot.gripB.setPosition(.6);
+            }
+
+            if(gamepad1.y)
+            {
+                robot.gripB.setPosition(0.25);
+            }
+
 //            if(gamepad2.x){
 //                automode = true;
 //                liftHeight = 0;
