@@ -29,7 +29,6 @@ public class SkystoneTeleop extends LinearOpMode{
 
     public boolean automode = false;
     public boolean cylindricalMeat = true;
-    public boolean bigdick = false;
 
 
 
@@ -46,7 +45,6 @@ public class SkystoneTeleop extends LinearOpMode{
         robot.rotate.setPosition(.245);
         //robot.clamp.setPosition(.245);
         while (opModeIsActive()) {
-            //robot.rotate.setPosition(1);
             // Sin Cos Atan inputs for mecanum
             trigMecanum();
 
@@ -60,10 +58,12 @@ public class SkystoneTeleop extends LinearOpMode{
 
             // Blue grabber
             if (gamepad1.left_bumper) {
-                robot.grabberB.setPosition(0.15); // Down
+                robot.grabberB.setPosition(.33); // Down
             }
-            if (gamepad1.left_trigger == 1) {
-                robot.grabberB.setPosition(0.55); // Up
+
+            if (gamepad1.left_trigger == 1)
+            {
+                robot.grabberB.setPosition(0.7); //up
             }
 
             // Foundation Clamp
@@ -126,24 +126,24 @@ public class SkystoneTeleop extends LinearOpMode{
 
             robot.liftExtend.setPower(gamepad2.left_stick_y);
 
-            if(gamepad1.x)
+            if(gamepad1.x) //down
             {
-                robot.gripR.setPosition(0.55);
+                robot.gripR.setPosition(0.65);
             }
 
-            if(gamepad1.b)
+            if(gamepad1.b) //up
             {
                 robot.gripR.setPosition(0.95);
             }
 
-            if(gamepad1.a)
+            if(gamepad1.a) // down
             {
-                robot.gripB.setPosition(.6);
+                robot.gripB.setPosition(.45);
             }
 
-            if(gamepad1.y)
+            if(gamepad1.y) //up
             {
-                robot.gripB.setPosition(0.25);
+                robot.gripB.setPosition(0);
             }
 
 //            if(gamepad2.x){
@@ -180,7 +180,7 @@ public class SkystoneTeleop extends LinearOpMode{
     }
 
     public void trigMecanum() {
-        rightstickx = gamepad1.right_stick_x ;
+        rightstickx = -gamepad1.right_stick_x ;
         leftstickx = gamepad1.left_stick_x * constant;
 
         leftstickyfront = gamepad1.left_stick_y * -constant;

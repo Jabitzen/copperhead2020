@@ -159,10 +159,10 @@ public class colorSensor extends LinearOpMode {
 
 
             // send the info back to driver station using telemetry function.
-            telemetry.addData ("calcBEdge", (sensorColorBEdge.red() * sensorColorBEdge.green()) / (sensorColorBEdge.blue() * sensorColorBEdge.blue()));
-            telemetry.addData ("calcBMid", (sensorColorBMid.red() * sensorColorBMid.green()) / (sensorColorBMid.blue() * sensorColorBMid.blue()));
-            telemetry.addData ("calcREdge", (sensorColorREdge.red() * sensorColorREdge.green()) / (sensorColorREdge.blue() * sensorColorREdge.blue()));
-            telemetry.addData ("calcRMid", (sensorColorRMid.red() * sensorColorRMid.green()) / (sensorColorRMid.blue() * sensorColorRMid.blue()));
+//            telemetry.addData ("calcBEdge", (sensorColorBEdge.red() * sensorColorBEdge.green()) / (sensorColorBEdge.blue() * sensorColorBEdge.blue()));
+//            telemetry.addData ("calcBMid", (sensorColorBMid.red() * sensorColorBMid.green()) / (sensorColorBMid.blue() * sensorColorBMid.blue()));
+//            telemetry.addData ("calcREdge", (sensorColorREdge.red() * sensorColorREdge.green()) / (sensorColorREdge.blue() * sensorColorREdge.blue()));
+//            telemetry.addData ("calcRMid", (sensorColorRMid.red() * sensorColorRMid.green()) / (sensorColorRMid.blue() * sensorColorRMid.blue()));
 
             telemetry.addData("Left Distance (cm)",
                     String.format(Locale.US, "%.02f", sensorDistanceBEdge.getDistance(DistanceUnit.CM)));
@@ -179,8 +179,17 @@ public class colorSensor extends LinearOpMode {
             //telemetry.addData("Hue", hsvValues[0]);
 
             telemetry.addLine("bot");
-            telemetry.addData("Left Distance (cm)",
-                    String.format(Locale.US, "%.02f", sensorDistanceBEdge.getDistance(DistanceUnit.CM)));
+            while(opModeIsActive()){
+                telemetry.addData("Left Distance (cm)",
+                        String.format(Locale.US, "%.02f", sensorDistanceBEdge.getDistance(DistanceUnit.CM)));
+                telemetry.addData("Red  ", sensorColorBMid.red());
+                //telemetry.addData("Green", sensorColor.green());
+                telemetry.addData("Blue ", sensorColorBMid.blue());
+                //telemetry.addData("Hue", hsvValues[0]);
+                telemetry.addData("Green ", sensorColorBMid.green());
+                //telemetry.addData("Hue", hsvValues[0]);
+                telemetry.update();
+            }
           //  telemetry.addData("Right Distance (cm)",
                   //  String.format(Locale.US, "%.02f", sensorDistanceRight.getDistance(DistanceUnit.CM)));
             //telemetry.addData("Alpha", sensorColor.alpha());

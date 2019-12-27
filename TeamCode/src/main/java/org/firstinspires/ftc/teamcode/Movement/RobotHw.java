@@ -54,7 +54,7 @@ public class RobotHw {
     public ElapsedTime runtime = new ElapsedTime();
 
     // Tick Conversion
-    static final double COUNTS_PER_MOTOR_REV = 380;    // eg: TETRIX Motor Encoder
+    static final double COUNTS_PER_MOTOR_REV = 560;    // eg: TETRIX Motor Encoder
     static final double DRIVE_GEAR_REDUCTION = 1.0;     // This is < 1.0 if geared UP
     static final double WHEEL_DIAMETER_INCHES = 4.0;     // For figuring circumference
     static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
@@ -99,8 +99,8 @@ public class RobotHw {
         bL = opmode.hardwareMap.get(DcMotor.class, "bL");
         bR = opmode.hardwareMap.get(DcMotor.class, "bR");
 
-        intakeR  = hwMap.get(DcMotor.class, "intakeR");
-        intakeL  = hwMap.get(DcMotor.class, "intakeL");
+        intakeR = hwMap.get(DcMotor.class, "intakeR");
+        intakeL = hwMap.get(DcMotor.class, "intakeL");
 
         liftExtend = hwMap.get(DcMotor.class, "liftExtend");
         liftRotate = hwMap.get(DcMotor.class, "liftRotate");
@@ -115,7 +115,7 @@ public class RobotHw {
         gripB = hwMap.get(Servo.class, "gripB");
         gripR = hwMap.get(Servo.class, "gripR");
 
-        degreesToTicks = 1120.0 / 360.0;
+        degreesToTicks = 560.0 / 360.0;
 
         //set direction of motors
         fL.setDirection(DcMotor.Direction.FORWARD);
@@ -221,6 +221,39 @@ public class RobotHw {
         bL.setPower(0);
         bR.setPower(0);
     }
+
+    public void grabberBDown() {
+        grabberB.setPosition(.33);
+    }
+
+    public void grabberBUp() {
+        grabberB.setPosition(.7);
+    }
+
+    public void grabberRDown() {
+        grabberB.setPosition(.65);
+    }
+
+    public void grabberRUp() {
+        grabberB.setPosition(.2);
+    }
+
+    public void gripBDown(){
+        gripB.setPosition(.45);
+    }
+
+    public void gripBUp(){
+        gripB.setPosition(0);
+    }
+
+    public void gripRUp(){
+        gripR.setPosition(.95);
+    }
+
+    public void gripRDown(){
+        gripR.setPosition(.65);
+    }
+
 
     // Strafe right
     public void strafeRight(double distance, double power) {
@@ -846,7 +879,7 @@ public class RobotHw {
             if (!Double.isNaN(sensorDistanceREdge.getDistance(DistanceUnit.CM))) {
                 speed = .5;
             }
-            if (sensorDistanceREdge.getDistance(DistanceUnit.CM) < 5.5 && sensorDistanceRMid.getDistance(DistanceUnit.CM) < 5.5) {
+            if (sensorDistanceREdge.getDistance(DistanceUnit.CM) < 3.68 && sensorDistanceRMid.getDistance(DistanceUnit.CM) < 3.68) {
                 cont = false;
             }
 

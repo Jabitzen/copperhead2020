@@ -23,15 +23,12 @@ public class testAnything extends LinearOpMode{
     public void runOpMode() throws InterruptedException {
 
         robot.init(this);
-        //bm1 = new BitMapVision(this);
-        //skyStonePos = bm1.findRedSkystones();
         waitForStart();
+        robot.grabberRDown();
+        sleep(500);
+        robot.gripRUp();
+        sleep(500);
+        robot.approachStonesRed(.5);
 
-        while (opModeIsActive()) {
-            telemetry.addData("reading", robot.sensorColorBotBack.red());
-            telemetry.update();
-            //robot.approachStonesRed(.5);
-           // sleep(30000);
-        }
     }
 }
