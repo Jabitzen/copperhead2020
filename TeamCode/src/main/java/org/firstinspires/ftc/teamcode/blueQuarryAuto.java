@@ -48,20 +48,26 @@ public class blueQuarryAuto extends LinearOpMode {
                     robot.goStraightGyro(25, .3, 3); //Move to the stone
                     sleep(500);
                     robot.rotate(90, .4); // Rotate to align grabberR with stone
+                    robot.grabberBDown(); //prime grabber facing down towards stones
                     sleep(500);
                     robot.goStraightGyro(1, 0.5, 2); // Align with center stone
                     sleep(30);
-                    robot.approachStonesBlue(0.5);//pproach stone
+                    robot.approachStonesBlue(0.5);//approach stone
 
-                    robot.alignStonesB(.14);
-                    robot.grabberBDown(); // Drop grabberB
+                    robot.alignStonesB(.14); //align with stones
+                    robot.gripBDown(); // grip stone
                     sleep(1500);
-                    robot.goStraightGyro(2, 0.2, 1);
+                    robot.grabberBUp(); //bring grabber up to carry stone
+                   // robot.goStraightGyro(2, 0.2, 1);
                     sleep(500);
                     robot.strafeRightGyro(6, .5); // Pull Stone out
-                    robot.goStraightGyro(-55, .8, 7); // Cross the bridge
-                    robot.grabberBUp(); // grabberR lets go of stone
-                    robot.goStraightGyro(13, 0.7, 5);
+                    robot.goStraightGyro(-75, .8, 7); // Cross the bridge
+                    robot.strafeRightGyro(20, .5); //strafe to foundation
+                    robot.grabberBDown();//put grabber down on foundation
+                    robot.gripBUp(); //let go of stone
+                    robot.grabberBUp(); // grabberR comes back up
+                    robot.strafeLeftGyro(20, 0.7, 5); //strafe out away from foundation
+                    robot.goStraightGyro(-20, .7, 5); //go to tape to park
                     sleep(30000);
 
                     robot.goStraightGyro(25, .3, 3); //Move to the stone
