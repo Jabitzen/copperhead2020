@@ -188,13 +188,13 @@ public class BitMapVision {
         Bitmap bitmap = getBitmap();
         String bitmapCubePosition;
 
-        int stone1 = bitmap.getPixel((int)(525 * widthFactor), (int)(1637 * heightFactor));//bitmap.getWidth() * 2/5, 20
+        int stone1 = bitmap.getPixel((int)(1110 * widthFactor), (int)(1649 * heightFactor));//bitmap.getWidth() * 2/5, 20
         int redVal1 = red(stone1);
 
-        int stone2 = bitmap.getPixel((int)(1300 * widthFactor), (int)(1637 * heightFactor));//bitmap.getWidth()/2, 20
+        int stone2 = bitmap.getPixel((int)(1873 * widthFactor), (int)(1649 * heightFactor));//bitmap.getWidth()/2, 20
         int redVal2 = red(stone2);
 
-        int stone3 = bitmap.getPixel((int)(2035 * widthFactor), (int)(1637 * heightFactor));//bitmap.getWidth() * 3/5, 20
+        int stone3 = bitmap.getPixel((int)(2629 * widthFactor), (int)(1649 * heightFactor));//bitmap.getWidth() * 3/5, 20
         int redVal3 = red(stone3);
 
         ArrayList<Integer> vals = new ArrayList<Integer>();
@@ -234,13 +234,13 @@ public class BitMapVision {
         Bitmap bitmap = getBitmap();
         String bitmapCubePosition;
 
-        int stone1 = bitmap.getPixel((int)(935 * widthFactor), (int)(1621 * heightFactor));//bitmap.getWidth() * 2/5, 20
+        int stone1 = bitmap.getPixel((int)(1477 * widthFactor), (int)(1673 * heightFactor));//bitmap.getWidth() * 2/5, 20
         int redVal1 = red(stone1);
 
-        int stone2 = bitmap.getPixel((int)(1675 * widthFactor), (int)(1621 * heightFactor));//bitmap.getWidth()/2, 20
+        int stone2 = bitmap.getPixel((int)(2241 * widthFactor), (int)(1673 * heightFactor));//bitmap.getWidth()/2, 20
         int redVal2 = red(stone2);
 
-        int stone3 = bitmap.getPixel((int)(2425 * widthFactor), (int)(1621 * heightFactor));//bitmap.getWidth() * 3/5, 20
+        int stone3 = bitmap.getPixel((int)(2985 * widthFactor), (int)(1673 * heightFactor));//bitmap.getWidth() * 3/5, 20
         int redVal3 = red(stone3);
 
         ArrayList<Integer> vals = new ArrayList<Integer>();
