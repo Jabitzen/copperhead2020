@@ -181,10 +181,10 @@ public class SkystoneTeleop extends LinearOpMode{
 
     public void trigMecanum() {
         rightstickx = -gamepad1.right_stick_x ;
-        leftstickx = gamepad1.left_stick_x * constant;
+        leftstickx = -gamepad1.left_stick_x * constant;
 
-        leftstickyfront = gamepad1.left_stick_y * -constant;
-        leftstickyback = gamepad1.left_stick_y * constant;
+        leftstickyfront = gamepad1.left_stick_y * constant;
+        leftstickyback = gamepad1.left_stick_y * -constant;
 
         double rFront = Math.hypot(rightstickx, leftstickyfront);
         double rBack = Math.hypot(rightstickx, leftstickyback);
@@ -213,9 +213,9 @@ public class SkystoneTeleop extends LinearOpMode{
 
          */
 
-        robot.fL.setPower(v1);
+        robot.fL.setPower(-v1);
         robot.fR.setPower(-v2);
-        robot.bL.setPower(-v3);// * .79);
+        robot.bL.setPower(v3);// * .79);
         robot.bR.setPower(v4);// * .79);
     }
     /* -----------------------------Deadzone Calculations--------------------------------------

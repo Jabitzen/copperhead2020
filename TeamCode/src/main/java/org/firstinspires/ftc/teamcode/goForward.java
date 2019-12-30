@@ -27,7 +27,7 @@ public class goForward extends LinearOpMode {
 
 
 
-        //robot.goStraightGyro(70, .3, 7);
+        robot.approachStonesRed( .4);
         //sleep(1000);
         //robot.rotate(90, .3);
         //sleep(1000);
@@ -39,7 +39,7 @@ public class goForward extends LinearOpMode {
         robot.fR.setPower(-0.5);
         robot.bL.setPower(0.5);
         robot.bR.setPower(-0.5);*/
-        robot.alignStonesB(0.2);
+       // robot.alignStonesB(0.2);
         //robot.goStraightGyro(7, 0.5, 5);
         sleep(5000);
         }

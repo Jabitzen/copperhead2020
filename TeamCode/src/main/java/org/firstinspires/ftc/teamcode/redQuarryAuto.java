@@ -60,24 +60,45 @@ public class redQuarryAuto extends LinearOpMode {
 
             if (skyStonePos == "center") {
 
-                robot.goStraightGyro(25, .3, 3); //Move to the stone
+                robot.goStraightGyro(18, .7, 3); //Move to the stone
                 sleep(500);
                 robot.rotate(90, .4); // Rotate to align grabberR with stone
                 sleep(500);
-                robot.goStraightGyro(1, 0.5, 2); // Align with center stone
-                sleep(30);
-                robot.approachStonesRed(5); // Approach stone
-
-                robot.alignStonesR(.14);
-                robot.grabberR.setPosition(0.65); // Drop grabberR
-                sleep(1500);
-                robot.goStraightGyro(-4, 0.2, 1);
+                robot.goStraightGyro(.5, 0.4, 2); // Align with center stone
+                robot.gripRUp();
+                robot.grabberRDown();
+                sleep(1000);
+                robot.approachStonesRed(.5); // Approach stone
+                robot.gripRDown();
+                //robot.alignStonesR(.14);
+                //robot.grabberR.setPosition(0.65); // Drop grabberR
+                //sleep(1500);
+                //robot.goStraightGyro(-4, 0.2, 1);
                 sleep(500);
-                robot.strafeRightGyro(7, .5); // Pull Stone out
-                robot.goStraightGyro(55, .8, 7); // Cross the bridge
-                robot.grabberR.setPosition(.2); // grabberR lets go of stone
-                robot.goStraightGyro(-13, 0.7, 5);
+                robot.strafeRightGyro(9.5, .6); // Pull Stone out
+                robot.rotate((robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - robot.lastAngles.firstAngle) * .7, .3); // Straighten out
+                robot.goStraightGyro(60, .9, 7); // Cross the bridge
+                robot.gripRUp(); // grabberR lets go of stone
+                robot.grabberRUp();
+                sleep(300);
+                robot.gripRDown();
+                robot.goStraightGyro(-90, 0.9, 5);
+                robot.gripRUp();
+                robot.grabberRDown();
+                sleep(1000);
+                robot.approachStonesRed(.5);
+                robot.gripRDown();
+                sleep(500);
+                robot.strafeRightGyro(8.25, .6); // Pull Stone out
+                robot.rotate(-(robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES).firstAngle - robot.lastAngles.firstAngle) * .7, .3); // Straighten out
+                robot.goStraightGyro(90, .9, 7); // Cross the bridge
+                robot.gripRUp(); // grabberR lets go of stone
+                robot.grabberRUp();
+                sleep(300);
+                robot.gripRDown();
+                robot.goStraightGyro(-15, 0.7, 5);
                 sleep(30000);
+                //robot.alignStonesR(.13);
 
                 //second stone
                 robot.goStraightGyro(91, .4, 5); // Go back to the stones

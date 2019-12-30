@@ -92,7 +92,8 @@ public class colorSensor extends LinearOpMode {
     //ColorSensor sensorColorRight;
     DistanceSensor sensorDistanceBEdge;
     //DistanceSensor sensorDistanceRight;
-
+    ColorSensor sensorColorBotBack;
+    ColorSensor sensorColorBotFront;
     @Override
     public void runOpMode() {
 
@@ -101,6 +102,8 @@ public class colorSensor extends LinearOpMode {
         sensorColorBEdge = hardwareMap.get(ColorSensor.class, "sensorColorBEdge");
         sensorColorRMid = hardwareMap.get(ColorSensor.class, "sensorColorRMid");
         sensorColorREdge = hardwareMap.get(ColorSensor.class, "sensorColorREdge");
+        sensorColorBotBack = hardwareMap.get(ColorSensor.class, "sensorColorBotBack");
+        sensorColorBotFront = hardwareMap.get(ColorSensor.class, "sensorColorBotFront");
         //sensorColorRight = hardwareMap.get(ColorSensor.class, "sensorColorRight");
 
         // get a reference to the distance sensor that shares the same name.
@@ -155,6 +158,14 @@ public class colorSensor extends LinearOpMode {
                     (int) (sensorColorRMid.green() * SCALE_FACTOR),
                     (int) (sensorColorRMid.blue() * SCALE_FACTOR),
                     hsvValues);
+            Color.RGBToHSV((int) (sensorColorBotBack.red() * SCALE_FACTOR),
+                    (int) (sensorColorBotBack.green() * SCALE_FACTOR),
+                    (int) (sensorColorBotBack.blue() * SCALE_FACTOR),
+                    hsvValues);
+            Color.RGBToHSV((int) (sensorColorBotFront.red() * SCALE_FACTOR),
+                    (int) (sensorColorBotFront.green() * SCALE_FACTOR),
+                    (int) (sensorColorBotFront.blue() * SCALE_FACTOR),
+                    hsvValues);
 
 
 
@@ -180,6 +191,7 @@ public class colorSensor extends LinearOpMode {
 
             telemetry.addLine("bot");
             while(opModeIsActive()){
+                /*
                 telemetry.addData("Left Distance (cm)",
                         String.format(Locale.US, "%.02f", sensorDistanceBEdge.getDistance(DistanceUnit.CM)));
                 telemetry.addData("Red  ", sensorColorBMid.red());
@@ -188,11 +200,15 @@ public class colorSensor extends LinearOpMode {
                 //telemetry.addData("Hue", hsvValues[0]);
                 telemetry.addData("Green ", sensorColorBMid.green());
                 //telemetry.addData("Hue", hsvValues[0]);
+*/
+                //telemetry.addData("line", sensorColorBotBack.red());
+                telemetry.update();telemetry.addData("line front", sensorColorBotFront.red());
                 telemetry.update();
             }
           //  telemetry.addData("Right Distance (cm)",
                   //  String.format(Locale.US, "%.02f", sensorDistanceRight.getDistance(DistanceUnit.CM)));
             //telemetry.addData("Alpha", sensorColor.alpha());
+            /*
             telemetry.addData("Red  ", sensorColorBMid.red());
             //telemetry.addData("Green", sensorColor.green());
             telemetry.addData("Blue ", sensorColorBMid.blue());
@@ -202,6 +218,8 @@ public class colorSensor extends LinearOpMode {
             telemetry.addData("Alpha ", sensorColorBMid.alpha());
             //telemetry.addData("Hue", hsvValues[0]);
             telemetry.update();
+
+             */
 //
 //            // change the background color to match the color detected by the RGB sensor.
 //            // pass a reference to the hue, saturation, and value array as an argument
