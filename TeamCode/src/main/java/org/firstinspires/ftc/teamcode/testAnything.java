@@ -22,25 +22,33 @@ public class testAnything extends LinearOpMode{
     @Override
     public void runOpMode() throws InterruptedException {
 
+
+
         robot.init(this);
         waitForStart();
-        robot.grabberRDown();
 
-        sleep(2000);
-        robot.gripRUp();
-        telemetry.addLine("gripRUp");
-        telemetry.update();
-        sleep(5000);
+        robot.clawDown();
+        sleep(3000);
+        robot.clawUp();
+        sleep(3000);
 
-
-        robot.gripRDown();
-        telemetry.addLine("gripRDown");
-        telemetry.update();
-
-        sleep(5000);
-
-        robot.grabberRUp();
-        sleep(5000);
+//        robot.grabberRDown();
+//
+//        sleep(2000);
+//        robot.gripRUp();
+//        telemetry.addLine("gripRUp");
+//        telemetry.update();
+//        sleep(5000);
+//
+//
+//        robot.gripRDown();
+//        telemetry.addLine("gripRDown");
+//        telemetry.update();
+//
+//        sleep(5000);
+//
+//        robot.grabberRUp();
+//        sleep(5000);
 
 
     }

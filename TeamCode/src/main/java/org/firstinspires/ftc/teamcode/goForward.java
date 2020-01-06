@@ -27,7 +27,11 @@ public class goForward extends LinearOpMode {
 
 
 
-        robot.approachStonesRed( .4);
+        //robot.turnPID( 90, .43/90, 0, 0, 7);
+        //robot.grabberRDown();
+        robot.goStraightGyro(20, .5, 4);
+        sleep(1000);
+        //robot.approachStonesRed(.5);
         //sleep(1000);
         //robot.rotate(90, .3);
         //sleep(1000);
