@@ -66,11 +66,13 @@ public class redQuarryAuto extends LinearOpMode {
                 correction = robot.correctAngle(90) ; //calculate angle needed to correct
 //                telemetry.addData("start angle: ", startPos.firstAngle);
 //                telemetry.addData("angle : ", robot.getAngle());
-                telemetry.addData("correct angle : ", correction);
-                telemetry.update();
-                sleep(1000);
+                //telemetry.addData("correct angle : ", correction);
+                //telemetry.update();
 
-                robot.turnPID(correction, .1/correction, 0, 0, 5); // Straighten out
+                if (Math.abs(correction) > 2) {
+                    robot.turnPID(correction, .1/correction, 0, 0, 5); // Straighten out
+                }
+
 
                 //sleep(1000000000);
 

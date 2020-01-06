@@ -77,6 +77,8 @@ public class SkystoneTeleop extends LinearOpMode{
                 robot.clamp.setPosition(.99);
             }
 
+          //  if(gamepad1.left_bumper)
+
             // Claw
             if (gamepad2.right_bumper) {
                 robot.clawDown(); // down

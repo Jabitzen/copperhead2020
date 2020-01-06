@@ -901,12 +901,9 @@ public class RobotHw {
         opmode.sleep(2000);
 
         double deltaAngle = angle + angles.firstAngle ;
-        if (Math.abs(deltaAngle) > 2) {
-            return deltaAngle;
-        }
-        else {
-            return 0;
-        }
+
+        return deltaAngle;
+
 
     }
 
