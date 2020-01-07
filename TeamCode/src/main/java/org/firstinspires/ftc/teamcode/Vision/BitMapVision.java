@@ -194,7 +194,7 @@ public class BitMapVision {
         int stone2 = bitmap.getPixel((int)(1873 * widthFactor), (int)(1649 * heightFactor));//bitmap.getWidth()/2, 20
         int redVal2 = red(stone2);
 
-        int stone3 = bitmap.getPixel((int)(2629 * widthFactor), (int)(1649 * heightFactor));//bitmap.getWidth() * 3/5, 20
+        int stone3 = bitmap.getPixel((int)(2700 * widthFactor), (int)(1649 * heightFactor));//bitmap.getWidth() * 3/5, 20
         int redVal3 = red(stone3);
 
         ArrayList<Integer> vals = new ArrayList<Integer>();

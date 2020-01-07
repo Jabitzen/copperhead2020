@@ -840,9 +840,9 @@ public class RobotHw {
         double currentTime = runtime.milliseconds();
         double pastTime = 0;
         startPos = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        opmode.telemetry.addData("start offset: ", startPos.firstAngle);
-        opmode.telemetry.update();
-        opmode.sleep(2000);
+        //opmode.telemetry.addData("start offset: ", startPos.firstAngle);
+        //opmode.telemetry.update();
+        //opmode.sleep(2000);
         double target = (angle + startPos.firstAngle);
         double prevError = target - getAngle();
         double error = prevError;
@@ -855,16 +855,16 @@ public class RobotHw {
             integral += dT * (error - prevError);
             power = (error * kP) + integral * kI + ((error - prevError) / dT * kD);
             if (power < 0) {
-                fL.setPower(power - .15);
-                bL.setPower(power - .15);
-                fR.setPower(-1 * (power - .15));
-                bR.setPower(-1 * (power - .15));
+                fL.setPower(power );
+                bL.setPower(power);
+                fR.setPower(-1 * (power));
+                bR.setPower(-1 * (power));
 
             } else {
-                fL.setPower(power + .15);
-                bL.setPower(power + .15);
-                fR.setPower(-1 * (power + .15));
-                bR.setPower(-1 * (power + .15));
+                fL.setPower(power);
+                bL.setPower(power);
+                fR.setPower(-1 * (power));
+                bR.setPower(-1 * (power));
             }
             opmode.telemetry.addData("angle: ", getAngle());
             opmode.telemetry.addData("P", (error * kP));
@@ -898,7 +898,7 @@ public class RobotHw {
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         opmode.telemetry.addData("angle", angles.firstAngle);
         opmode.telemetry.update();
-        opmode.sleep(2000);
+        //opmode.sleep(1000);
 
         double deltaAngle = angle + angles.firstAngle ;
 

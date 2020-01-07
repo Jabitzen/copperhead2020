@@ -96,6 +96,37 @@ public class SkystoneTeleop extends LinearOpMode{
                 robot.rotate.setPosition(.245);
             }
 
+            if (gamepad1.dpad_up){
+                robot.grabberRDown();
+            }
+            if (gamepad1.dpad_down){
+                robot.grabberRUp();
+            }
+
+            if(gamepad1.dpad_left){
+                robot.grabberBDown();
+            }
+
+            if(gamepad1.dpad_right){
+                robot.grabberBUp();
+            }
+
+            if(gamepad1.left_bumper){
+                robot.gripBDown();
+            }
+
+            if(gamepad1.right_bumper){
+                robot.gripBUp();
+            }
+
+            if(gamepad1.x){
+                robot.gripRUp();
+            }
+
+            if(gamepad1.b){
+                robot.gripRDown();
+            }
+
             // Reverse Mode
             if (gamepad1.dpad_down){
                 constant = -1; // Reverse

@@ -65,7 +65,7 @@ public class bitMapTests extends LinearOpMode {
 
         //getBitmap();
         //String pos =
-        findBlueSkystones();
+        findRedSkystones();
         //telemetry.addData("pos", pos);
         //telemetry.update();
 
@@ -353,17 +353,17 @@ public class bitMapTests extends LinearOpMode {
 
     }
 
-    public void findRedSkystones() throws InterruptedException{
+    public String findRedSkystones() throws InterruptedException{
         Bitmap bitmap = getBitmap();
         String bitmapCubePosition;
 
-        int stone1 = bitmap.getPixel((int)(790 * widthFactor), (int)(715 * heightFactor));//bitmap.getWidth() * 2/5, 20
+        int stone1 = bitmap.getPixel((int)(1110 * widthFactor), (int)(1649 * heightFactor));//bitmap.getWidth() * 2/5, 20
         int redVal1 = red(stone1);
 
-        int stone2 = bitmap.getPixel((int)(1390 * widthFactor), (int)(715 * heightFactor));//bitmap.getWidth()/2, 20
+        int stone2 = bitmap.getPixel((int)(1873 * widthFactor), (int)(1649 * heightFactor));//bitmap.getWidth()/2, 20
         int redVal2 = red(stone2);
 
-        int stone3 = bitmap.getPixel((int)(2055 * widthFactor), (int)(715 * heightFactor));//bitmap.getWidth() * 3/5, 20
+        int stone3 = bitmap.getPixel((int)(2700 * widthFactor), (int)(1649 * heightFactor));//bitmap.getWidth() * 3/5, 20
         int redVal3 = red(stone3);
 
         ArrayList<Integer> vals = new ArrayList<Integer>();
@@ -388,7 +388,7 @@ public class bitMapTests extends LinearOpMode {
         else {
             bitmapCubePosition = "yikes";
         }
-
+        
         telemetry.addData("redval1", redVal1);
         telemetry.addData("redval2", redVal2);
         telemetry.addData("redval3", redVal3);
@@ -397,7 +397,7 @@ public class bitMapTests extends LinearOpMode {
         telemetry.addData("right", vals.get(2));
         telemetry.update();
         sleep(5000);
-        //return bitmapCubePosition;
+        return bitmapCubePosition;
     }
     public void findBlueSkystones() throws InterruptedException{
         Bitmap bitmap = getBitmap();
