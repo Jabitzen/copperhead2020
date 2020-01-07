@@ -40,11 +40,13 @@ public class bitMapTests extends LinearOpMode {
     private BlockingQueue<VuforiaLocalizer.CloseableFrame> frame;
 
     public static String bitmapSkyStonePosition;
+
+
     //WebcamName webcamName = null;
 
     @Override
     public void runOpMode() throws InterruptedException {
-
+        BitMapVision bm1 = new BitMapVision(this);
         //webcamName = hardwareMap.get(WebcamName.class, "Webcam 1");
 
         int cameraMonitorViewId = this.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", this.hardwareMap.appContext.getPackageName());
@@ -56,16 +58,24 @@ public class bitMapTests extends LinearOpMode {
         vuforia = ClassFactory.getInstance().createVuforia(params);
 
 
-        Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true); //enables RGB565 format for the image
-        vuforia.setFrameQueueCapacity(4); //tells VuforiaLocalizer to only store one frame at a time
-        vuforia.enableConvertFrameToBitmap();
+
+        String pos = "";
+        while(! isStarted())
+        {
+            Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true); //enables RGB565 format for the image
+            vuforia.setFrameQueueCapacity(4); //tells VuforiaLocalizer to only store one frame at a time
+            vuforia.enableConvertFrameToBitmap();
+            pos = bm1.findBlueSkystones();
+            telemetry.addData("pos", pos);
+            telemetry.update();
+        }
 
         waitForStart();
 
 
+
         //getBitmap();
         //String pos =
-        findRedSkystones();
         //telemetry.addData("pos", pos);
         //telemetry.update();
 
@@ -109,7 +119,7 @@ public class bitMapTests extends LinearOpMode {
     }
 
     public Bitmap getBitmap() throws InterruptedException{
-
+        telemetry.addLine("running getBitmap()");
         VuforiaLocalizer.CloseableFrame picture;
         picture = vuforia.getFrameQueue().take();
         Image rgb = picture.getImage(1);
@@ -399,17 +409,17 @@ public class bitMapTests extends LinearOpMode {
         sleep(5000);
         return bitmapCubePosition;
     }
-    public void findBlueSkystones() throws InterruptedException{
+    public String findBlueSkystones() throws InterruptedException{
         Bitmap bitmap = getBitmap();
         String bitmapCubePosition;
 
-        int stone1 = bitmap.getPixel((int)(1080 * widthFactor), (int)(715 * heightFactor));//bitmap.getWidth() * 2/5, 20
+        int stone1 = bitmap.getPixel((int)(989 * widthFactor), (int)(1677 * heightFactor));//bitmap.getWidth() * 2/5, 20
         int redVal1 = red(stone1);
 
-        int stone2 = bitmap.getPixel((int)(1710 * widthFactor), (int)(715 * heightFactor));//bitmap.getWidth()/2, 20
+        int stone2 = bitmap.getPixel((int)(1745 * widthFactor), (int)(1677 * heightFactor));//bitmap.getWidth()/2, 20
         int redVal2 = red(stone2);
 
-        int stone3 = bitmap.getPixel((int)(2340 * widthFactor), (int)(715 * heightFactor));//bitmap.getWidth() * 3/5, 20
+        int stone3 = bitmap.getPixel((int)(2500 * widthFactor), (int)(1677 * heightFactor));//bitmap.getWidth() * 3/5, 20
         int redVal3 = red(stone3);
 
         ArrayList<Integer> vals = new ArrayList<Integer>();
@@ -443,7 +453,7 @@ public class bitMapTests extends LinearOpMode {
         telemetry.addData("right", vals.get(2));
         telemetry.update();
         sleep(5000);
-        //return bitmapCubePosition;
+        return bitmapCubePosition;
     }
 
 

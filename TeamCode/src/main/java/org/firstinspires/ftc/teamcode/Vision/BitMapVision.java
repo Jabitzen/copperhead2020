@@ -39,6 +39,7 @@ public class BitMapVision {
     private final int yheight = 300;
 
 
+
     private static final String VUFORIA_KEY = "Aad5SFz/////AAABmT+V+odOO0Lcr/j0iQ+cxkFwNC+TZ2mUCftLAt5wXY/BCUwwq4iU84o/Q15qndcAU2JPL+SN/qG+8GE9j0fDBHGkUHqAOBhu41XjysYMyF+kBeicTqdwfzaUzT5NLSvAU8aOZ+oIyQu+KFBoHVGylT7Yf6ASJw9gX34kck2ECReLzij/3gORcXvFFtXm/rGIyQGlxPGOXDv0ZnYmurQ79fH6fnArDP6Ylcc9QYQuPInhQ7BKzhiicPZhciwnKfZfa3CH4zu8zSWajDLDQmaj3iZxnkVsXac6XCk2cYMD37svmgGqI78M4bAcRUfOpPqGtqz+89jC8kUmCip8OSdmGO7ArKzBPHF3sctfMxurkuG4";
 
     private BlockingQueue<VuforiaLocalizer.CloseableFrame> frame;
@@ -188,13 +189,13 @@ public class BitMapVision {
         Bitmap bitmap = getBitmap();
         String bitmapCubePosition;
 
-        int stone1 = bitmap.getPixel((int)(1110 * widthFactor), (int)(1649 * heightFactor));//bitmap.getWidth() * 2/5, 20
+        int stone1 = bitmap.getPixel((int)(511 * widthFactor), (int)(765 * heightFactor));//bitmap.getWidth() * 2/5, 20
         int redVal1 = red(stone1);
 
-        int stone2 = bitmap.getPixel((int)(1873 * widthFactor), (int)(1649 * heightFactor));//bitmap.getWidth()/2, 20
+        int stone2 = bitmap.getPixel((int)(893 * widthFactor), (int)(765 * heightFactor));//bitmap.getWidth()/2, 20
         int redVal2 = red(stone2);
 
-        int stone3 = bitmap.getPixel((int)(2700 * widthFactor), (int)(1649 * heightFactor));//bitmap.getWidth() * 3/5, 20
+        int stone3 = bitmap.getPixel((int)(1295 * widthFactor), (int)(765 * heightFactor));//bitmap.getWidth() * 3/5, 20
         int redVal3 = red(stone3);
 
         ArrayList<Integer> vals = new ArrayList<Integer>();
@@ -234,13 +235,13 @@ public class BitMapVision {
         Bitmap bitmap = getBitmap();
         String bitmapCubePosition;
 
-        int stone1 = bitmap.getPixel((int)(1477 * widthFactor), (int)(1673 * heightFactor));//bitmap.getWidth() * 2/5, 20
+        int stone1 = bitmap.getPixel((int)(989 * widthFactor), (int)(1677 * heightFactor));//bitmap.getWidth() * 2/5, 20
         int redVal1 = red(stone1);
 
-        int stone2 = bitmap.getPixel((int)(2241 * widthFactor), (int)(1673 * heightFactor));//bitmap.getWidth()/2, 20
+        int stone2 = bitmap.getPixel((int)(1745 * widthFactor), (int)(1677 * heightFactor));//bitmap.getWidth()/2, 20
         int redVal2 = red(stone2);
 
-        int stone3 = bitmap.getPixel((int)(2985 * widthFactor), (int)(1673 * heightFactor));//bitmap.getWidth() * 3/5, 20
+        int stone3 = bitmap.getPixel((int)(2500 * widthFactor), (int)(1677 * heightFactor));//bitmap.getWidth() * 3/5, 20
         int redVal3 = red(stone3);
 
         ArrayList<Integer> vals = new ArrayList<Integer>();
