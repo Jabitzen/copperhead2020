@@ -32,7 +32,7 @@ public class redQuarryAuto extends LinearOpMode {
         waitForStart();
 
         bm1 = new BitMapVision(this);
-        skyStonePos = "right"; //bm1.findRedSkystones();
+        skyStonePos = bm1.findRedSkystones();
         telemetry.addData("stone", skyStonePos);
         telemetry.update();
 
@@ -196,7 +196,7 @@ public class redQuarryAuto extends LinearOpMode {
 
                 robot.turnPID(90, .79/90, 0, 0, 10); // Rotate to align grabberR with stone
                 //sleep(500);
-                robot.goStraightGyro(6, 0.2, 1); // Align with center stone
+                robot.goStraightGyro(7.5, 0.2, 1); // Align with center stone
                 robot.gripRUp(); //prime grabber and grip for stone
                 robot.grabberRDown();
                 sleep(500);
@@ -241,7 +241,7 @@ public class redQuarryAuto extends LinearOpMode {
                 robot.gripRDown(); //grab 2nd stone
                 sleep(500);
                 robot.grabberRUp();
-                robot.strafeRightGyro(7.5, .6); // Pull Stone out
+                robot.strafeRightGyro(7, .6); // Pull Stone out
                 correction = robot.correctAngle(90) ;
                 if (Math.abs(correction) > 2)
                     robot.turnPID(90, .3/correction, 0, 0, 1); // Straighten out

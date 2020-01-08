@@ -27,10 +27,19 @@ public class testAnything extends LinearOpMode{
         robot.init(this);
         waitForStart();
 
-        robot.clawDown();
-        sleep(3000);
-        robot.clawUp();
-        sleep(3000);
+        robot.grabberBDown();
+        sleep (1000);
+        robot.grabberBUp();
+        sleep(1000);
+        robot.gripBUp();
+        sleep(1000);
+        robot.gripBDown();
+        sleep(1000);
+
+//        robot.clawDown();
+//        sleep(3000);
+//        robot.clawUp();
+//        sleep(3000);
 
 //        robot.grabberRDown();
 //

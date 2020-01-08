@@ -177,6 +177,73 @@ public class RobotHw {
         opmode.telemetry.update();
 
     }
+    public void init(LinearOpMode lOpmode, Boolean teleop) {
+        opmode = lOpmode;
+        // Hardware map
+        hwMap = opmode.hardwareMap;
+
+        degreesToTicks = 0; //add in actual conversion
+
+        // Define and Initialize Motors
+        fL = opmode.hardwareMap.get(DcMotor.class, "fL");
+        fR = opmode.hardwareMap.get(DcMotor.class, "fR");
+        bL = opmode.hardwareMap.get(DcMotor.class, "bL");
+        bR = opmode.hardwareMap.get(DcMotor.class, "bR");
+
+        intakeR = hwMap.get(DcMotor.class, "intakeR");
+        intakeL = hwMap.get(DcMotor.class, "intakeL");
+
+        liftExtend = hwMap.get(DcMotor.class, "liftExtend");
+        liftRotate = hwMap.get(DcMotor.class, "liftRotate");
+
+        //Define and initialize servos
+        //clip = hwMap.get(Servo.class, "clip");
+        claw = hwMap.get(Servo.class, "claw");
+
+        rotate = hwMap.get(Servo.class, "rotate");
+
+        clamp = hwMap.get(Servo.class, "clamp");
+
+        grabberR = hwMap.get(Servo.class, "grabberR");
+        grabberB = hwMap.get(Servo.class, "grabberB");
+
+        gripB = hwMap.get(Servo.class, "gripB");
+        gripR = hwMap.get(Servo.class, "gripR");
+
+        degreesToTicks = 560.0 / 360.0;
+
+        //set direction of motors
+        fL.setDirection(DcMotor.Direction.REVERSE);
+        fR.setDirection(DcMotor.Direction.FORWARD);
+        bR.setDirection(DcMotor.Direction.FORWARD);
+        bL.setDirection(DcMotor.Direction.REVERSE);
+
+        //intakeL.setDirection(DcMotor.Direction.rotate);
+        //intakeR.setDirection(DcMotor.Direction.REVERSE);
+
+        // Reset encoders, and run without encoders
+        reset();
+
+        // Set motor powers to zero
+        stopMotors();
+
+
+        // Set all motors to zero power
+        fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
+        liftExtend.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        liftRotate.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        opmode.telemetry.addData("fl", fL.getCurrentPosition());
+        opmode.telemetry.addData("fr", fR.getCurrentPosition());
+        opmode.telemetry.addData("bl", bL.getCurrentPosition());
+        opmode.telemetry.addData("br", bR.getCurrentPosition());
+        opmode.telemetry.update();
+
+    }
 
     public double atTarget(double distance) {
         return Math.abs(distance * COUNTS_PER_INCH);
@@ -241,7 +308,7 @@ public class RobotHw {
     }
 
     public void gripBDown(){
-        gripB.setPosition(0.06);
+        gripB.setPosition(0.03);
     }
 
     public void gripBUp(){
@@ -1168,15 +1235,15 @@ public class RobotHw {
 
 
         while (cont == true && opmode.opModeIsActive()){
-            fL.setPower(-.5 * speed);
-            fR.setPower(-.5 * speed);
-            bL.setPower(.5 * speed);
-            bR.setPower(.5 * speed);
+            fL.setPower(-power * speed);
+            fR.setPower(power * speed);
+            bL.setPower(power * speed);
+            bR.setPower(-power * speed);
 
             if (!Double.isNaN(sensorDistanceBEdge.getDistance(DistanceUnit.CM))) {
-                speed = .5;
+                speed = .4;
             }
-            if (sensorDistanceBEdge.getDistance(DistanceUnit.CM) < 5.5 && sensorDistanceBMid.getDistance(DistanceUnit.CM) < 5.5) {
+            if (sensorDistanceBEdge.getDistance(DistanceUnit.CM) < 7.5 || sensorDistanceBMid.getDistance(DistanceUnit.CM) < 7.5) {
                 cont = false;
             }
 
