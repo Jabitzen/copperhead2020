@@ -25,20 +25,13 @@ public class SkystoneTeleop extends LinearOpMode{
     public double liftHeight = 0;
     public double liftDistance;
     public double liftAngle;
-    //public double ticksInDegree = 1120.0 / 360.0;
 
     public boolean automode = false;
-    public boolean cylindricalMeat = true;
-
-
 
     public int constant = 1;
 
-
-
     @Override
     public void runOpMode() throws InterruptedException {
-
         robot.init(this, true);
         //robot.brakeMode();
         waitForStart();
@@ -47,27 +40,6 @@ public class SkystoneTeleop extends LinearOpMode{
         while (opModeIsActive()) {
             // Sin Cos Atan inputs for mecanum
             trigMecanum();
-
-            // Red grabber
-            /*
-            if (gamepad1.right_bumper) {
-                robot.grabberR.setPosition(0.72); // up
-            }
-            if (gamepad1.right_trigger == 1) {
-                robot.grabberR.setPosition(0.31); // down
-            }
-
-            // Blue grabber
-            if (gamepad1.left_bumper) {
-                robot.grabberB.setPosition(.33); // Down
-            }
-
-            if (gamepad1.left_trigger == 1)
-            {
-                robot.grabberB.setPosition(0.7); //up
-            }
-            */
-
 
             // Foundation Clamp
             if (gamepad1.y) { //up
@@ -89,45 +61,20 @@ public class SkystoneTeleop extends LinearOpMode{
             if (gamepad2.left_trigger == 1){
                 robot.rotate.setPosition(.6);
             }
-
             if (gamepad2.right_trigger == 1){
                 robot.rotate.setPosition(.245);
             }
 
-            /*
-            if (gamepad1.dpad_up){
+            if (gamepad1.x){
                 robot.grabberRDown();
-            }
-            if (gamepad1.dpad_down){
-                robot.grabberRUp();
-            }
-
-            if(gamepad1.dpad_left){
-                robot.grabberBDown();
-            }
-
-            if(gamepad1.dpad_right){
-                robot.grabberBUp();
-            }
-
-            if(gamepad1.left_bumper){
-                robot.gripBDown();
-            }
-
-            if(gamepad1.right_bumper){
-                robot.gripBUp();
-            }
-
-
-
-            if(gamepad1.x){
                 robot.gripRUp();
             }
 
             if(gamepad1.b){
                 robot.gripRDown();
+                sleep(1000);
+                robot.grabberRUp();
             }
-            */
 
             // Reverse Mode
             if (gamepad1.dpad_down){
@@ -150,7 +97,6 @@ public class SkystoneTeleop extends LinearOpMode{
                 robot.intakeL.setPower(0);
                 robot.intakeR.setPower(0);
             }
-
             robot.liftExtend.setPower(gamepad2.right_stick_y);
             robot.liftRotate.setPower(-gamepad2.left_stick_y);
         }

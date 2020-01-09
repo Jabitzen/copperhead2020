@@ -54,7 +54,7 @@ public class blueQuarryAuto extends LinearOpMode {
 
                 robot.turnPID(90, .79/90, 0, 0, 10); // Rotate to align grabberR with stone
                 //sleep(500);
-                robot.goStraightGyro(-3, 0.2, 1); // Align with center stone
+                robot.goStraightGyro(-2, 0.2, 1); // Align with center stone
                 robot.gripBUp(); //prime grabber and grip for stone
                 robot.grabberBDown();
                 sleep(500);
@@ -99,7 +99,7 @@ public class blueQuarryAuto extends LinearOpMode {
                 robot.gripBDown(); //grab 2nd stone
                 sleep(500);
                 robot.grabberBUp();
-                robot.strafeRightGyro(7.5, .6); // Pull Stone out
+                robot.strafeRightGyro(5.5, .6); // Pull Stone out
                // correction = robot.correctAngle(90) ;
                 //if (Math.abs(correction) > 2)
                   //  robot.turnPID(90, .3/correction, 0, 0, 1); // Straighten out
@@ -228,20 +228,20 @@ public class blueQuarryAuto extends LinearOpMode {
 
                 //sleep(1000000000);
 
-                robot.goStraightGyro(-55, 1, 7); // go to deposit 1st stone
+                robot.goStraightGyro(-59, 1, 7); // go to deposit 1st stone
                 robot.grabberBDown();
                 robot.gripBUp(); // grabberR lets go of stone
 
                 sleep(300);
                 robot.gripBDown(); //put grabber up to go back to quarry
                 robot.grabberBUp();
-                robot.goStraightGyro(84.5, 1, 5); //go back to quarry
+                robot.goStraightGyro(90.5, 1, 6); //go back to quarry
                 robot.gripBUp();
                 sleep(100);
                 robot.grabberBDown();
-             //   correction = robot.correctAngle(90) ; //calculate angle needed to correct
-             //   if (Math.abs(correction) > 2)
-                  //  robot.turnPID(90, .3/correction, 0, 0, 1); // Straighten out
+                //   correction = robot.correctAngle(90) ; //calculate angle needed to correct
+                //   if (Math.abs(correction) > 2)
+                //  robot.turnPID(90, .3/correction, 0, 0, 1); // Straighten out
                 robot.approachStonesBlue(.4); //approach 2nd stone
                 robot.gripBDown(); //grab 2nd stone
                 sleep(500);
@@ -250,7 +250,7 @@ public class blueQuarryAuto extends LinearOpMode {
              //   correction = robot.correctAngle(90) ;
              //   if (Math.abs(correction) > 2)
              //       robot.turnPID(90, .3/correction, 0, 0, 1); // Straighten out
-                robot.goStraightGyro(-85, 1, 7); // go to deposit 2nd stone
+                robot.goStraightGyro(-90, 1, 7); // go to deposit 2nd stone
                 robot.grabberBDown();
                 robot.gripBUp(); // grabberR lets go of stone
                 sleep(200);

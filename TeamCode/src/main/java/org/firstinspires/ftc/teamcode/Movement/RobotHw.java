@@ -182,8 +182,6 @@ public class RobotHw {
         // Hardware map
         hwMap = opmode.hardwareMap;
 
-        degreesToTicks = 0; //add in actual conversion
-
         // Define and Initialize Motors
         fL = opmode.hardwareMap.get(DcMotor.class, "fL");
         fR = opmode.hardwareMap.get(DcMotor.class, "fR");
@@ -210,23 +208,17 @@ public class RobotHw {
         gripB = hwMap.get(Servo.class, "gripB");
         gripR = hwMap.get(Servo.class, "gripR");
 
-        degreesToTicks = 560.0 / 360.0;
-
         //set direction of motors
         fL.setDirection(DcMotor.Direction.REVERSE);
         fR.setDirection(DcMotor.Direction.FORWARD);
         bR.setDirection(DcMotor.Direction.FORWARD);
         bL.setDirection(DcMotor.Direction.REVERSE);
 
-        //intakeL.setDirection(DcMotor.Direction.rotate);
-        //intakeR.setDirection(DcMotor.Direction.REVERSE);
-
         // Reset encoders, and run without encoders
         reset();
 
         // Set motor powers to zero
         stopMotors();
-
 
         // Set all motors to zero power
         fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -292,7 +284,7 @@ public class RobotHw {
     }
 
     public void grabberBDown() {
-        grabberR.setPosition(.31);
+        grabberR.setPosition(.35);
     }
 
     public void grabberBUp() {
@@ -308,7 +300,7 @@ public class RobotHw {
     }
 
     public void gripBDown(){
-        gripB.setPosition(0.03);
+        gripB.setPosition(0);
     }
 
     public void gripBUp(){
@@ -1186,7 +1178,6 @@ public class RobotHw {
 
 
     public void approachStonesRed (double power) {
-        opmode.telemetry.addData("ran method", 0);
         resetAngle();
         brakeMode();
         double speed = 1;
@@ -1218,14 +1209,10 @@ public class RobotHw {
         }
 
         strafeLeftGyro(2, 0.2, 1);
-
-
         stopMotors();
         floatMode();
         //gripRDown();
     }
-
-
     public void approachStonesBlue (double power) {
         resetAngle();
         brakeMode();
@@ -1243,21 +1230,15 @@ public class RobotHw {
             if (!Double.isNaN(sensorDistanceBEdge.getDistance(DistanceUnit.CM))) {
                 speed = .4;
             }
-            if (sensorDistanceBEdge.getDistance(DistanceUnit.CM) < 7.5 || sensorDistanceBMid.getDistance(DistanceUnit.CM) < 7.5) {
+            if (sensorDistanceBEdge.getDistance(DistanceUnit.CM) < 5.5 || sensorDistanceBMid.getDistance(DistanceUnit.CM) < 5.5) {
                 cont = false;
             }
-
-
-
-
-
 
             opmode.telemetry.addData("front", sensorDistanceBEdge.getDistance(DistanceUnit.CM));
             opmode.telemetry.addData("back", sensorDistanceBMid.getDistance(DistanceUnit.CM));
             opmode.telemetry.update();
         }
-
-
+        strafeLeftGyro(2, 0.2, 1);
         stopMotors();
         floatMode();
     }
