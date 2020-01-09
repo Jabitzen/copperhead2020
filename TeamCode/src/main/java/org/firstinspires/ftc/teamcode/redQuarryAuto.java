@@ -27,14 +27,17 @@ public class redQuarryAuto extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
+        bm1 = new BitMapVision(this);
         robot.init(this);
 
-        waitForStart();
+        while (!isStarted())
+        {
+            skyStonePos = bm1.findRedSkystones();
+            telemetry.addData("stone", skyStonePos);
+            telemetry.update();
+        }
 
-        bm1 = new BitMapVision(this);
-        skyStonePos = bm1.findRedSkystones();
-        telemetry.addData("stone", skyStonePos);
-        telemetry.update();
+        waitForStart();
 
         while (opModeIsActive()) {
 

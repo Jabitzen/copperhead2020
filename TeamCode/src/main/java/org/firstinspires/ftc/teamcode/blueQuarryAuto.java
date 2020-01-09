@@ -31,15 +31,18 @@ public class blueQuarryAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-
+        bm1 = new BitMapVision(this);
         robot.init(this);
+
+        while (!isStarted())
+        {
+            skyStonePos = bm1.findBlueSkystones();
+            telemetry.addData("stone", skyStonePos);
+            telemetry.update();
+        }
 
         waitForStart();
 
-        bm1 = new BitMapVision(this);
-        skyStonePos = bm1.findBlueSkystones();
-        telemetry.addData("stone", skyStonePos);
-        telemetry.update();
 
         while (opModeIsActive()) {
 
@@ -68,14 +71,16 @@ public class blueQuarryAuto extends LinearOpMode {
                 sleep(1000);
                 robot.grabberBUp(); //pick up stone
                 robot.strafeRightGyro(8, .6); // Pull Stone out
-               // correction = robot.correctAngle(90) ; //calculate angle needed to correct
+                correction = robot.correctAngle(-90) ; //calculate angle needed to correct
 //                telemetry.addData("start angle: ", startPos.firstAngle);
-//                telemetry.addData("angle : ", robot.getAngle());
-                //telemetry.addData("correct angle : ", correction);
-                //telemetry.update();
+                telemetry.addData("angle : ", robot.getAngle());
+                telemetry.addData("correct angle : ", correction);
 
-               // if (Math.abs(correction) > 2)
-                 //   robot.turnPID(90, .3/correction, 0, 0, 1); // Straighten out
+                telemetry.update();
+                sleep(5000);
+
+               if (Math.abs(correction) > 2)
+                   robot.turnPID(-90, .3/correction, 0, 0, 1); // Straighten out
 
 
 
