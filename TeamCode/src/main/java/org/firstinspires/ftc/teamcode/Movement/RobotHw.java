@@ -957,7 +957,7 @@ public class RobotHw {
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         opmode.telemetry.addData("angle", angles.firstAngle);
         opmode.telemetry.update();
-        //opmode.sleep(1000);
+        opmode.sleep(5000);
 
         double deltaAngle = angle + angles.firstAngle ;
 

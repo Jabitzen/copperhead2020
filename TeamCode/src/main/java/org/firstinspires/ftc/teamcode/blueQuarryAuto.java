@@ -68,19 +68,19 @@ public class blueQuarryAuto extends LinearOpMode {
                 //sleep(1500);
 
                 //robot.goStraightGyro(-4, 0.2, 1);
-                sleep(1000);
+                sleep(600);
                 robot.grabberBUp(); //pick up stone
                 robot.strafeRightGyro(8, .6); // Pull Stone out
                 correction = robot.correctAngle(90) ; //calculate angle needed to correct
                 // telemetry.addData("start angle: ", startPos.firstAngle);
-                telemetry.addData("angle : ", robot.getAngle());
+               // telemetry.addData("angle : ", robot.getAngle());
                 telemetry.addData("correct angle : ", correction);
 
                 telemetry.update();
                 sleep(5000);
 
                if (Math.abs(correction) > 2)
-                   robot.turnPID(90, .3/correction, 0, 0, 1); // Straighten out
+                   robot.turnPID(-90, .3/correction, 0, 0, 1); // Straighten out
 
 
 
