@@ -10,7 +10,8 @@ import org.firstinspires.ftc.teamcode.Movement.RobotHw;
 
 @TeleOp(name="Skystone TeleOP", group="Pushbot")
 
-// @ AUTHOR HAYDEN WARREN
+// @ AUTHOR ROBERT HAYDEN WARREN
+
 public class SkystoneTeleop extends LinearOpMode{
 
     RobotHw robot = new RobotHw();
@@ -22,17 +23,18 @@ public class SkystoneTeleop extends LinearOpMode{
     public int clampcount = 1;
 
     public double foundationDistance;
-    public double liftHeight = 0;
+    public double liftHeight;
     public double liftDistance;
     public double liftAngle;
 
-    public boolean automode = false;
+    public boolean teleop = true;
 
     public int constant = 1;
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot.init(this, true);
+        robot.init(this, teleop);
+
         //robot.brakeMode();
         waitForStart();
         //robot.rotate.setPosition(.245);
@@ -46,7 +48,7 @@ public class SkystoneTeleop extends LinearOpMode{
                 robot.clamp.setPosition(0.2);
             }
             if (gamepad1.a) { //down
-                robot.clamp.setPosition(.99);
+                robot.clamp.setPosition(1);
             }
 
             // Claw
@@ -59,17 +61,18 @@ public class SkystoneTeleop extends LinearOpMode{
 
             //Rotate
             if (gamepad2.left_trigger == 1){
-                robot.rotate.setPosition(.6);
+                robot.rotate.setPosition(.6); // Cube fits in robot
             }
             if (gamepad2.right_trigger == 1){
-                robot.rotate.setPosition(.245);
+                robot.rotate.setPosition(.245); // Cube is horizontal
             }
-
+            // Red Grabber stone pick up
             if (gamepad1.x){
                 robot.grabberRDown();
                 robot.gripRUp();
             }
 
+            // Red Grabber pinch and bring up stone
             if(gamepad1.b){
                 robot.gripRDown();
                 sleep(1000);
@@ -97,6 +100,7 @@ public class SkystoneTeleop extends LinearOpMode{
                 robot.intakeL.setPower(0);
                 robot.intakeR.setPower(0);
             }
+            // Lift
             robot.liftExtend.setPower(gamepad2.right_stick_y);
             robot.liftRotate.setPower(-gamepad2.left_stick_y);
         }
@@ -118,8 +122,6 @@ public class SkystoneTeleop extends LinearOpMode{
 
         double rightX = leftstickx;
 
-
-
         final double v1 = rFront * Math.cos(robotAngleFront) + rightX;
         final double v2 = rFront * Math.sin(robotAngleFront) - rightX;
         final double v3 = rBack * Math.sin(robotAngleBack) + rightX;
@@ -134,14 +136,11 @@ public class SkystoneTeleop extends LinearOpMode{
         telemetry.addData("leftY", gamepad1.left_stick_y);
         telemetry.addData ("Right X", rightX);
         telemetry.update();
-
-         */
+        */
 
         robot.fL.setPower(-v1);
         robot.fR.setPower(-v2);
         robot.bL.setPower(v3);// * .79);
         robot.bR.setPower(v4);// * .79);
     }
-
-
 }
