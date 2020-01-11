@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Movement.RobotHw;
 
@@ -22,6 +23,11 @@ public class SkystoneTeleop extends LinearOpMode{
     public double leftstickyback;
     public int clampcount = 1;
 
+    double fRtickspersecond  = 0.0;
+    double fLtickspersecond  = 0.0;
+    double bLtickspersecond  = 0.0;
+    double bRtickspersecond  = 0.0;
+
     public double foundationDistance;
     public double liftHeight;
     public double liftDistance;
@@ -35,13 +41,27 @@ public class SkystoneTeleop extends LinearOpMode{
     public void runOpMode() throws InterruptedException {
         robot.init(this, teleop);
 
+        ElapsedTime runTime = new ElapsedTime();
         //robot.brakeMode();
+        runTime.reset();
         waitForStart();
+
         //robot.rotate.setPosition(.245);
         //robot.clamp.setPosition(.245);
         while (opModeIsActive()) {
             // Sin Cos Atan inputs for mecanum
             trigMecanum();
+
+            fRtickspersecond = robot.fR.getCurrentPosition()/ runTime.seconds();
+            fLtickspersecond = robot.fL.getCurrentPosition()/ runTime.seconds();
+            bRtickspersecond = robot.bR.getCurrentPosition()/runTime.seconds();
+            bLtickspersecond = robot.bL.getCurrentPosition()/ runTime.seconds();
+
+            telemetry.addData("fRtickspersecond", fRtickspersecond);
+            telemetry.addData("fLtickspersecond", fLtickspersecond);
+            telemetry.addData("bRtickspersecond", bRtickspersecond);
+            telemetry.addData("bLtickspersecond", bLtickspersecond);
+            telemetry.update();
 
             // Foundation Clamp
             if (gamepad1.y) { //up

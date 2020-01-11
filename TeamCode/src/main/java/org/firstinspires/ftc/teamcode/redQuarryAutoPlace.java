@@ -1,20 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Movement.RobotHw;
 import org.firstinspires.ftc.teamcode.Vision.BitMapVision;
 
-@Autonomous(name="redQuarryAuto", group="12596")
-public class redQuarryAuto extends LinearOpMode {
+@Autonomous(name="redQuarryAutoPlace", group="12596")
+public class redQuarryAutoPlace extends LinearOpMode {
 
     BitMapVision bm1 = null;
     String skyStonePos = null;
@@ -79,14 +72,16 @@ public class redQuarryAuto extends LinearOpMode {
 
                 //sleep(1000000000);
 
-                robot.goStraightGyro(60, 1, 7); // go to deposit 1st stone
+                robot.goStraightGyro(95, 1, 7); // go to deposit 1st stone
+                robot.strafeLeftGyro(10, .6, 3);
                 robot.grabberRDown();
                 robot.gripRUp(); // grabberR lets go of stone
 
                 sleep(300);
+                robot.strafeRightGyro(10, .7);
                 robot.gripRDown(); //put grabber up to go back to quarry
                 robot.grabberRUp();
-                robot.goStraightGyro(-89.5, 1, 5); //go back to quarry
+                robot.goStraightGyro(-120.5, 1, 5); //go back to quarry
                 robot.gripRUp();
                 sleep(100);
                 robot.grabberRDown();
@@ -97,7 +92,7 @@ public class redQuarryAuto extends LinearOpMode {
                 robot.gripRDown(); //grab 2nd stone
                 sleep(500);
                 robot.grabberRUp();
-                robot.strafeRightGyro(7.5, .6); // Pull Stone out
+                robot.strafeRightGyro(7.5, .7); // Pull Stone out
                 correction = robot.correctAngle(90) ;
                 if (Math.abs(correction) > 2)
                     robot.turnPID(90, .3/correction, 0, 0, 1); // Straighten out
@@ -108,7 +103,7 @@ public class redQuarryAuto extends LinearOpMode {
                 robot.grabberRUp();
                 robot.gripRDown();
                 sleep(200);
-                robot.goStraightGyro(-13, 0.7, 2); //park
+                robot.goStraightGyro(-13, 0.8, 2); //park
                 sleep(30000);
                 //robot.alignStonesR(.13);
 
@@ -134,7 +129,7 @@ public class redQuarryAuto extends LinearOpMode {
 
                 robot.turnPID(90, .79/90, 0, 0, 10); // Rotate to align grabberR with stone
                 //sleep(500);
-                robot.goStraightGyro(-5, 0.2, 1); // Align with center stone
+                robot.goStraightGyro(-5, 0.3, 1); // Align with center stone
                 robot.gripRUp(); //prime grabber and grip for stone
                 robot.grabberRDown();
                 sleep(500);
@@ -147,7 +142,7 @@ public class redQuarryAuto extends LinearOpMode {
                 //robot.goStraightGyro(-4, 0.2, 1);
                 sleep(1000);
                 robot.grabberRUp(); //pick up stone
-                robot.strafeRightGyro(8, .6); // Pull Stone out
+                robot.strafeRightGyro(9.5, .8); // Pull Stone out
                 correction = robot.correctAngle(90) ; //calculate angle needed to correct
 //                telemetry.addData("start angle: ", startPos.firstAngle);
 //                telemetry.addData("angle : ", robot.getAngle());
@@ -161,14 +156,25 @@ public class redQuarryAuto extends LinearOpMode {
 
                 //sleep(1000000000);
 
-                robot.goStraightGyro(66, 1, 7); // go to deposit 1st stone
+                robot.goStraightGyro(105, 1, 7); // go to deposit 1st stone
+                robot.strafeLeftGyro(12, .7, 3);
                 robot.grabberRDown();
                 robot.gripRUp(); // grabberR lets go of stone
 
-                sleep(300);
+                sleep(500);
+                robot.strafeRightGyro(10, .8);
                 robot.gripRDown(); //put grabber up to go back to quarry
                 robot.grabberRUp();
-                robot.goStraightGyro(-94.5, 1, 5); //go back to quarry
+                correction = robot.correctAngle(90) ; //calculate angle needed to correct
+//                telemetry.addData("start angle: ", startPos.firstAngle);
+//                telemetry.addData("angle : ", robot.getAngle());
+                //telemetry.addData("correct angle : ", correction);
+                //telemetry.update();
+
+                if (Math.abs(correction) > 2)
+                    robot.turnPID(90, .2/correction, 0, 0, 1); // Straighten out
+
+                robot.goStraightGyro(-128.5, 1, 5); //go back to quarry
                 robot.gripRUp();
                 sleep(100);
                 robot.grabberRDown();
@@ -179,11 +185,11 @@ public class redQuarryAuto extends LinearOpMode {
                 robot.gripRDown(); //grab 2nd stone
                 sleep(500);
                 robot.grabberRUp();
-                robot.strafeRightGyro(8, .6); // Pull Stone out
+                robot.strafeRightGyro(9, .7); // Pull Stone out
                 correction = robot.correctAngle(90) ;
                 if (Math.abs(correction) > 2)
                     robot.turnPID(90, .3/correction, 0, 0, 1); // Straighten out
-                robot.goStraightGyro(95, 1, 7); // go to deposit 2nd stone
+                robot.goStraightGyro(97, 1, 7); // go to deposit 2nd stone
                 robot.grabberRDown();
                 robot.gripRUp(); // grabberR lets go of stone
 
@@ -191,7 +197,7 @@ public class redQuarryAuto extends LinearOpMode {
                 robot.grabberRUp();
                 robot.gripRDown();
                 sleep(200);
-                robot.goStraightGyro(-13, 0.7, 2); //park
+                robot.goStraightGyro(-10, 0.9, 2); //park
                 sleep(30000);
             } else { // right
 
@@ -199,7 +205,7 @@ public class redQuarryAuto extends LinearOpMode {
 
                 robot.turnPID(90, .79/90, 0, 0, 10); // Rotate to align grabberR with stone
                 //sleep(500);
-                robot.goStraightGyro(9.5, 0.2, 3); // Align with center stone
+                robot.goStraightGyro(9.5, 0.3, 3); // Align with center stone
                 robot.gripRUp(); //prime grabber and grip for stone
                 robot.grabberRDown();
                 sleep(500);
@@ -212,7 +218,7 @@ public class redQuarryAuto extends LinearOpMode {
                 //robot.goStraightGyro(-4, 0.2, 1);
                 sleep(1000);
                 robot.grabberRUp(); //pick up stone
-                robot.strafeRightGyro(9, .6); // Pull Stone out
+                robot.strafeRightGyro(10, .7); // Pull Stone out
                 correction = robot.correctAngle(90) ; //calculate angle needed to correct
 //                telemetry.addData("start angle: ", startPos.firstAngle);
 //                telemetry.addData("angle : ", robot.getAngle());
@@ -226,14 +232,16 @@ public class redQuarryAuto extends LinearOpMode {
 
                 //sleep(1000000000);
 
-                robot.goStraightGyro(55, 1, 7); // go to deposit 1st stone
+                robot.goStraightGyro(90, 1, 7); // go to deposit 1st stone
+                robot.strafeLeftGyro(10, .7, 3);
                 robot.grabberRDown();
                 robot.gripRUp(); // grabberR lets go of stone
 
                 sleep(300);
+                robot.strafeRightGyro(10, .7);
                 robot.gripRDown(); //put grabber up to go back to quarry
                 robot.grabberRUp();
-                robot.goStraightGyro(-84.5, 1, 5); //go back to quarry
+                robot.goStraightGyro(-115.5, 1, 5); //go back to quarry
                 robot.gripRUp();
                 sleep(100);
                 robot.grabberRDown();
@@ -244,7 +252,7 @@ public class redQuarryAuto extends LinearOpMode {
                 robot.gripRDown(); //grab 2nd stone
                 sleep(500);
                 robot.grabberRUp();
-                robot.strafeRightGyro(7, .6); // Pull Stone out
+                robot.strafeRightGyro(7, .7); // Pull Stone out
                 correction = robot.correctAngle(90) ;
                 if (Math.abs(correction) > 2)
                     robot.turnPID(90, .3/correction, 0, 0, 1); // Straighten out
@@ -255,7 +263,7 @@ public class redQuarryAuto extends LinearOpMode {
                 robot.grabberRUp();
                 robot.gripRDown();
                 sleep(200);
-                robot.goStraightGyro(-13, 0.7, 2); //park
+                robot.goStraightGyro(-13, 0.8, 2); //park
                 sleep(30000);
             }
         }

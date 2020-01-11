@@ -34,6 +34,9 @@ public class testAnything extends LinearOpMode{
         waitForStart();
 
         // Full power test
+
+        robot.goStraightGyro(40, .5, 6);
+        sleep(1000000);
         while(robot.fR.getCurrentPosition() < 1000)
         {
             robot.fR.setPower(1);

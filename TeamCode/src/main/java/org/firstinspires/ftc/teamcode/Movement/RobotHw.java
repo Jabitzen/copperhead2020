@@ -422,7 +422,11 @@ public class RobotHw {
     // Return avg of all 4 motor encoder values
     public double encoderAvg() {
 
+
+
+
         double avg = 0;
+
         // FR motor
         avg += Math.abs(fR.getCurrentPosition());
         // FL motor
@@ -458,8 +462,9 @@ public class RobotHw {
         bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
-    public void goStraightGyro(double distance, double leftPower, double timeout) {
+    public void goStraightGyro(double distance, double power, double timeout) {
 
+        double speed = 0.0;
 
         //reset();
         resetAngle();
@@ -467,15 +472,11 @@ public class RobotHw {
         double rightPower;
         // rotate
         if (distance > 0) {
-            rightPower = leftPower ;
-            rightPower = rightPower - .15;
-            leftPower = leftPower -.15;
+            power = power - .15;
 
         } // reverse
         else {
-            rightPower = leftPower ;
-            rightPower = -rightPower + .15;
-            leftPower = -leftPower + .15;
+            power = -power + .15;
         }
 
         double target = Math.abs(distance * (537.6/15.5));
@@ -486,29 +487,30 @@ public class RobotHw {
         runtime.reset();
         if (distance > 0) {
             while (Math.abs(encoderAvg()) < target && opmode.opModeIsActive() && runtime.seconds() < timeout) {
+                speed = (.15 + (power * remainingDistance(distance)));
                 if (getAngle() > 1) {
-                    fL.setPower(.9 * (.15 + (rightPower * remainingDistance(distance))));
-                    fR.setPower(1.1 * (.15 + (leftPower * remainingDistance(distance))));
-                    bL.setPower(.9 * (.15 + (leftPower * remainingDistance(distance))));
-                    bR.setPower(1.1 * (.15 + (rightPower * remainingDistance(distance))));
+                    fL.setPower(.9 * speed);
+                    fR.setPower(1.1 * speed);
+                    bL.setPower(.9 * speed);
+                    bR.setPower(1.1 * speed);
                 }
                 else if (getAngle() < -1) {
-                    fL.setPower(1.1 * (.15 + (rightPower * remainingDistance(distance))));
-                    fR.setPower(.9 * (.15 + (leftPower * remainingDistance(distance))));
-                    bL.setPower(1.1 * (.15 + (leftPower * remainingDistance(distance))));
-                    bR.setPower(.9 * (.15 + (rightPower * remainingDistance(distance))));
+                    fL.setPower(1.1 * speed);
+                    fR.setPower(.9 * speed);
+                    bL.setPower(1.1 * speed);
+                    bR.setPower(.9 * speed);
                 }
                 else {
-                    fL.setPower((.15 + (rightPower * remainingDistance(distance))));
-                    fR.setPower((.15 + (leftPower * remainingDistance(distance))));
-                    bL.setPower((.15 + (leftPower * remainingDistance(distance))));
-                    bR.setPower((.15 + (rightPower * remainingDistance(distance))));
+                    fL.setPower(speed);
+                    fR.setPower(speed);
+                    bL.setPower(speed);
+                    bR.setPower(speed);
                 }
-                opmode.telemetry.addData("avg : ", encoderAvg());
-                opmode.telemetry.addData("fl ticks : ", fL.getCurrentPosition());
-                opmode.telemetry.addData("fr ticks : ", fR.getCurrentPosition());
-                opmode.telemetry.addData("bl ticks : ", bL.getCurrentPosition());
-                opmode.telemetry.addData("br ticks : ", bR.getCurrentPosition());
+                //opmode.telemetry.addData("avg : ", encoderAvg());
+                //opmode.telemetry.addData("fl ticks : ", fL.getCurrentPosition());
+                //opmode.telemetry.addData("fr ticks : ", fR.getCurrentPosition());
+                //opmode.telemetry.addData("bl ticks : ", bL.getCurrentPosition());
+                //opmode.telemetry.addData("br ticks : ", bR.getCurrentPosition());
 
                 opmode.telemetry.addData("angle : ", getAngle());
                 opmode.telemetry.addData("fl : ", fL.getPower());
@@ -522,23 +524,24 @@ public class RobotHw {
         }
         else {
             while (Math.abs(encoderAvg()) < target && opmode.opModeIsActive() && runtime.seconds() < timeout) {
+                speed = (-.15 + (power * remainingDistance(distance)));
                 if (getAngle() > 1) {
-                    fL.setPower(1.1 * (-.15 + (rightPower * remainingDistance(distance))));
-                    fR.setPower(.9 * (-.15 + (leftPower * remainingDistance(distance))));
-                    bL.setPower(1.1 * (-.15 + (leftPower * remainingDistance(distance))));
-                    bR.setPower(.9 * (-.15 + (rightPower * remainingDistance(distance))));
+                    fL.setPower(1.1 * speed);
+                    fR.setPower(.9 * speed);
+                    bL.setPower(1.1 * speed);
+                    bR.setPower(.9 * speed);
                 }
                 else if (getAngle() < -1) {
-                    fL.setPower(.9 * (-.15 + (rightPower * remainingDistance(distance))));
-                    fR.setPower(1.1 * (-.15 + (leftPower * remainingDistance(distance))));
-                    bL.setPower(.9 * (-.15 + (leftPower * remainingDistance(distance))));
-                    bR.setPower(1.1 * (-.15 + (rightPower * remainingDistance(distance))));
+                    fL.setPower(.9 * speed);
+                    fR.setPower(1.1 * speed);
+                    bL.setPower(.9 * speed);
+                    bR.setPower(1.1 * speed);
                 }
                 else {
-                    fL.setPower((-.15 + (rightPower * remainingDistance(distance))));
-                    fR.setPower((-.15 + (leftPower * remainingDistance(distance))));
-                    bL.setPower((-.15 + (leftPower * remainingDistance(distance))));
-                    bR.setPower((-.15 + (rightPower * remainingDistance(distance))));
+                    fL.setPower(speed);
+                    fR.setPower(speed);
+                    bL.setPower(speed);
+                    bR.setPower(speed);
                 }
 
                 //opmode.telemetry.addData("avg", encoderAvg());
@@ -556,7 +559,6 @@ public class RobotHw {
         }
 
         stopMotors();
-
         floatMode();
         resetAngle();
     }
@@ -955,9 +957,9 @@ public class RobotHw {
 
     public double correctAngle(double angle) {
         Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        opmode.telemetry.addData("angle", angles.firstAngle);
-        opmode.telemetry.update();
-        opmode.sleep(5000);
+        //opmode.telemetry.addData("angle", angles.firstAngle);
+        //opmode.telemetry.update();
+        //opmode.sleep(5000);
 
         double deltaAngle = angle + angles.firstAngle ;
 
@@ -1238,7 +1240,7 @@ public class RobotHw {
             opmode.telemetry.addData("back", sensorDistanceBMid.getDistance(DistanceUnit.CM));
             opmode.telemetry.update();
         }
-        strafeLeftGyro(2, 0.2, 1);
+        //strafeLeftGyro(2, 0.2, 1);
         stopMotors();
         floatMode();
     }
