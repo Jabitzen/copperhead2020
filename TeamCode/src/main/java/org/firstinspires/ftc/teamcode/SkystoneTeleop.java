@@ -36,6 +36,7 @@ public class SkystoneTeleop extends LinearOpMode{
     public boolean teleop = true;
 
     public int constant = 1;
+    public double chungusStartPos;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -44,6 +45,8 @@ public class SkystoneTeleop extends LinearOpMode{
         ElapsedTime runTime = new ElapsedTime();
         //robot.brakeMode();
         runTime.reset();
+        chungusStartPos = robot.liftRotate.getCurrentPosition();
+        robot.liftExtend.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         waitForStart();
 
         //robot.rotate.setPosition(.245);
@@ -51,17 +54,21 @@ public class SkystoneTeleop extends LinearOpMode{
         while (opModeIsActive()) {
             // Sin Cos Atan inputs for mecanum
             trigMecanum();
+            telemetry.addData("start", chungusStartPos);
+            telemetry.addData("pos", robot.liftRotate.getCurrentPosition());
+            telemetry.update();
 
             fRtickspersecond = robot.fR.getCurrentPosition()/ runTime.seconds();
             fLtickspersecond = robot.fL.getCurrentPosition()/ runTime.seconds();
             bRtickspersecond = robot.bR.getCurrentPosition()/runTime.seconds();
             bLtickspersecond = robot.bL.getCurrentPosition()/ runTime.seconds();
-
+/*
             telemetry.addData("fRtickspersecond", fRtickspersecond);
             telemetry.addData("fLtickspersecond", fLtickspersecond);
             telemetry.addData("bRtickspersecond", bRtickspersecond);
             telemetry.addData("bLtickspersecond", bLtickspersecond);
             telemetry.update();
+*/
 
             // Foundation Clamp
             if (gamepad1.y) { //up
@@ -121,8 +128,22 @@ public class SkystoneTeleop extends LinearOpMode{
                 robot.intakeR.setPower(0);
             }
             // Lift
-            robot.liftExtend.setPower(gamepad2.right_stick_y);
-            robot.liftRotate.setPower(-gamepad2.left_stick_y);
+            robot.liftExtend.setPower((0.5) * gamepad2.right_stick_y);
+            if ((gamepad2.left_stick_y < 0) && (robot.liftRotate.getCurrentPosition() > chungusStartPos))
+            {
+                robot.liftRotate.setPower(0.5 * gamepad2.left_stick_y);
+            }
+
+            else if (gamepad2.left_stick_y > 0)
+            {
+                robot.liftRotate.setPower(0.5 * gamepad2.left_stick_y);
+            }
+
+            else{
+                robot.liftRotate.setPower(0);
+            }
+
+
         }
     }
 
