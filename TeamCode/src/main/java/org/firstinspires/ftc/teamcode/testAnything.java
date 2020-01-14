@@ -24,32 +24,52 @@ public class testAnything extends LinearOpMode{
 
     @Override
     public void runOpMode() throws InterruptedException {
+        robot.init(this);
+        waitForStart();
 
+        robot.strafeLeftGyro(80, .6, 5);
+        sleep(30000);
         double fRtickspersecond  = 0.0;
         double fLtickspersecond  = 0.0;
         double bLtickspersecond  = 0.0;
         double bRtickspersecond  = 0.0;
-
+/*
         robot.init(this);
         waitForStart();
+*/
 
         // Full power test
 
-        robot.goStraightGyro(40, .5, 6);
-        sleep(1000000);
-        while(robot.fR.getCurrentPosition() < 1000)
-        {
-            robot.fR.setPower(1);
-            robot.fL.setPower(1);
-            robot.bL.setPower(1);
-            robot.bR.setPower(1);
+        //robot.goStraightGyro(40, .5, 6);
+        //sleep(1000000);
 
+
+        while(robot.fR.getCurrentPosition() < 10000)
+        {
+            robot.fR.setPower(0.9);
+            robot.fL.setPower(1000.0/1037.0);
+            robot.bL.setPower(1);
+            robot.bR.setPower(0.5);
+
+            telemetry.addData("fL:", robot.fL.getCurrentPosition());
+            telemetry.addData("fR:", robot.fR.getCurrentPosition());
+            telemetry.addData("bL:", robot.bR.getCurrentPosition());
+            telemetry.addData("bR:", robot.bL.getCurrentPosition());
+            telemetry.update();
 
         }
+
+        robot.fL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.bL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.fR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        robot.bR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         robot.fR.setPower(0);
         robot.fL.setPower(0);
         robot.bL.setPower(0);
         robot.bR.setPower(0);
+
+        sleep(1000000);
 
         // Ticks per second tests
         sleep(30000);
