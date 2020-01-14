@@ -292,7 +292,7 @@ public class RobotHw {
     }
 
     public void grabberRDown() {
-        grabberB.setPosition(.68);
+        grabberB.setPosition(.65);
     }
 
     public void grabberRUp() {
@@ -1224,7 +1224,7 @@ public class RobotHw {
             opmode.telemetry.update();
         }
 
-        strafeLeftGyro(2, 0.2, 1);
+        //strafeLeftGyro(2, 0.2, 1);
         stopMotors();
         floatMode();
         //gripRDown();

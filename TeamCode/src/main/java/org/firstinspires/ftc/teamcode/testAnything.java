@@ -26,7 +26,8 @@ public class testAnything extends LinearOpMode{
     public void runOpMode() throws InterruptedException {
         robot.init(this);
         waitForStart();
-
+        robot.approachStonesRed(.4);
+        sleep(5000);
         robot.strafeLeftGyro(80, .6, 5);
         sleep(30000);
         double fRtickspersecond  = 0.0;
