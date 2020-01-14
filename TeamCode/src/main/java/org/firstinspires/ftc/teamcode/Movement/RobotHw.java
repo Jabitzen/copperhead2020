@@ -292,7 +292,7 @@ public class RobotHw {
     }
 
     public void grabberRDown() {
-        grabberB.setPosition(.65);
+        grabberB.setPosition(.68);
     }
 
     public void grabberRUp() {
@@ -1190,10 +1190,24 @@ public class RobotHw {
 
         while (cont == true && opmode.opModeIsActive()){
             //moveLeft(power * speed);
-            fL.setPower(-power * speed);
-            fR.setPower(power * speed);
-            bL.setPower(power * speed);
-            bR.setPower(-power * speed);
+            if (getAngle() > 1) {
+                fL.setPower((-power * 1.2) * speed);
+                fR.setPower((power * 1.2) * speed);
+                bL.setPower((power * .8) * speed);
+                bR.setPower((-power * .8) * speed);
+            }
+            else if (getAngle() < -1) {
+                fL.setPower((-power * .8) * speed);
+                fR.setPower((power * .8) * speed);
+                bL.setPower((power * 1.2) * speed);
+                bR.setPower((-power * 1.2) * speed);
+            }
+            else {
+                fL.setPower(-power * speed);
+                fR.setPower(power * speed);
+                bL.setPower(power * speed);
+                bR.setPower(-power * speed);
+            }
             if (!Double.isNaN(sensorDistanceREdge.getDistance(DistanceUnit.CM))) {
                 speed = .4;
             }
