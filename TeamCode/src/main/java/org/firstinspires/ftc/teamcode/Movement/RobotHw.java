@@ -316,7 +316,7 @@ public class RobotHw {
     }
 
     public void clawUp(){
-        claw.setPosition(.3);
+        claw.setPosition(.5);
     }
 
     public void gripRDown(){

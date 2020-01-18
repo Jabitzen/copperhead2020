@@ -38,6 +38,8 @@ public class SkystoneTeleop extends LinearOpMode{
     public int constant = 1;
     public double chungusStartPos;
 
+    public double chungusUpLimit;
+
     @Override
     public void runOpMode() throws InterruptedException {
         robot.init(this, teleop);
@@ -54,14 +56,14 @@ public class SkystoneTeleop extends LinearOpMode{
         while (opModeIsActive()) {
             // Sin Cos Atan inputs for mecanum
             trigMecanum();
-            telemetry.addData("start", chungusStartPos);
+           // telemetry.addData("start", chungusStartPos);
             telemetry.addData("pos", robot.liftRotate.getCurrentPosition());
             telemetry.update();
-
-            fRtickspersecond = robot.fR.getCurrentPosition()/ runTime.seconds();
-            fLtickspersecond = robot.fL.getCurrentPosition()/ runTime.seconds();
-            bRtickspersecond = robot.bR.getCurrentPosition()/runTime.seconds();
-            bLtickspersecond = robot.bL.getCurrentPosition()/ runTime.seconds();
+//
+//            fRtickspersecond = robot.fR.getCurrentPosition()/ runTime.seconds();
+//            fLtickspersecond = robot.fL.getCurrentPosition()/ runTime.seconds();
+//            bRtickspersecond = robot.bR.getCurrentPosition()/runTime.seconds();
+//            bLtickspersecond = robot.bL.getCurrentPosition()/ runTime.seconds();
 /*
             telemetry.addData("fRtickspersecond", fRtickspersecond);
             telemetry.addData("fLtickspersecond", fLtickspersecond);
@@ -86,24 +88,24 @@ public class SkystoneTeleop extends LinearOpMode{
                 robot.clawUp(); // up
             }
 
-            //Rotate
-            if (gamepad2.left_trigger == 1){
-                robot.rotate.setPosition(.6); // Cube fits in robot
-            }
-            if (gamepad2.right_trigger == 1){
-                robot.rotate.setPosition(.245); // Cube is horizontal
-            }
+            //Rotate/8
+//            if (gamepad2.left_trigger == 1){
+//                robot.rotate.setPosition(.6); // Cube fits in robot
+//            }
+//            if (gamepad2.right_trigger == 1){
+//                robot.rotate.setPosition(.245); // Cube is horizontal
+//            }
             // Red Grabber stone pick up
             if (gamepad1.x){
                 robot.grabberRDown();
-                robot.gripRUp();
+                //robot.gripRUp();
             }
 
             // Red Grabber pinch and bring up stone
             if(gamepad1.b){
-                robot.gripRDown();
-                sleep(1000);
-                robot.grabberRUp();
+                robot.grabberBDown();
+                //sleep(1000);
+                //robot.grabberRUp();
             }
 
             // Reverse Mode
@@ -129,18 +131,90 @@ public class SkystoneTeleop extends LinearOpMode{
             }
             // Lift
             robot.liftExtend.setPower((0.5) * gamepad2.right_stick_y);
-            if ((gamepad2.left_stick_y < 0) && (robot.liftRotate.getCurrentPosition() > chungusStartPos))
+            if ((gamepad2.left_stick_y < 0))
             {
-                robot.liftRotate.setPower(0.5 * gamepad2.left_stick_y);
+                robot.liftRotate.setPower(-0.5 * gamepad2.left_stick_y);
             }
 
-            else if (gamepad2.left_stick_y > 0)
+            else if (gamepad2.left_stick_y > 0 && (robot.liftRotate.getCurrentPosition() > chungusStartPos))
             {
-                robot.liftRotate.setPower(0.5 * gamepad2.left_stick_y);
+                robot.liftRotate.setPower(-0.5 * gamepad2.left_stick_y);
             }
 
             else{
                 robot.liftRotate.setPower(0);
+            }
+
+            if(gamepad2.x){
+                //telemetry.addLine(("first stage"));
+                //telemetry.update();
+                if(robot.liftRotate.getCurrentPosition() < 500)
+                {
+                    double aboveOrBelow = robot.liftRotate.getCurrentPosition() - 500; //-200
+                    double makeItOne = 1 / (Math.abs(aboveOrBelow)); // 1/200
+                    double power = -0.5;
+//                    telemetry.addData("1", aboveOrBelow);
+//                    telemetry.addData("2", makeItOne);
+//                    telemetry.addData("3", power);
+                   // telemetry.addLine(("2nd stage"));
+                    //telemetry.addData("calc", aboveOrBelow * makeItOne * power);
+                    //telemetry.update();
+                    robot.liftRotate.setPower(aboveOrBelow * makeItOne * power);
+                }
+
+                else {
+                    robot.liftRotate.setPower(0);
+                }
+
+
+            }
+
+            if(gamepad2.y){
+                //telemetry.addLine(("first stage"));
+                //telemetry.update();
+                if(robot.liftRotate.getCurrentPosition() < 1000)
+                {
+                    double aboveOrBelow = robot.liftRotate.getCurrentPosition() - 1000; //-200
+                    double makeItOne = 1 / (Math.abs(aboveOrBelow)); // 1/200
+                    double power = -0.5;
+//                    telemetry.addData("1", aboveOrBelow);
+//                    telemetry.addData("2", makeItOne);
+//                    telemetry.addData("3", power);
+                    // telemetry.addLine(("2nd stage"));
+                    //telemetry.addData("calc", aboveOrBelow * makeItOne * power);
+                    //telemetry.update();
+                    robot.liftRotate.setPower(aboveOrBelow * makeItOne * power);
+                }
+
+                else {
+                    robot.liftRotate.setPower(0);
+                }
+
+
+            }
+
+            if(gamepad2.b){
+                //telemetry.addLine(("first stage"));
+                //telemetry.update();
+                if(robot.liftRotate.getCurrentPosition() < 1500)
+                {
+                    double aboveOrBelow = robot.liftRotate.getCurrentPosition() - 1500; //-200
+                    double makeItOne = 1 / (Math.abs(aboveOrBelow)); // 1/200
+                    double power = -0.5;
+//                    telemetry.addData("1", aboveOrBelow);
+//                    telemetry.addData("2", makeItOne);
+//                    telemetry.addData("3", power);
+                    // telemetry.addLine(("2nd stage"));
+                    //telemetry.addData("calc", aboveOrBelow * makeItOne * power);
+                    //telemetry.update();
+                    robot.liftRotate.setPower(aboveOrBelow * makeItOne * power);
+                }
+
+                else {
+                    robot.liftRotate.setPower(0);
+                }
+
+
             }
 
 
