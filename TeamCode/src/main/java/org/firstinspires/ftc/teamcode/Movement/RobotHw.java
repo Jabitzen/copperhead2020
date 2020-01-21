@@ -1209,9 +1209,10 @@ public class RobotHw {
                 bR.setPower(-power * speed);
             }
             if (!Double.isNaN(sensorDistanceREdge.getDistance(DistanceUnit.CM))) {
+                reset();
                 speed = .4;
             }
-            if (sensorDistanceREdge.getDistance(DistanceUnit.CM) < 7.5 || sensorDistanceRMid.getDistance(DistanceUnit.CM) < 7.5) {
+            if (sensorDistanceREdge.getDistance(DistanceUnit.CM) < 9.5 || sensorDistanceRMid.getDistance(DistanceUnit.CM) < 9.5) {
                 cont = false;
             }
 
