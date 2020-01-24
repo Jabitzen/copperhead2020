@@ -131,7 +131,8 @@ public class SkystoneTeleop extends LinearOpMode{
                 robot.intakeR.setPower(0);
             }
             // Lift
-            robot.liftExtend.setPower((0.5) * gamepad2.right_stick_y);
+
+            robot.liftExtend.setPower(gamepad2.right_stick_y);
             if ((gamepad2.left_stick_y < 0))
             {
                 robot.liftRotate.setPower(-0.5 * gamepad2.left_stick_y);
@@ -203,11 +204,11 @@ public class SkystoneTeleop extends LinearOpMode{
 
     public void trigMecanum() {
 
-        rightstickx = -gamepad1.right_stick_x ;
-        leftstickx = -gamepad1.left_stick_x * constant;
+        rightstickx = Math.abs(gamepad1.right_stick_x) * -gamepad1.right_stick_x ;
+        leftstickx = -gamepad1.left_stick_x * Math.abs(gamepad1.left_stick_x) * constant;
 
-        leftstickyfront = gamepad1.left_stick_y * constant;
-        leftstickyback = gamepad1.left_stick_y * -constant;
+        leftstickyfront = Math.abs(gamepad1.left_stick_y) * gamepad1.left_stick_y * constant;
+        leftstickyback = Math.abs(gamepad1.left_stick_y) * gamepad1.left_stick_y * -constant;
 
         double rFront = Math.hypot(rightstickx, leftstickyfront);
         double rBack = Math.hypot(rightstickx, leftstickyback);

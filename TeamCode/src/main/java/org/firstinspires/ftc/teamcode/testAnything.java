@@ -19,6 +19,7 @@ public class testAnything extends LinearOpMode{
     RobotHw robot = new RobotHw();
     BitMapVision bm1 = null;
     ElapsedTime runTime = new ElapsedTime();
+    double correction;
 
     //String skyStonePos = null;
 
@@ -26,7 +27,13 @@ public class testAnything extends LinearOpMode{
     public void runOpMode() throws InterruptedException {
         robot.init(this);
         waitForStart();
-        robot.approachStonesRed(.4);
+        while (opModeIsActive()) {
+            correction = robot.correctAngle(0);
+            robot.turnPID(0, .2/correction, 0,0, 30);
+            //telemetry.addData()
+            //sleep(500000);
+        }
+
         sleep(5000);
         robot.strafeLeftGyro(80, .6, 5);
         sleep(30000);

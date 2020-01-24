@@ -490,21 +490,21 @@ public class RobotHw {
                 speed = (.15 + (power * remainingDistance(distance)));
                 if (getAngle() > 1) {
                     fL.setPower(.9 * speed);
-                    fR.setPower(1.1 * speed);
+                    fR.setPower(1.1 * speed * .9793);
                     bL.setPower(.9 * speed);
                     bR.setPower(1.1 * speed);
                 }
                 else if (getAngle() < -1) {
                     fL.setPower(1.1 * speed);
-                    fR.setPower(.9 * speed);
+                    fR.setPower(.9 * speed * .9793);
                     bL.setPower(1.1 * speed);
                     bR.setPower(.9 * speed);
                 }
                 else {
                     fL.setPower(speed);
-                    fR.setPower(speed);
+                    fR.setPower(speed * .9793);
                     bL.setPower(speed);
-                    bR.setPower(speed);
+                    bR.setPower(speed);// * .9793);
                 }
                 //opmode.telemetry.addData("avg : ", encoderAvg());
                 //opmode.telemetry.addData("fl ticks : ", fL.getCurrentPosition());
@@ -527,21 +527,21 @@ public class RobotHw {
                 speed = (-.15 + (power * remainingDistance(distance)));
                 if (getAngle() > 1) {
                     fL.setPower(1.1 * speed);
-                    fR.setPower(.9 * speed);
+                    fR.setPower(.9 * speed * .9793);
                     bL.setPower(1.1 * speed);
                     bR.setPower(.9 * speed);
                 }
                 else if (getAngle() < -1) {
                     fL.setPower(.9 * speed);
-                    fR.setPower(1.1 * speed);
+                    fR.setPower(1.1 * speed * .9793);
                     bL.setPower(.9 * speed);
                     bR.setPower(1.1 * speed);
                 }
                 else {
                     fL.setPower(speed);
-                    fR.setPower(speed);
+                    fR.setPower(speed * .9793);
                     bL.setPower(speed);
-                    bR.setPower(speed);
+                    bR.setPower(speed);// * .9793);
                 }
 
                 //opmode.telemetry.addData("avg", encoderAvg());
@@ -912,8 +912,14 @@ public class RobotHw {
             pastTime = currentTime;
             currentTime = runtime.milliseconds();
             double dT = currentTime - pastTime;
+            //prevError = error;
             error = target - getAngle();
             integral += dT * (error - prevError);
+
+            if (Math.abs(integral * kI) > .2) {
+                kI = Math.abs(.2/integral);
+            }
+
             power = (error * kP) + integral * kI + ((error - prevError) / dT * kD);
             if (power < 0) {
                 fL.setPower(power );
@@ -927,9 +933,12 @@ public class RobotHw {
                 fR.setPower(-1 * (power));
                 bR.setPower(-1 * (power));
             }
+
+
             opmode.telemetry.addData("angle: ", getAngle());
             opmode.telemetry.addData("P", (error * kP));
             opmode.telemetry.addData("I", (integral * kI));
+            opmode.telemetry.addData("integral", integral);
             opmode.telemetry.addData("D", ((Math.abs(error) - Math.abs(prevError)) / dT * kD));
             opmode.telemetry.update();
             prevError = error;
@@ -986,20 +995,20 @@ public class RobotHw {
             if (getAngle() > 1) {
                 fL.setPower(power * .8);
                 fR.setPower(-power * .8);
-                bL.setPower(-power * 1.2);
-                bR.setPower(power * 1.2);
+                bL.setPower(-power * 1.2 * 0.91);
+                bR.setPower(power * 1.2 * 0.91);
             }
             else if (getAngle() < -1) {
                 fL.setPower(power * 1.2);
                 fR.setPower(-power * 1.2);
-                bL.setPower(-power * .8);
-                bR.setPower(power * .8);
+                bL.setPower(-power * .8 * 0.91);
+                bR.setPower(power * .8 * 0.91);
             }
             else {
                 fL.setPower(power);
                 fR.setPower(-power);
-                bL.setPower(-power);
-                bR.setPower(power);
+                bL.setPower(-power* 0.91);
+                bR.setPower(power* 0.91);
             }
             //opmode.telemetry.addData("avg", encoderAvg());
             //opmode.telemetry.addData("fl", fL.getCurrentPosition());
@@ -1037,20 +1046,20 @@ public class RobotHw {
             if (getAngle() > 1) {
                 fL.setPower(-power * 1.2);
                 fR.setPower(power * 1.2);
-                bL.setPower(power * .8);
-                bR.setPower(-power * .8);
+                bL.setPower(power * .8 * 0.91);
+                bR.setPower(-power * .8 * 0.91);
             }
             else if (getAngle() < -1) {
                 fL.setPower(-power * .8);
-                fR.setPower(power * .8);
-                bL.setPower(power * 1.2);
-                bR.setPower(-power * 1.2);
+                fR.setPower(power * .8 );
+                bL.setPower(power * 1.2 * 0.91);
+                bR.setPower(-power * 1.2 * 0.91);
             }
             else {
                 fL.setPower(-power);
                 fR.setPower(power);
-                bL.setPower(power);
-                bR.setPower(-power);
+                bL.setPower(power * 0.91);
+                bR.setPower(-power * 0.91);
             }
             //opmode.telemetry.addData("avg", encoderAvg());
             //opmode.telemetry.addData("fl", fL.getCurrentPosition());
@@ -1193,24 +1202,24 @@ public class RobotHw {
             if (getAngle() > 1) {
                 fL.setPower((-power * 1.2) * speed);
                 fR.setPower((power * 1.2) * speed);
-                bL.setPower((power * .8) * speed);
-                bR.setPower((-power * .8) * speed);
+                bL.setPower((power * .8) * speed * .91);
+                bR.setPower((-power * .8) * speed* .91);
             }
             else if (getAngle() < -1) {
                 fL.setPower((-power * .8) * speed);
-                fR.setPower((power * .8) * speed);
-                bL.setPower((power * 1.2) * speed);
-                bR.setPower((-power * 1.2) * speed);
+                fR.setPower((power * .8) * speed );
+                bL.setPower((power * 1.2) * speed* .91);
+                bR.setPower((-power * 1.2) * speed* .91);
             }
             else {
                 fL.setPower(-power * speed);
-                fR.setPower(power * speed);
-                bL.setPower(power * speed);
-                bR.setPower(-power * speed);
+                fR.setPower(power * speed );
+                bL.setPower(power * speed* .91);
+                bR.setPower(-power * speed* .91);
             }
             if (!Double.isNaN(sensorDistanceREdge.getDistance(DistanceUnit.CM))) {
                 reset();
-                speed = .4;
+                speed = .5;
             }
             if (sensorDistanceREdge.getDistance(DistanceUnit.CM) < 9.5 || sensorDistanceRMid.getDistance(DistanceUnit.CM) < 9.5) {
                 cont = false;
