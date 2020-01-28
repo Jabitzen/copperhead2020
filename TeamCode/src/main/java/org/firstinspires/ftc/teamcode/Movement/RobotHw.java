@@ -284,7 +284,7 @@ public class RobotHw {
     }
 
     public void grabberBDown() {
-        grabberR.setPosition(.35);
+        grabberR.setPosition(.32);
     }
 
     public void grabberBUp() {
@@ -885,7 +885,10 @@ public class RobotHw {
         //lastDegrees = degrees;
 
         // wait for rotation to stop.
+        opmode.telemetry.addLine("done");
+        opmode.telemetry.update();
         opmode.sleep(500);
+
 
         // reset angle tracking on new heading.
         //resetAngle();
@@ -893,7 +896,7 @@ public class RobotHw {
 
     public void turnPID(double angle, double p, double i, double d, double timeout){
         runtime.reset();
-        //resetAngle();
+        resetAngle();
         double kP = Math.abs(p);
         double kD = d;
         double kI = i;
@@ -912,26 +915,29 @@ public class RobotHw {
             pastTime = currentTime;
             currentTime = runtime.milliseconds();
             double dT = currentTime - pastTime;
-            //prevError = error;
+            prevError = error;
             error = target - getAngle();
-            integral += dT * (error - prevError);
+            integral += dT * (prevError);
 
-            if (Math.abs(integral * kI) > .2) {
-                kI = Math.abs(.2/integral);
+            if (Math.abs(integral * kI) > .15 && Math.abs(error * kP) < .1) {
+                kI = Math.abs(.15/integral);
+            }
+            else {
+                kI = 0;
             }
 
             power = (error * kP) + integral * kI + ((error - prevError) / dT * kD);
             if (power < 0) {
-                fL.setPower(power );
-                bL.setPower(power);
-                fR.setPower(-1 * (power));
-                bR.setPower(-1 * (power));
+                fL.setPower(power - .1);
+                bL.setPower(power - .1);
+                fR.setPower(-1 * (power) + .1);
+                bR.setPower(-1 * (power) + .1);
 
             } else {
-                fL.setPower(power);
-                bL.setPower(power);
-                fR.setPower(-1 * (power));
-                bR.setPower(-1 * (power));
+                fL.setPower(power + .1);
+                bL.setPower(power + .1);
+                fR.setPower(-1 * (power) - .1);
+                bR.setPower(-1 * (power) - .1);
             }
 
 

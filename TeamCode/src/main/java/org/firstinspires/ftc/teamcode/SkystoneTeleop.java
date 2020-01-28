@@ -98,12 +98,26 @@ public class SkystoneTeleop extends LinearOpMode{
             // Red Grabber stone pick up
             if (gamepad1.x){
                 robot.grabberRDown();
-                robot.gripRUp();
+                robot.gripRDown();
             }
 
             // Red Grabber pinch and bring up stone
             if(gamepad1.b){
                 robot.grabberBDown();
+                robot.gripBDown();
+                //sleep(1000);
+                //robot.grabberRUp();
+            }
+
+            if(gamepad1.dpad_left){
+                robot.grabberRUp();
+                robot.gripRUp();
+                //sleep(1000);
+                //robot.grabberRUp();
+            }
+
+            if(gamepad1.dpad_right){
+                robot.grabberBUp();
                 robot.gripBUp();
                 //sleep(1000);
                 //robot.grabberRUp();
@@ -116,6 +130,8 @@ public class SkystoneTeleop extends LinearOpMode{
             if (gamepad1.dpad_up){
                 constant = 1; // Forward
             }
+
+
 
             //intake
             if (gamepad1.right_trigger > .1){
