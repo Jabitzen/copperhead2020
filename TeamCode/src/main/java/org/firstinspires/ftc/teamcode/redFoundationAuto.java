@@ -14,14 +14,50 @@ public class redFoundationAuto extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         robot.init(this);
 
+
+//        waitForStart();
+//        robot.strafeRightGyro(48, 1);
+//        //Strafe right 4ft
+//
+//        robot.grabberRDown();
+//        robot.grabberBDown();
+//        //servos down
+//
+//        robot.strafeLeftGyro(48, 1, 5);
+//        //strafe left 4ft
+//
+//        robot.grabberRUp();
+//        robot.grabberBUp();
+//        //servos up
+//
+//        robot.goStraightGyro(60,1, 5);
+//        //move forward 5ft
+
         waitForStart();
-        robot.moveStraight(-15, .5);
+        robot.goStraightGyro(-12, .7, 3);
+        robot.strafeRightGyro(30, .5);
+        //Strafe right 4ft
 
-        robot.moveStraight(-15, .5);
-        //servo down
+        robot.grabberRDown();
+        robot.grabberBDown();
+        sleep(2000);
+        //servos down
+        robot.goStraightGyro(-4,.7, 3);
 
-        robot.moveStraight(15, .5);
-        //servo up
-        //robot.strafeRight(30, .5);
+        //robot.turnPID(90,.3,0,0,1);
+
+        robot.goStraightGyro(-12, 0.5, 5);
+
+        robot.grabberRUp();
+        robot.grabberBUp();
+        //servos up
+
+        robot.strafeLeftGyro(60, 1, 5);
+        //strafe left 4ft
+
+
+
+
     }
+
 }
