@@ -64,7 +64,7 @@ public class blueQuarryAutoPlace extends LinearOpMode {
                 //sleep(5000);
 
                if (Math.abs(correction) > 2)
-                   robot.turnPID(90, .2/correction, 0, 0, 1); // Straighten out
+                   robot.turnPID(90, .1/correction, 0, 0, 1); // Straighten out
 
 
 
@@ -100,11 +100,11 @@ public class blueQuarryAutoPlace extends LinearOpMode {
                 //sleep(5000);
 
                 if (Math.abs(correction) > 2)
-                    robot.turnPID(90, .2/correction, 0, 0, 1);
+                    robot.turnPID(90, .1/correction, 0, 0, 1);
                 // Pull Stone out
-               // correction = robot.correctAngle(90) ;
-                //if (Math.abs(correction) > 2)
-                  //  robot.turnPID(90, .3/correction, 0, 0, 1); // Straighten out
+                // correction = robot.correctAngle(90) ;
+                // if (Math.abs(correction) > 2)
+                //  robot.turnPID(90, .3/correction, 0, 0, 1); // Straighten out
                 robot.goStraightGyro(-90, 1, 7); // go to deposit 2nd stone
                 robot.grabberBDown();
                 robot.gripBUp(); // grabberR lets go of stone
@@ -113,29 +113,10 @@ public class blueQuarryAutoPlace extends LinearOpMode {
                 robot.gripBDown();
                 sleep(200);
                 robot.goStraightGyro(13, 0.8, 2); //park
-                sleep(30000);
-                //robot.alignStonesR(.13);
-
-//                //second stone
-//                robot.goStraightGyro(91, .4, 5); // Go back to the stones
-//                sleep(500);
-//                robot.strafeRightGyro(10.5, .25); // go in to get 2nd stone
-//                //robot.grabberR.setPosition(0.02); // drop grabberR do hold stone
-//                robot.goStraightGyro(-.6, .2, .2);
-//                sleep(1000);
-//                robot.strafeLeft(10.5, .5); // Pull stone out
-//                robot.goStraightGyro(-100, .7, 7); // Cross the bridge
-//               // robot.grabberR.setPosition(.5); // Drop the stone
-//                sleep(500);
-//                robot.strafeRight(3, .3);
-//                robot.goStraightGyro(26, .5, 3); // park
-//                sleep(30000);
-
 
             } else if (skyStonePos == "left") {
 
                 robot.goStraightGyro(18, .7, 3); //Move to the 1st stone
-
                 robot.turnPID(90, .79/90, 0, 0, 10); // Rotate to align grabberR with stone
                 //sleep(500);
                 robot.goStraightGyro(-11, 0.3, 1); // Align with center stone
@@ -161,7 +142,7 @@ public class blueQuarryAutoPlace extends LinearOpMode {
                 //sleep(5000);
 
                 if (Math.abs(correction) > 2)
-                    robot.turnPID(90, .2/correction, 0, 0, 1);
+                    robot.turnPID(90, .1/correction, 0, 0, 1);
                 // Pull Stone out
              //   correction = robot.correctAngle(90) ; //calculate angle needed to correct
 //                telemetry.addData("start angle: ", startPos.firstAngle);

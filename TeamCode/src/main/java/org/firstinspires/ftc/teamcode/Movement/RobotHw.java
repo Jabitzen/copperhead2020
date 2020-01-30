@@ -292,7 +292,7 @@ public class RobotHw {
     }
 
     public void grabberRDown() {
-        grabberB.setPosition(.65);
+        grabberB.setPosition(.72);
     }
 
     public void grabberRUp() {
@@ -1231,10 +1231,6 @@ public class RobotHw {
                 cont = false;
             }
 
-
-
-
-
             opmode.telemetry.addData("front", sensorDistanceREdge.getDistance(DistanceUnit.CM));
             opmode.telemetry.addData("back", sensorDistanceRMid.getDistance(DistanceUnit.CM));
             opmode.telemetry.update();
@@ -1254,15 +1250,31 @@ public class RobotHw {
 
 
         while (cont == true && opmode.opModeIsActive()){
-            fL.setPower(-power * speed);
-            fR.setPower(power * speed);
-            bL.setPower(power * speed);
-            bR.setPower(-power * speed);
+
+            if (getAngle() > 1) {
+                fL.setPower((-power * 1.2) * speed);
+                fR.setPower((power * 1.2) * speed);
+                bL.setPower((power * .8) * speed * .91);
+                bR.setPower((-power * .8) * speed* .91);
+            }
+            else if (getAngle() < -1) {
+                fL.setPower((-power * .8) * speed);
+                fR.setPower((power * .8) * speed );
+                bL.setPower((power * 1.2) * speed* .91);
+                bR.setPower((-power * 1.2) * speed* .91);
+            }
+            else {
+                fL.setPower(-power * speed);
+                fR.setPower(power * speed );
+                bL.setPower(power * speed* .91);
+                bR.setPower(-power * speed* .91);
+            }
 
             if (!Double.isNaN(sensorDistanceBEdge.getDistance(DistanceUnit.CM))) {
-                speed = .4;
+                reset();
+                speed = .5;
             }
-            if (sensorDistanceBEdge.getDistance(DistanceUnit.CM) < 5.5 || sensorDistanceBMid.getDistance(DistanceUnit.CM) < 5.5) {
+            if (sensorDistanceBEdge.getDistance(DistanceUnit.CM) < 9.5 || sensorDistanceBMid.getDistance(DistanceUnit.CM) < 9.5) {
                 cont = false;
             }
 
@@ -1270,7 +1282,7 @@ public class RobotHw {
             opmode.telemetry.addData("back", sensorDistanceBMid.getDistance(DistanceUnit.CM));
             opmode.telemetry.update();
         }
-        //strafeLeftGyro(2, 0.2, 1);
+
         stopMotors();
         floatMode();
     }

@@ -54,8 +54,8 @@ public class blueFoundationAuto extends LinearOpMode {
         //servos up
         sleep(2000);
         robot.goStraightGyro(20, 1, 5);
-        robot.strafeLeftGyro(2, 0.5, 1);
-        robot.goStraightGyro(35, 1, 5);
+        robot.strafeLeftGyro(2, 0.5, 3);
+        robot.goStraightGyro(40, 1, 5);
         //strafe left 4ft
 
 

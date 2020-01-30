@@ -45,12 +45,11 @@ public class blueQuarryAuto extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            // Middle Pathing
+            // Reset tracking angle
             robot.resetAngle();
-            //robot.startPos = robot.imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
 
             if (skyStonePos == "center") {
-
+                // Move to first skystone
                 robot.goStraightGyro(18, .7, 3); //Move to the 1st stone
 
                 robot.turnPID(90, .79/90, 0, 0, 10); // Rotate to align grabberR with stone
@@ -59,7 +58,7 @@ public class blueQuarryAuto extends LinearOpMode {
                 robot.gripBUp(); //prime grabber and grip for stone
                 robot.grabberBDown();
                 sleep(500);
-                robot.approachStonesBlue(.4); // Approach stone
+                robot.approachStonesBlue(.5); // Approach stone
                 robot.gripBDown(); //grab stone
                 //robot.alignStonesR(.14);
                 //robot.grabberR.setPosition(0.65); // Drop grabberR
@@ -68,7 +67,7 @@ public class blueQuarryAuto extends LinearOpMode {
                 //robot.goStraightGyro(-4, 0.2, 1);
                 sleep(600);
                 robot.grabberBUp(); //pick up stone
-                robot.strafeRightGyro(8, .6); // Pull Stone out
+                robot.strafeRightGyro(robot.encoderAvg() * (11.0/537.6) + 6.5, .6); // Pull Stone out
                 correction = robot.correctAngle(90) ; //calculate angle needed to correct
                 // telemetry.addData("start angle: ", startPos.firstAngle);
                 // telemetry.addData("angle : ", robot.getAngle());
@@ -77,8 +76,8 @@ public class blueQuarryAuto extends LinearOpMode {
                 //telemetry.update();
                 //sleep(5000);
 
-               if (Math.abs(correction) > 2)
-                   robot.turnPID(90, .2/correction, 0, 0, 1); // Straighten out
+               if (Math.abs(correction) > 3)
+                   robot.turnPID(90, .1/correction, 0, 0, 1); // Straighten out
 
 
 
@@ -98,11 +97,11 @@ public class blueQuarryAuto extends LinearOpMode {
             //    correction = robot.correctAngle(90) ; //calculate angle needed to correct
            //     if (Math.abs(correction) > 2)
             //        robot.turnPID(90, .3/correction, 0, 0, 1); // Straighten out
-                robot.approachStonesBlue(.4); //approach 2nd stone
+                robot.approachStonesBlue(.5); //approach 2nd stone
                 robot.gripBDown(); //grab 2nd stone
                 sleep(500);
                 robot.grabberBUp();
-                robot.strafeRightGyro(11, .6);
+                robot.strafeRightGyro(robot.encoderAvg() * (11.0/537.6) + 6.5, .6);
                 correction = robot.correctAngle(90) ; //calculate angle needed to correct
                 // telemetry.addData("start angle: ", startPos.firstAngle);
                 // telemetry.addData("angle : ", robot.getAngle());
@@ -111,8 +110,8 @@ public class blueQuarryAuto extends LinearOpMode {
                 //telemetry.update();
                 //sleep(5000);
 
-                if (Math.abs(correction) > 2)
-                    robot.turnPID(90, .2/correction, 0, 0, 1);
+                if (Math.abs(correction) > 3)
+                    robot.turnPID(90, .1/correction, 0, 0, 1);
                 // Pull Stone out
                // correction = robot.correctAngle(90) ;
                 //if (Math.abs(correction) > 2)
@@ -154,7 +153,7 @@ public class blueQuarryAuto extends LinearOpMode {
                 robot.gripBUp(); //prime grabber and grip for stone
                 robot.grabberBDown();
                 sleep(500);
-                robot.approachStonesBlue(.4); // Approach stone
+                robot.approachStonesBlue(.5); // Approach stone
                 robot.gripBDown(); //grab stone
                 //robot.alignStonesR(.14);
                 //robot.grabberR.setPosition(0.65); // Drop grabberR
@@ -163,7 +162,7 @@ public class blueQuarryAuto extends LinearOpMode {
                 //robot.goStraightGyro(-4, 0.2, 1);
                 sleep(1000);
                 robot.grabberBUp(); //pick up stone
-                robot.strafeRightGyro(8, .6);
+                robot.strafeRightGyro(robot.encoderAvg() * (11.0/537.6) + 6.5, .6);
                 correction = robot.correctAngle(90) ; //calculate angle needed to correct
                 // telemetry.addData("start angle: ", startPos.firstAngle);
                 // telemetry.addData("angle : ", robot.getAngle());
@@ -172,8 +171,8 @@ public class blueQuarryAuto extends LinearOpMode {
                 //telemetry.update();
                 //sleep(5000);
 
-                if (Math.abs(correction) > 2)
-                    robot.turnPID(90, .2/correction, 0, 0, 1);
+                if (Math.abs(correction) > 3)
+                    robot.turnPID(90, .1/correction, 0, 0, 1);
                 // Pull Stone out
              //   correction = robot.correctAngle(90) ; //calculate angle needed to correct
 //                telemetry.addData("start angle: ", startPos.firstAngle);
@@ -202,11 +201,11 @@ public class blueQuarryAuto extends LinearOpMode {
              //   correction = robot.correctAngle(90) ; //calculate angle needed to correct
              //   if (Math.abs(correction) > 2)
                //     robot.turnPID(90, .3/correction, 0, 0, 1); // Straighten out
-                robot.approachStonesBlue(.4); //approach 2nd stone
+                robot.approachStonesBlue(.5); //approach 2nd stone
                 robot.gripBDown(); //grab 2nd stone
                 sleep(500);
                 robot.grabberBUp();
-                robot.strafeRightGyro(8, .6); // Pull Stone out
+                robot.strafeRightGyro(robot.encoderAvg() * (11.0/537.6) + 6.5, .6); // Pull Stone out
 
                 correction = robot.correctAngle(90) ; //calculate angle needed to correct
                 // telemetry.addData("start angle: ", startPos.firstAngle);
@@ -216,8 +215,8 @@ public class blueQuarryAuto extends LinearOpMode {
                 //telemetry.update();
                 //sleep(5000);
 
-                if (Math.abs(correction) > 2)
-                    robot.turnPID(90, .2/correction, 0, 0, 1);
+                if (Math.abs(correction) > 3)
+                    robot.turnPID(90, .1/correction, 0, 0, 1);
              //   correction = robot.correctAngle(90) ;
              //   if (Math.abs(correction) > 2)
              //       robot.turnPID(90, .3/correction, 0, 0, 1); // Straighten out
@@ -241,7 +240,7 @@ public class blueQuarryAuto extends LinearOpMode {
                 robot.gripBUp(); //prime grabber and grip for stone
                 robot.grabberBDown();
                 sleep(500);
-                robot.approachStonesBlue(.4); // Approach stone
+                robot.approachStonesBlue(.5); // Approach stone
                 robot.gripBDown(); //grab stone
                 //robot.alignStonesR(.14);
                 //robot.grabberR.setPosition(0.65); // Drop grabberR
@@ -250,7 +249,7 @@ public class blueQuarryAuto extends LinearOpMode {
                 //robot.goStraightGyro(-4, 0.2, 1);
                 sleep(1000);
                 robot.grabberBUp(); //pick up stone
-                robot.strafeRightGyro(8, .6); // Pull Stone out
+                robot.strafeRightGyro(robot.encoderAvg() * (11.0/537.6) + 6.5, .6); // Pull Stone out
               //  correction = robot.correctAngle(90) ; //calculate angle needed to correct
 //                telemetry.addData("start angle: ", startPos.firstAngle);
 //                telemetry.addData("angle : ", robot.getAngle());
@@ -272,8 +271,8 @@ public class blueQuarryAuto extends LinearOpMode {
                 //telemetry.update();
                 //sleep(5000);
 
-                if (Math.abs(correction) > 2)
-                    robot.turnPID(90, .2/correction, 0, 0, 1);
+                if (Math.abs(correction) > 3)
+                    robot.turnPID(90, .1/correction, 0, 0, 1);
 
                 robot.goStraightGyro(-66, 1, 7); // go to deposit 1st stone
                 robot.grabberBDown();
@@ -289,11 +288,11 @@ public class blueQuarryAuto extends LinearOpMode {
                 //   correction = robot.correctAngle(90) ; //calculate angle needed to correct
                 //   if (Math.abs(correction) > 2)
                 //  robot.turnPID(90, .3/correction, 0, 0, 1); // Straighten out
-                robot.approachStonesBlue(.4); //approach 2nd stone
+                robot.approachStonesBlue(.5); //approach 2nd stone
                 robot.gripBDown(); //grab 2nd stone
                 sleep(500);
                 robot.grabberBUp();
-                robot.strafeRightGyro(7.5, .6); // Pull Stone out
+                robot.strafeRightGyro(robot.encoderAvg() * (11.0/537.6) + 6.5, .6); // Pull Stone out
              //   correction = robot.correctAngle(90) ;
              //   if (Math.abs(correction) > 2)
              //       robot.turnPID(90, .3/correction, 0, 0, 1); // Straighten out
@@ -306,8 +305,8 @@ public class blueQuarryAuto extends LinearOpMode {
                 //telemetry.update();
                 //sleep(5000);
 
-                if (Math.abs(correction) > 2)
-                    robot.turnPID(90, .2/correction, 0, 0, 1);
+                if (Math.abs(correction) > 3)
+                    robot.turnPID(90, .1/correction, 0, 0, 1);
 
                 robot.goStraightGyro(-93, 1, 7); // go to deposit 2nd stone
                 robot.grabberBDown();

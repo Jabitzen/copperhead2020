@@ -21,56 +21,40 @@ public class SkystoneTeleop extends LinearOpMode{
     public double leftstickx;
     public double leftstickyfront;
     public double leftstickyback;
+    public double chungusStartPos;
+    public double speed = 1;
+    public double rotationSpeed = 1;
+
     public int clampcount = 1;
-
-    double fRtickspersecond  = 0.0;
-    double fLtickspersecond  = 0.0;
-    double bLtickspersecond  = 0.0;
-    double bRtickspersecond  = 0.0;
-
-    public double foundationDistance;
-    public double liftHeight;
-    public double liftDistance;
-    public double liftAngle;
+    public int constant = 1;
 
     public boolean teleop = true;
+    public boolean clawdown = false;
+    public boolean grabberR = false;
+    public boolean grabberB = false;
 
-    public int constant = 1;
-    public double chungusStartPos;
+    public ElapsedTime runtime = new ElapsedTime();
+    public ElapsedTime robert = new ElapsedTime();
 
-    public double chungusUpLimit;
-
+    // AUTHOR ROBERT HAYDEN WARREN
     @Override
     public void runOpMode() throws InterruptedException {
         robot.init(this, teleop);
-
         ElapsedTime runTime = new ElapsedTime();
         //robot.brakeMode();
         runTime.reset();
         chungusStartPos = robot.liftRotate.getCurrentPosition();
         robot.liftExtend.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         waitForStart();
+        runtime.reset();
+        robert.reset();
 
-        //robot.rotate.setPosition(.245);
-        //robot.clamp.setPosition(.245);
         while (opModeIsActive()) {
             // Sin Cos Atan inputs for mecanum
             trigMecanum();
-           // telemetry.addData("start", chungusStartPos);
-            telemetry.addData("pos", robot.liftRotate.getCurrentPosition());
+            // telemetry.addData("start", chungusStartPos);
+            telemetry.addData("rotation speed", rotationSpeed * .5);
             telemetry.update();
-//
-//            fRtickspersecond = robot.fR.getCurrentPosition()/ runTime.seconds();
-//            fLtickspersecond = robot.fL.getCurrentPosition()/ runTime.seconds();
-//            bRtickspersecond = robot.bR.getCurrentPosition()/runTime.seconds();
-//            bLtickspersecond = robot.bL.getCurrentPosition()/ runTime.seconds();
-/*
-            telemetry.addData("fRtickspersecond", fRtickspersecond);
-            telemetry.addData("fLtickspersecond", fLtickspersecond);
-            telemetry.addData("bRtickspersecond", bRtickspersecond);
-            telemetry.addData("bLtickspersecond", bLtickspersecond);
-            telemetry.update();
-*/
 
             // Foundation Clamp
             if (gamepad1.y) { //up
@@ -81,46 +65,47 @@ public class SkystoneTeleop extends LinearOpMode{
             }
 
             // Claw
-            if (gamepad2.right_bumper) {
-                robot.clawDown(); // down
-            }
-            if (gamepad2.left_bumper) {
-                robot.clawUp(); // up
+            if (gamepad2.right_bumper && runtime.seconds() > 1) {
+                if (!clawdown) {
+                    robot.clawDown(); // down
+                    clawdown = true;
+                }
+                else {
+                    robot.clawUp(); // up
+                    clawdown = false;
+                }
+                runtime.reset();
             }
 
-            //Rotate/8
-//            if (gamepad2.left_trigger == 1){
-//                robot.rotate.setPosition(.6); // Cube fits in robot
-//            }
-//            if (gamepad2.right_trigger == 1){
-//                robot.rotate.setPosition(.245); // Cube is horizontal
-//            }
             // Red Grabber stone pick up
-            if (gamepad1.x){
-                robot.grabberRDown();
-                robot.gripRDown();
+            if (gamepad1.x && robert.seconds() > 1){
+                if (!grabberB) {
+                    robot.grabberRDown();
+                    robot.gripRUp();
+                    grabberB = true;
+                }
+                else {
+                    robot.grabberRUp();
+                    robot.gripRDown();
+                    grabberR = false;
+                }
+                robert.reset();
             }
 
             // Red Grabber pinch and bring up stone
-            if(gamepad1.b){
-                robot.grabberBDown();
-                robot.gripBDown();
-                //sleep(1000);
-                //robot.grabberRUp();
-            }
+            if(gamepad1.b && robert.seconds() > 1){
+                if (!grabberR) {
+                    robot.grabberBDown();
+                    robot.gripBUp();
+                    grabberR = true;
+                }
+                else {
+                    robot.grabberBUp();
+                    robot.gripBDown();
+                    grabberR = false;
 
-            if(gamepad1.dpad_left){
-                robot.grabberRUp();
-                robot.gripRUp();
-                //sleep(1000);
-                //robot.grabberRUp();
-            }
-
-            if(gamepad1.dpad_right){
-                robot.grabberBUp();
-                robot.gripBUp();
-                //sleep(1000);
-                //robot.grabberRUp();
+                }
+                robert.reset();
             }
 
             // Reverse Mode
@@ -130,8 +115,6 @@ public class SkystoneTeleop extends LinearOpMode{
             if (gamepad1.dpad_up){
                 constant = 1; // Forward
             }
-
-
 
             //intake
             if (gamepad1.right_trigger > .1){
@@ -146,57 +129,69 @@ public class SkystoneTeleop extends LinearOpMode{
                 robot.intakeL.setPower(0);
                 robot.intakeR.setPower(0);
             }
-            // Lift
 
-            robot.liftExtend.setPower(gamepad2.right_stick_y);
+            // Lift
+            if(gamepad2.a && runtime.seconds() > 1) {
+                if (rotationSpeed == 1){
+                    rotationSpeed = .5;
+                }
+
+                else {
+                    rotationSpeed = 1;
+                }
+                runtime.reset();
+            }
+
             if ((gamepad2.left_stick_y < 0))
             {
-                robot.liftRotate.setPower(-0.5 * gamepad2.left_stick_y);
+                robot.liftRotate.setPower(-0.5 * gamepad2.left_stick_y * rotationSpeed);
             }
 
             else if (gamepad2.left_stick_y > 0 && (robot.liftRotate.getCurrentPosition() > chungusStartPos))
             {
-                robot.liftRotate.setPower(-0.5 * gamepad2.left_stick_y);
+                robot.liftRotate.setPower(-0.5 * gamepad2.left_stick_y * rotationSpeed);
             }
 
             else{
                 robot.liftRotate.setPower(0);
             }
 
+            robot.liftExtend.setPower(gamepad2.right_stick_y);
+
             if(gamepad2.x){
-                //telemetry.addLine(("first stage"));
-                //telemetry.update();
+                // telemetry.addLine(("first stage"));
+                // telemetry.update();
+                double aboveOrBelow = robot.liftRotate.getCurrentPosition() - 500; //-200
+                double makeItOne = 1 / (Math.abs(aboveOrBelow)); // 1/200
+                double power = -0.5;
+                // telemetry.addData("1", aboveOrBelow);
+                // telemetry.addData("2", makeItOne);
+                // telemetry.addData("3", power);
+                // telemetry.addLine(("2nd stage"));
+                // telemetry.addData("calc", aboveOrBelow * makeItOne * power);
+                // telemetry.update();
+                robot.liftRotate.setPower(aboveOrBelow * makeItOne * power);
+            }
 
-                    double aboveOrBelow = robot.liftRotate.getCurrentPosition() - 500; //-200
-                    double makeItOne = 1 / (Math.abs(aboveOrBelow)); // 1/200
-                    double power = -0.5;
-//                    telemetry.addData("1", aboveOrBelow);
-//                    telemetry.addData("2", makeItOne);
-//                    telemetry.addData("3", power);
-                   // telemetry.addLine(("2nd stage"));
-                    //telemetry.addData("calc", aboveOrBelow * makeItOne * power);
-                    //telemetry.update();
-                    robot.liftRotate.setPower(aboveOrBelow * makeItOne * power);
-
-
-
-
-
+            //Slowmode drivetrain
+            if (gamepad1.right_bumper) {
+                speed = 1;
+            }
+            if (gamepad1.left_bumper) {
+                speed = .5;
             }
 
             if(gamepad2.y){
                 double aboveOrBelow = robot.liftRotate.getCurrentPosition() - 750; //-200
                 double makeItOne = 1 / (Math.abs(aboveOrBelow)); // 1/200
                 double power = -0.5;
-//                    telemetry.addData("1", aboveOrBelow);
-//                    telemetry.addData("2", makeItOne);
-//                    telemetry.addData("3", power);
+                // telemetry.addData("1", aboveOrBelow);
+                // telemetry.addData("2", makeItOne);
+                // telemetry.addData("3", power);
                 // telemetry.addLine(("2nd stage"));
-                //telemetry.addData("calc", aboveOrBelow * makeItOne * power);
-                //telemetry.update();
+                // telemetry.addData("calc", aboveOrBelow * makeItOne * power);
+                // telemetry.update();
                 robot.liftRotate.setPower(aboveOrBelow * makeItOne * power);
-
-
             }
 
             if(gamepad2.b){
@@ -204,17 +199,14 @@ public class SkystoneTeleop extends LinearOpMode{
                 double aboveOrBelow = robot.liftRotate.getCurrentPosition() - 1000; //-200
                 double makeItOne = 1 / (Math.abs(aboveOrBelow)); // 1/200
                 double power = -0.5;
-//                    telemetry.addData("1", aboveOrBelow);
-//                    telemetry.addData("2", makeItOne);
-//                    telemetry.addData("3", power);
+                // telemetry.addData("1", aboveOrBelow);
+                // telemetry.addData("2", makeItOne);
+                // telemetry.addData("3", power);
                 // telemetry.addLine(("2nd stage"));
-                //telemetry.addData("calc", aboveOrBelow * makeItOne * power);
-                //telemetry.update();
+                // telemetry.addData("calc", aboveOrBelow * makeItOne * power);
+                // telemetry.update();
                 robot.liftRotate.setPower(aboveOrBelow * makeItOne * power);
-
             }
-
-
         }
     }
 
@@ -250,9 +242,9 @@ public class SkystoneTeleop extends LinearOpMode{
         telemetry.update();
         */
 
-        robot.fL.setPower(-v1);
-        robot.fR.setPower(-v2);
-        robot.bL.setPower(v3);// * .79);
-        robot.bR.setPower(v4);// * .79);
+        robot.fL.setPower(-v1 * speed);
+        robot.fR.setPower(-v2 * speed);
+        robot.bL.setPower(v3 * speed);// * .79);
+        robot.bR.setPower(v4 * speed);// * .79);
     }
 }
