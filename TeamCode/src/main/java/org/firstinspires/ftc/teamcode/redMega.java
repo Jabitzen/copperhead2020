@@ -13,8 +13,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Movement.RobotHw;
 import org.firstinspires.ftc.teamcode.Vision.BitMapVision;
 
-@Autonomous(name="redQuarryAuto", group="12596")
-public class redQuarryAuto extends LinearOpMode {
+@Autonomous(name="redMega", group="12596")
+public class redMega extends LinearOpMode {
 
     BitMapVision bm1 = null;
     String skyStonePos = null;
@@ -54,7 +54,7 @@ public class redQuarryAuto extends LinearOpMode {
             //prime grabber and grip for stone
             robot.gripRUp();
             robot.grabberRDown();
-            sleep(500);
+            sleep(700);
             // reset encoders for backtracking
             robot.reset();
             // Approach stone
@@ -126,12 +126,40 @@ public class redQuarryAuto extends LinearOpMode {
                 robot.turnPID(90, .1/correction, 0, 0, 1); // Straighten out
             // go to deposit 2nd stone
             if (skyStonePos == "center") {
-                robot.goStraightGyro(90, 1, 7);
+                robot.goStraightGyro(128, 1, 7);
             } else if (skyStonePos == "left") {
                 robot.goStraightGyro(97, 1, 7);
             } else {
                 robot.goStraightGyro(85, 1, 7);
             }
+
+
+            //MOVING FOUNDATION
+            robot.strafeLeftGyro(15, .5, 5);//Alinging with where we start foundation auto
+           // robot.goStraightGyro(12, .7, 3);
+            //robot.strafeLeftGyro(30, .5, 8);
+
+
+
+            //Strafe right 4ft
+            robot.gripRUp();
+            robot.grabberRDown();
+            robot.grabberBDown();
+            sleep(2000);
+
+            //robot.turnPID(90,.3,0,0,1);
+            robot.strafeRightGyro(43, .8);
+            sleep(30000);
+            // servos up
+            robot.grabberRUp();
+            robot.grabberBUp();
+            sleep(2000);
+
+            robot.goStraightGyro(-20, 1, 5);
+            robot.strafeLeftGyro(2, 0.5, 3);
+            robot.goStraightGyro(-50, 1, 5);
+
+
             // grabberR lets go of stone
             robot.grabberRDown();
             robot.gripRUp();
@@ -140,6 +168,19 @@ public class redQuarryAuto extends LinearOpMode {
             robot.grabberRUp();
             robot.gripRDown();
             sleep(200);
+
+            //COPY AND PASTED RED FOUNDATION AUTO
+
+            //MOVING FOUNDATION
+
+
+
+
+
+
+
+
+
             //park
             if (skyStonePos == "center") {
                 robot.goStraightGyro(-11, 0.7, 2);

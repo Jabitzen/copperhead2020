@@ -54,7 +54,7 @@ public class redFoundationAuto extends LinearOpMode {
 
         robot.goStraightGyro(-20, 1, 5);
         robot.strafeLeftGyro(2, 0.5, 3);
-        robot.goStraightGyro(-40, 1, 5);
+        robot.goStraightGyro(-50, 1, 5);
 
 
 
