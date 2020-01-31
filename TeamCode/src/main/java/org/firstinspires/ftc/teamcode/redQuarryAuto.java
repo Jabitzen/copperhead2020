@@ -42,14 +42,14 @@ public class redQuarryAuto extends LinearOpMode {
             //Move to the 1st stone
             robot.goStraightGyro(18, .7, 3);
             // Rotate to align grabberR with stone
-            robot.turnPID(90, .78/90, 0, 0, 10);
+            robot.turnPID(90, .78/90, 0, .2, 10);
             // Align with center stone
             if (skyStonePos == "center") {
                 robot.goStraightGyro(2, 0.2, 1);
             } else if (skyStonePos == "left") {
                 robot.goStraightGyro(-5, 0.2, 2);
-            } else {
-                robot.goStraightGyro(11.5, 0.2, 3);
+            } else { // right
+                robot.goStraightGyro(14, 0.2, 3);
             }
             //prime grabber and grip for stone
             robot.gripRUp();
@@ -70,7 +70,7 @@ public class redQuarryAuto extends LinearOpMode {
             correction = robot.correctAngle(90) ;
             // Straighten out
             if (Math.abs(correction) > 3)
-                robot.turnPID(90, .1/correction, 0, 0, 1);
+                robot.turnPID(90, .13/correction, 0, 0, 1);
 
             // Testing telemetry
             /*
@@ -88,6 +88,7 @@ public class redQuarryAuto extends LinearOpMode {
             } else {
                 robot.goStraightGyro(55, 1, 7);
             }
+            robot.strafeLeftGyro(4, .5, 5);
             // grabberR lets go of stone
             robot.grabberRDown();
             robot.gripRUp();
@@ -95,6 +96,7 @@ public class redQuarryAuto extends LinearOpMode {
             //put grabber up to go back to quarry
             robot.gripRDown();
             robot.grabberRUp();
+            robot.strafeRightGyro(4, .5);
             //go back to quarry
             if (skyStonePos == "center") {
                 robot.goStraightGyro(-89.5, 1, 5);
@@ -111,7 +113,7 @@ public class redQuarryAuto extends LinearOpMode {
             correction = robot.correctAngle(90);
             // Straighten out
             if (Math.abs(correction) > 3)
-                robot.turnPID(90, .1/correction, 0, 0, 1);
+                robot.turnPID(90, .13/correction, 0, 0, 1);
             //approach 2nd stone
             robot.approachStonesRed(.5);
             //grab 2nd stone
@@ -123,15 +125,16 @@ public class redQuarryAuto extends LinearOpMode {
             // Correct robot angle
             correction = robot.correctAngle(90) ;
             if (Math.abs(correction) > 3)
-                robot.turnPID(90, .1/correction, 0, 0, 1); // Straighten out
+                robot.turnPID(90, .13/correction, 0, 0, 1); // Straighten out
             // go to deposit 2nd stone
             if (skyStonePos == "center") {
                 robot.goStraightGyro(90, 1, 7);
             } else if (skyStonePos == "left") {
-                robot.goStraightGyro(97, 1, 7);
+                robot.goStraightGyro(99, 1, 7);
             } else {
                 robot.goStraightGyro(85, 1, 7);
             }
+            robot.strafeLeftGyro(4, .5, 5);
             // grabberR lets go of stone
             robot.grabberRDown();
             robot.gripRUp();
@@ -140,13 +143,14 @@ public class redQuarryAuto extends LinearOpMode {
             robot.grabberRUp();
             robot.gripRDown();
             sleep(200);
+            robot.strafeRightGyro(4, .5);
             //park
             if (skyStonePos == "center") {
                 robot.goStraightGyro(-11, 0.7, 2);
             } else if (skyStonePos == "left") {
                 robot.goStraightGyro(-13, 0.7, 2);
             } else {
-                robot.goStraightGyro(-13, 0.7, 2);
+                robot.goStraightGyro(-15, 0.7, 2);
             }
             sleep(30000);
         }

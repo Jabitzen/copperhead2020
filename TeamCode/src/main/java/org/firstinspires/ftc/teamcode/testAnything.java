@@ -29,12 +29,12 @@ public class testAnything extends LinearOpMode{
         waitForStart();
 
             //correction = robot.correctAngle(0); .00005
-        robot.turnPID(3, .235/3, 0,0.25, 30);
+        //robot.turnPID(3, .235/3, 0,0.25, 30);
             //telemetry.addData()
             //sleep(500000);
 
-
-        sleep(15000);        robot.strafeLeftGyro(80, .6, 5);
+        robot.approachStonesBlue(.5);
+        sleep(15000);
         sleep(30000);
         double fRtickspersecond  = 0.0;
         double fLtickspersecond  = 0.0;

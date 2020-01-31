@@ -42,7 +42,7 @@ public class redMega extends LinearOpMode {
             //Move to the 1st stone
             robot.goStraightGyro(18, .7, 3);
             // Rotate to align grabberR with stone
-            robot.turnPID(90, .78/90, 0, 0, 10);
+            robot.turnPID(90, .78/90, 0, .2, 10);
             // Align with center stone
             if (skyStonePos == "center") {
                 robot.goStraightGyro(2, 0.2, 1);
@@ -128,14 +128,14 @@ public class redMega extends LinearOpMode {
             if (skyStonePos == "center") {
                 robot.goStraightGyro(128, 1, 7);
             } else if (skyStonePos == "left") {
-                robot.goStraightGyro(97, 1, 7);
+                robot.goStraightGyro(138, 1, 7);
             } else {
-                robot.goStraightGyro(85, 1, 7);
+                robot.goStraightGyro(123, 1, 7);
             }
 
 
             //MOVING FOUNDATION
-            robot.strafeLeftGyro(15, .5, 5);//Alinging with where we start foundation auto
+            robot.strafeLeftGyro(13, .5, 5);//Alinging with where we start foundation auto
            // robot.goStraightGyro(12, .7, 3);
             //robot.strafeLeftGyro(30, .5, 8);
 
@@ -145,10 +145,10 @@ public class redMega extends LinearOpMode {
             robot.gripRUp();
             robot.grabberRDown();
             robot.grabberBDown();
-            sleep(2000);
+            sleep(1000);
 
             //robot.turnPID(90,.3,0,0,1);
-            robot.strafeRightGyro(43, .8);
+            robot.strafeRightGyro(38, .8);
             sleep(30000);
             // servos up
             robot.grabberRUp();
@@ -187,7 +187,7 @@ public class redMega extends LinearOpMode {
             } else if (skyStonePos == "left") {
                 robot.goStraightGyro(-13, 0.7, 2);
             } else {
-                robot.goStraightGyro(-13, 0.7, 2);
+                robot.goStraightGyro(-15, 0.7, 2);
             }
             sleep(30000);
         }

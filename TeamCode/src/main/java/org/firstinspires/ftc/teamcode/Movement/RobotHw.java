@@ -20,7 +20,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.opencv.core.Mat;
+
 
 
 public class RobotHw {
@@ -488,6 +488,7 @@ public class RobotHw {
         if (distance > 0) {
             while (Math.abs(encoderAvg()) < target && opmode.opModeIsActive() && runtime.seconds() < timeout) {
                 speed = (.15 + (power * remainingDistance(distance)));
+                //speed = 1;
                 if (getAngle() > 1) {
                     fL.setPower(.9 * speed);
                     fR.setPower(1.1 * speed * .9793);
@@ -1244,13 +1245,14 @@ public class RobotHw {
     public void approachStonesBlue (double power) {
         resetAngle();
         brakeMode();
-
-        boolean cont = true;
         double speed = 1;
 
+        boolean cont = true;
+        //gripRUp();
+        //grabberRDown();
 
         while (cont == true && opmode.opModeIsActive()){
-
+            //moveLeft(power * speed);
             if (getAngle() > 1) {
                 fL.setPower((-power * 1.2) * speed);
                 fR.setPower((power * 1.2) * speed);
@@ -1269,14 +1271,13 @@ public class RobotHw {
                 bL.setPower(power * speed* .91);
                 bR.setPower(-power * speed* .91);
             }
-
-            if (!Double.isNaN(sensorDistanceBEdge.getDistance(DistanceUnit.CM))) {
-                reset();
-                speed = .5;
-            }
-            if (sensorDistanceBEdge.getDistance(DistanceUnit.CM) < 9.5 || sensorDistanceBMid.getDistance(DistanceUnit.CM) < 9.5) {
-                cont = false;
-            }
+//            if (!Double.isNaN(sensorDistanceBEdge.getDistance(DistanceUnit.CM))) {
+//                reset();
+//                speed = .5;
+//            }
+//            if (sensorDistanceBEdge.getDistance(DistanceUnit.CM) < 3.5 || sensorDistanceBMid.getDistance(DistanceUnit.CM) < 3.5) {
+//                cont = false;
+//            }
 
             opmode.telemetry.addData("front", sensorDistanceBEdge.getDistance(DistanceUnit.CM));
             opmode.telemetry.addData("back", sensorDistanceBMid.getDistance(DistanceUnit.CM));

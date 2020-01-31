@@ -45,7 +45,7 @@ public class redFoundationAuto extends LinearOpMode {
         robot.goStraightGyro(4,.7, 3);
 
         //robot.turnPID(90,.3,0,0,1);
-        robot.strafeRightGyro(33, 0.4);
+        robot.strafeRightGyro(33, 0.7);
 
         // servos up
         robot.grabberRUp();
@@ -53,8 +53,8 @@ public class redFoundationAuto extends LinearOpMode {
         sleep(2000);
 
         robot.goStraightGyro(-20, 1, 5);
-        robot.strafeLeftGyro(2, 0.5, 3);
-        robot.goStraightGyro(-50, 1, 5);
+        robot.strafeLeftGyro(4, 0.5, 8);
+        robot.goStraightGyro(-45, 1, 5);
 
 
 
