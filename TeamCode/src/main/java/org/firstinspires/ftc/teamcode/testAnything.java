@@ -28,14 +28,25 @@ public class testAnything extends LinearOpMode{
         robot.init(this);
         waitForStart();
 
-            //correction = robot.correctAngle(0); .00005
+        //correction = robot.correctAngle(0); .00005
         //robot.turnPID(3, .235/3, 0,0.25, 30);
-            //telemetry.addData()
-            //sleep(500000);
+        //telemetry.addData()
+        //sleep(500000);
+        robot.goStraightGyro(50, 1, 10);
 
+
+
+        //robot.grabberBUp();
+        telemetry.update();
+        sleep(5000);
+        telemetry.addLine("up");
         robot.approachStonesBlue(.5);
-        sleep(15000);
-        sleep(30000);
+
+        while (opModeIsActive()) {
+            sleep(15000);
+        }
+
+
         double fRtickspersecond  = 0.0;
         double fLtickspersecond  = 0.0;
         double bLtickspersecond  = 0.0;

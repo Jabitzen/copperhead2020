@@ -1,27 +1,13 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.app.Activity;
-import android.graphics.Color;
-import android.view.View;
-
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.teamcode.Movement.RobotHw;
 import org.firstinspires.ftc.teamcode.Vision.BitMapVision;
 
-@Autonomous(name="blueQuarryAuto", group="12596")
-public class blueQuarryAuto extends LinearOpMode {
+@Autonomous(name="blueMega", group="12596")
+public class blueMega extends LinearOpMode {
 
     BitMapVision bm1 = null;
     String skyStonePos = null;
@@ -137,44 +123,56 @@ public class blueQuarryAuto extends LinearOpMode {
             robot.strafeRightGyro(robot.encoderAvg() * (11.0/537.6) + 5, .6);
             // Correct robot angle
             correction = robot.correctAngle(90) ;
-            if (Math.abs(correction) > 3)
+            if (Math.abs(correction) > 2)
                 robot.turnPID(90, .15/correction, 0, 0, 1); // Straighten out
             // go to deposit 2nd stone
             if (skyStonePos == "center") {
-                robot.goStraightGyro(-90, 1, 7);
+                robot.goStraightGyro(-128, 1, 7);
             } else if (skyStonePos == "left") {
-                robot.goStraightGyro(-88, 1, 7);
+                robot.goStraightGyro(-114, 1, 7);
             } else {
-                robot.goStraightGyro(-96, 1, 7);
+                robot.goStraightGyro(-134, 1, 7);
             }
-            robot.strafeLeftGyro(4, .5, 5);
-            // grabberR lets go of stone
-            robot.grabberBDown();
+
+
+            //MOVING FOUNDATION
+            robot.strafeLeftGyro(13, .5, 3);//Alinging with where we start foundation auto
+            // robot.goStraightGyro(12, .7, 3);
+            //robot.strafeLeftGyro(30, .5, 8);
+
+
+
+            //Strafe right 4ft
             robot.gripBUp();
+            robot.grabberRDown();
+            robot.grabberBDown();
+            sleep(1000);
+
+            //robot.turnPID(90,.3,0,0,1);
+            robot.strafeRightGyro(38, 1);
+            sleep(30000);
+            // servos up
+            robot.grabberRUp();
+            robot.grabberBUp();
+            sleep(2000);
+
+            robot.goStraightGyro(-20, 1, 5);
+            robot.strafeLeftGyro(2, 0.5, 3);
+            robot.goStraightGyro(-50, 1, 5);
+
+
+            // grabberR lets go of stone
+            robot.grabberRDown();
+            robot.gripRUp();
             sleep(200);
             // Grabber folds back up
-            robot.grabberBUp();
-            robot.gripBDown();
+            robot.grabberRUp();
+            robot.gripRDown();
             sleep(200);
-            robot.strafeRightGyro(3, .5);
-            //calculate angle needed to correct
-            correction = robot.correctAngle(90);
-            // Straighten out
-            if (Math.abs(correction) > 3)
-                robot.turnPID(90, .14/correction, 0, 0, 1);
-            //park
-            if (skyStonePos == "center") {
-                robot.goStraightGyro(13, 0.7, 2);
-            } else if (skyStonePos == "left") {
-                robot.goStraightGyro(21, 1, 4);
-            } else {
-                robot.goStraightGyro(13, 0.7, 2);
-            }
-            sleep(30000);
 
+            //COPY AND PASTED RED FOUNDATION AUTO
 
-
-
+            //MOVING FOUNDATION
         }
         telemetry.addLine("done");
         telemetry.update();

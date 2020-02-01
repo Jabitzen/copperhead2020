@@ -91,10 +91,12 @@ public class colorSensor extends LinearOpMode {
     ColorSensor sensorColorREdge;
     //ColorSensor sensorColorRight;
     DistanceSensor sensorDistanceBEdge;
-    DistanceSensor sensorDistanceBMID;
+    DistanceSensor sensorDistanceBMid;
     //DistanceSensor sensorDistanceRight;
     ColorSensor sensorColorBotBack;
     ColorSensor sensorColorBotFront;
+    public DistanceSensor sensorDistanceRMid;
+    public DistanceSensor sensorDistanceREdge;
     @Override
     public void runOpMode() {
 
@@ -109,8 +111,9 @@ public class colorSensor extends LinearOpMode {
 
         // get a reference to the distance sensor that shares the same name.
         sensorDistanceBEdge = hardwareMap.get(DistanceSensor.class, "sensorColorBEdge");
-        sensorDistanceBMID = hardwareMap.get(DistanceSensor.class, "sensorColorBEdge");
-       // sensorDistanceRight = hardwareMap.get(DistanceSensor.class, "sensorColorRight");
+        sensorDistanceBMid = hardwareMap.get(DistanceSensor.class, "sensorColorBMid");
+        sensorDistanceREdge = hardwareMap.get(DistanceSensor.class, "sensorColorREdge");
+        sensorDistanceRMid = hardwareMap.get(DistanceSensor.class, "sensorColorRMid");
 
         // hsvValues is an array that will hold the hue, saturation, and value information.
         float hsvValues[] = {0F, 0F, 0F};
@@ -154,10 +157,14 @@ public class colorSensor extends LinearOpMode {
                 //telemetry.addData("Hue", hsvValues[0]);
 */
                 //telemetry.addData("line", sensorColorBotBack.red());
-                telemetry.addData("Left Distance (cm)",
+                telemetry.addData("Bedge (cm)",
                         String.format(Locale.US, "%.02f", sensorDistanceBEdge.getDistance(DistanceUnit.CM)));
-                telemetry.addData("Left Distance (cm)",
-                        String.format(Locale.US, "%.02f", sensorDistanceBMID.getDistance(DistanceUnit.CM)));
+                telemetry.addData("Bmid (cm)",
+                        String.format(Locale.US, "%.02f", sensorDistanceBMid.getDistance(DistanceUnit.CM)));
+                telemetry.addData("Redge (cm)",
+                        String.format(Locale.US, "%.02f", sensorDistanceREdge.getDistance(DistanceUnit.CM)));
+                telemetry.addData("Rmid (cm)",
+                        String.format(Locale.US, "%.02f", sensorDistanceRMid.getDistance(DistanceUnit.CM)));
 
                 //  telemetry.addData("Right Distance (cm)",
                 //  String.format(Locale.US, "%.02f", sensorDistanceRight.getDistance(DistanceUnit.CM)));
