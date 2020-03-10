@@ -316,7 +316,7 @@ public class RobotHw {
     }
 
     public void clawUp(){
-        claw.setPosition(.5);
+        claw.setPosition(.43);
     }
 
     public void gripRDown(){
@@ -1323,6 +1323,18 @@ public class RobotHw {
             opmode.telemetry.update();
         }
 
+        stopMotors();
+    }
+
+    public void diagonalFR(double distance, double power)
+    {
+        reset();
+        double target = Math.abs(distance * (537.6/11));
+
+        while (Math.abs(encoderAvg()) < target && opmode.opModeIsActive()){
+            fR.setPower(power);
+            bL.setPower(power);
+        }
         stopMotors();
     }
 

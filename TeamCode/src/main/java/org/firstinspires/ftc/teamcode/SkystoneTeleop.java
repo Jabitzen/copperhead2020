@@ -85,8 +85,10 @@ public class SkystoneTeleop extends LinearOpMode{
                     grabberB = true;
                 }
                 else {
-                    robot.grabberRUp();
                     robot.gripRDown();
+                    sleep(500);
+                    robot.grabberRUp();
+
                     grabberR = false;
                 }
                 robert.reset();
@@ -100,8 +102,9 @@ public class SkystoneTeleop extends LinearOpMode{
                     grabberR = true;
                 }
                 else {
-                    robot.grabberBUp();
                     robot.gripBDown();
+                    sleep(500);
+                    robot.grabberBUp();
                     grabberR = false;
 
                 }
